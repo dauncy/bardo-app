@@ -1,0 +1,35 @@
+version: '3.9'
+
+services:
+  db:
+    image: supabase/postgres:14.1.0
+    restart: always
+    ports:
+      - '6242:5432'
+    hostname: bardo-db
+    environment:
+      POSTGRES_PASSWORD: 'bardo_app'
+      POSTGRES_USER: 'bardo_app'
+    volumes:
+      - ./dev/sql_init.sql:/docker-entrypoint-initdb.d/sql_init.sql
+      - bardo-app-db-data:/var/lib/postgresql/data
+    healthcheck:
+      test: pg_isready -U bardo_app
+      interval: 2s
+      timeout: 3s
+      retries: 40
+  redis:
+    image: bitnami/redis:6.2.5
+    restart: always
+    ports:
+      - '6243:6379'
+    environment:
+      ALLOW_EMPTY_PASSWORD: 'yes'
+    healthcheck:
+      test: redis-cli ping
+      interval: 1s
+      timeout: 3s
+      retries: 50
+volumes:
+  bardo-app-db-data:
+    name: bardo-app-db-data

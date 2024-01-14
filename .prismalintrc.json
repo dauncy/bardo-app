@@ -1,0 +1,17 @@
+{
+  "rules": {
+    "field-name-mapping-snake-case": [
+      "error",
+      {
+        "compoundWords": ["S3"]
+      }
+    ],
+    "field-order": [
+      "error",
+      {
+        "order": ["tenantId", "..."]
+      }
+    ],
+    "forbid-required-ignored-field": ["error"]
+  }
+}
