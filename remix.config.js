@@ -1,11 +1,10 @@
-
 import { flatRoutes } from 'remix-flat-routes'
 
 /** @type {import('@remix-run/dev').AppConfig} */
 export default {
   tailwind: true,
   postcss: true,
-  ignoredRouteFiles: ["**/.*"],
+  ignoredRouteFiles: ['**/.*'],
   serverModuleFormat: 'esm',
   serverPlatform: 'node',
   browserNodeBuiltinsPolyfill: {
@@ -34,4 +33,4 @@ export default {
   routes: defineRoutes => {
     return flatRoutes(['routes'], defineRoutes)
   },
-};
+}

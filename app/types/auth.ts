@@ -1,4 +1,4 @@
-import { z } from "zod";
+import { z } from 'zod'
 
 export const authenticateSchema = z.object({
   idToken: z.string(),
@@ -7,5 +7,5 @@ export const authenticateSchema = z.object({
 export enum AuthStep {
   INTIAL = 'INTIAL',
   SIGN_IN = 'SIGN_IN',
-  SIGN_UP = 'SIGN_UP'
+  SIGN_UP = 'SIGN_UP',
 }

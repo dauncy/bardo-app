@@ -1,8 +1,11 @@
-import { LoaderFunctionArgs } from '@remix-run/node'
+import type { LoaderFunctionArgs } from '@remix-run/node'
 import { parse } from 'qs'
-import { z, ZodObject, ZodRawShape } from 'zod'
+import type { z, ZodObject, ZodRawShape } from 'zod'
 
-export const getSearchParams = <T extends ZodRawShape>(ctx: LoaderFunctionArgs, schema: ZodObject<T>): z.infer<typeof schema> => {
+export const getSearchParams = <T extends ZodRawShape>(
+  ctx: LoaderFunctionArgs,
+  schema: ZodObject<T>,
+): z.infer<typeof schema> => {
   const url = new URL(ctx.request.url)
   const params = new URLSearchParams(url.search)
   const body = parse(params.toString())

@@ -1,20 +1,11 @@
-import "reflect-metadata"
-import type { LinksFunction } from "@remix-run/node";
-import {
-  Links,
-  LiveReload,
-  Meta,
-  Outlet,
-  Scripts,
-  ScrollRestoration,
-} from "@remix-run/react";
-import styles from "./tailwind.css";
-import { ClientOnly } from "@app/components/utility/ClientOnly";
-import { Toaster } from "@app/components/bardo/toast/Toaster";
+import 'reflect-metadata'
+import type { LinksFunction } from '@remix-run/node'
+import { Links, LiveReload, Meta, Outlet, Scripts, ScrollRestoration } from '@remix-run/react'
+import styles from './tailwind.css'
+import { ClientOnly } from '@app/components/utility/ClientOnly'
+import { Toaster } from '@app/components/bardo/toast/Toaster'
 
-export const links: LinksFunction = () => [
-  { rel: "stylesheet", href: styles }
-];
+export const links: LinksFunction = () => [{ rel: 'stylesheet', href: styles }]
 
 export default function App() {
   return (
@@ -35,5 +26,5 @@ export default function App() {
         </ClientOnly>
       </body>
     </html>
-  );
+  )
 }

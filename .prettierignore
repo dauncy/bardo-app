@@ -1,0 +1,17 @@
+/node_modules
+
+/build/*
+/public/build/**/*
+/server-build
+.env
+.cache/
+
+/test-results/
+/playwright-report/
+/playwright/.cache/
+/coverage
+/prisma/migrations
+yarn.lock
+package-lock.json
+*.log
+*.txt

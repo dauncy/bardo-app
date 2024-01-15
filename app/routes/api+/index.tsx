@@ -1,3 +1,3 @@
-export const loader = async() => {
+export const loader = async () => {
   return 'Hello World'
 }
