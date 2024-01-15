@@ -11,10 +11,23 @@ datasource db {
 }
 
 model User {
-  id             String                   @id
-  email          String                   
-  picture        String?
-  name           String?
-  created_at     DateTime                 @default(now())
-  updated_at     DateTime                 @updatedAt
+  id         String    @id
+  email      String
+  picture    String?
+  name       String?
+  journals   Journal[]
+  created_at DateTime  @default(now())
+  updated_at DateTime  @updatedAt
+}
+
+model Journal {
+  id         String   @id @default(uuid()) @db.Uuid
+  title      String?
+  body       String
+  /// [JournalMetadata]
+  metadata   Json
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+  User       User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId     String?
 }
