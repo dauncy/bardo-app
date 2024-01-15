@@ -6,4 +6,8 @@ export class Routes {
   static user(id: string) {
     return `${Routes.users}/${id}`
   }
+  static marketing = {
+    privacy: '/privacy',
+    tos: '/terms-of-service'
+  }
 }
