@@ -108,11 +108,11 @@ export const SignUpForm = ({
           <span>{"By creating an account, you aggree to Bardo's"}</span>
           <span> </span>
           <span className="cursor-pointer font-medium hover:underline">
-            <Link to={'href'}>{'terms of service'}</Link>
+            <Link to={Routes.marketing.tos}>{'terms of service'}</Link>
           </span>
           <span>{' and '}</span>
           <span className="cursor-pointer font-medium hover:underline">
-            <Link to={'#'}>{'privacy policy'}</Link>
+            <Link to={Routes.marketing.privacy}>{'privacy policy'}</Link>
           </span>
         </TypographyParagraph>
       </CardFooter>

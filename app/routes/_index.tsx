@@ -57,14 +57,14 @@ export default function Index() {
           </div>
 
           <div className="mt-auto hidden items-center gap-x-4 md:flex">
-            <Link to={'#'}>
+            <Link to={Routes.marketing.privacy}>
               <Button variant={'link'}>
                 <TypographyParagraph size={'extraSmall'}>{'Privacy Policy'}</TypographyParagraph>
               </Button>
             </Link>
-            <Link to={'#'}>
+            <Link to={Routes.marketing.tos}>
               <Button variant={'link'}>
-                <TypographyParagraph size={'extraSmall'}>{'Privacy Policy'}</TypographyParagraph>
+                <TypographyParagraph size={'extraSmall'}>{'Terms of Service'}</TypographyParagraph>
               </Button>
             </Link>
           </div>
@@ -72,14 +72,14 @@ export default function Index() {
         <div className="flex h-full  w-full flex-1 flex-col items-center justify-center bg-violet-200 px-4 py-0 pb-2 pt-5 md:bg-transparent md:py-5 md:pb-0 md:pt-0">
           <AuthForm />
           <div className="mt-auto flex gap-x-4 md:hidden">
-            <Link to={'#'}>
+            <Link to={Routes.marketing.privacy}>
               <Button variant={'link'}>
                 <TypographyParagraph size={'extraSmall'}>{'Privacy Policy'}</TypographyParagraph>
               </Button>
             </Link>
-            <Link to={'#'}>
+            <Link to={Routes.marketing.tos}>
               <Button variant={'link'}>
-                <TypographyParagraph size={'extraSmall'}>{'Privacy Policy'}</TypographyParagraph>
+                <TypographyParagraph size={'extraSmall'}>{'Terms of Service'}</TypographyParagraph>
               </Button>
             </Link>
           </div>
