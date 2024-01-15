@@ -4,6 +4,7 @@
   "sideEffects": false,
   "type": "module",
   "scripts": {
+    "prepare": "husky install" ,
     "build": "remix build",
     "setup": "yarn run build && prisma generate && prisma migrate deploy",
     "dev": "remix dev --manual -c \"node --watch server.js\"",
@@ -67,6 +68,7 @@
     "eslint-plugin-jsx-a11y": "^6.7.1",
     "eslint-plugin-react": "^7.33.2",
     "eslint-plugin-react-hooks": "^4.6.0",
+    "husky": "^8.0.3",
     "prettier": "^3.1.0",
     "prettier-plugin-tailwindcss": "^0.5.9",
     "prisma": "^5.8.0",
