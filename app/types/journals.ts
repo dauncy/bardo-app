@@ -1,3 +1,5 @@
+import { z } from 'zod'
+
 export enum TripModality {
   LSD = 'LSD',
   PSILOCYBIN = 'PSILOCYBIN',
@@ -6,29 +8,38 @@ export enum TripModality {
   KETAMINE = 'KETAMINE',
   PEYOTE = 'PEYOTE',
   DMT = 'DMT',
-  AYAHUASCA = 'AYAHUASCA'
+  AYAHUASCA = 'AYAHUASCA',
 }
 
 export enum TripIntention {
   THERAPY = 'THERAPY',
   RECREATION = 'RECREATION',
   CURIOSITY = 'CURIOSITY',
-  SPIRITUAL = 'SPIRITUAL'
+  SPIRITUAL = 'SPIRITUAL',
 }
 
 export enum TripSetting {
   NATURE = 'NATURE',
   CONCERT_OR_FESTIVAL = 'CONCERT_OR_FESTIVAL',
-  CLINIC = 'CLINIC'
+  CLINIC = 'CLINIC',
 }
 
 export enum TripDosage {
   MICRO = 'MICRO',
-  LOW = "LOW",
+  LOW = 'LOW',
   HIGH = 'HIGH',
-  HEROIC = 'HEROIC'
+  HEROIC = 'HEROIC',
 }
 
-export interface AddJournalDTO {
-  
-}
+export const journalCrudSchema = z.discriminatedUnion('_action', [
+  z.object({
+    _action: z.literal('CREATE_JOURNAL'),
+    data: z.object({
+      title: z.string().optional(),
+      modality: z.string(),
+      intention: z.string(),
+      dosage: z.string(),
+      setting: z.string(),
+    }),
+  }),
+])
