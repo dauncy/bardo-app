@@ -12,6 +12,7 @@ import { Routes } from '@app/services/routes.service'
 import { AdminAuthService } from '@app/services/auth/auth-server.service'
 import { Card, CardContent } from '@app/components/bardo/Card'
 import { Icons } from '@app/components/bardo/Icons'
+import { getAccountInfo } from '@app/utils/server.utils/account.utils'
 
 const authSvc = container.resolve(AuthClient)
 
@@ -23,7 +24,11 @@ export const loader = async (ctx: LoaderFunctionArgs) => {
   const adminAuth = container.resolve(AdminAuthService)
   const isAuthenticated = await adminAuth.isAuthenticated(ctx.request)
   if (isAuthenticated) {
-    return redirect(Routes.users)
+    const { user, authProfile } = await getAccountInfo(ctx.request)
+    if (!user || !authProfile) {
+      throw redirect(Routes.logout)
+    }
+    return redirect(`${Routes.users}/${user.id}`)
   }
   return null
 }

@@ -36,6 +36,7 @@ export const journalCrudSchema = z.discriminatedUnion('_action', [
     _action: z.literal('CREATE_JOURNAL'),
     data: z.object({
       title: z.string().optional(),
+      body: z.string(),
       modality: z.string(),
       intention: z.string(),
       dosage: z.string(),
