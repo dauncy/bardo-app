@@ -3,11 +3,12 @@ import { TypographyParagraph } from '@app/components/bardo/typography/Typography
 import { prisma } from '@app/db.server'
 import { defer, type LoaderFunctionArgs } from '@remix-run/node'
 import { Await, Link, useLoaderData, useParams } from '@remix-run/react'
-import { Suspense } from 'react'
+import { Fragment, Suspense } from 'react'
 import { JournalSkeleton } from '@app/components/journals/JournalsSkeleton'
 import type { Journal } from '@prisma/client'
 import { Button } from '@app/components/bardo/Button'
 import { Icons } from '@app/components/bardo/Icons'
+import { JournalCard } from '@app/components/journals/JournalCard'
 
 export const loader = async (ctx: LoaderFunctionArgs) => {
   const { userId } = ctx.params
@@ -18,7 +19,10 @@ export const loader = async (ctx: LoaderFunctionArgs) => {
   const userJournals = new Promise<Journal[]>(async resolve => {
     const journals = await prisma.journal.findMany({
       where: {
-        userId,
+        user_id: userId,
+      },
+      orderBy: {
+        updated_at: 'desc',
       },
     })
     resolve(journals)
@@ -70,7 +74,15 @@ export default function UserJournalsPage() {
                 </div>
               )
             }
-            return null
+            return (
+              <div className="relative flex w-full flex-col gap-y-8">
+                {journals.map(journal => (
+                  <Fragment key={journal.id}>
+                    <JournalCard journal={journal} />
+                  </Fragment>
+                ))}
+              </div>
+            )
           }}
         </Await>
       </Suspense>

@@ -45,8 +45,8 @@ export default function UserLayout() {
   ]
 
   return (
-    <div className="items-cente rjustify-center flex h-screen w-screen bg-violet-50 p-5">
-      <div className="max-w-9xl h-[calc(100vh-50px)] w-full rounded-md border border-slate-200 bg-white shadow-md">
+    <div className="flex min-h-screen w-screen items-center justify-center bg-violet-50 p-5">
+      <div className="max-w-9xl h-full min-h-[calc(100vh-40px)] w-full rounded-md border border-slate-200 bg-white shadow-md">
         <div className="space-y-6 p-10 pb-16">
           <div className="space-y-0.5">
             <TypographyParagraph size={'large'} className="text-3xl text-foreground">
@@ -57,11 +57,11 @@ export default function UserLayout() {
             </TypographyParagraph>
           </div>
           <Separator className="my-6" />
-          <div className="flex flex-col space-y-8 lg:flex-row lg:space-x-12 lg:space-y-0">
-            <aside className="-mx-4 lg:w-1/5">
+          <div className="flex flex-col space-y-8 xl:flex-row xl:space-x-12 xl:space-y-0">
+            <aside className="-mx-4 xl:w-1/5">
               <SidebarNav items={sidebarNavItems} />
             </aside>
-            <div className="flex-1 overflow-hidden lg:max-w-3xl xl:max-w-5xl">
+            <div className="flex-1 xl:max-w-5xl">
               <Outlet context={{ user, authProfile }} />
             </div>
           </div>

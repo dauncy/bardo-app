@@ -4,6 +4,7 @@ import { CreateJournal } from '@app/components/journals/CreateJournal'
 import { prisma } from '@app/db.server'
 import { Routes } from '@app/services/routes.service'
 import type { RequestCtx } from '@app/types'
+import type { TripDosage } from '@app/types/journals'
 import { journalCrudSchema } from '@app/types/journals'
 import { getAccountInfo } from '@app/utils/server.utils/account.utils'
 import { getFormData } from '@app/utils/server.utils/forms.utils'
@@ -25,14 +26,14 @@ export const action = async (ctx: ActionFunctionArgs) => {
       const { data } = body
       await prisma.journal.create({
         data: {
-          userId: user.id,
+          user_id: user.id,
           title: data.title,
           body: data.body,
           metadata: {
             modality: data.modality,
             intention: data.intention,
             setting: data.setting,
-            dosage: data.dosage,
+            dosage: data.dosage as TripDosage,
           },
         },
       })
@@ -52,7 +53,7 @@ export default function NewJournalPage() {
         {'Fill in the fields below and click publish when you are done.'}
       </TypographyParagraph>
       <Separator className="my-6" />
-      <div className="relative h-[300px] overflow-y-scroll">
+      <div className="relative">
         <CreateJournal />
       </div>
     </div>

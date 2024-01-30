@@ -1,28 +1,20 @@
 /* eslint-disable react/jsx-pascal-case */
 import { Form, useNavigation } from '@remix-run/react'
-import { Label } from '../bardo/Label'
-import { Input } from '../bardo/Input'
-import {
-  Select,
-  SelectTrigger,
-  SelectContent,
-  SelectLabel,
-  SelectItem,
-  SelectGroup,
-  SelectValue,
-} from '../bardo/Select'
+import { Label } from '@app/components/bardo/Label'
+import { Input } from '@app/components/bardo/Input'
 import { TripDosage, TripIntention, TripModality, TripSetting } from '@app/types/journals'
-import { Button } from '../bardo/Button'
-import { Textarea } from '../bardo/Textarea'
-import { Icons } from '../bardo/Icons'
+import { Button } from '@app/components/bardo/Button'
+import { Textarea } from '@app/components/bardo/Textarea'
+import { Icons } from '@app/components/bardo/Icons'
+import { SelectWithHint } from './SelectWithHint'
 
 export const CreateJournal = () => {
   const navigation = useNavigation()
   const pending = navigation.state === 'submitting' || navigation.state === 'loading'
 
   return (
-    <Form className="flex h-full w-full flex-col justify-center gap-x-8 gap-y-8 md:flex-row md:gap-y-0" method={'POST'}>
-      <div className="flex flex-1 flex-col gap-y-8">
+    <Form className="flex h-full w-full flex-col justify-center gap-8 lg:flex-row " method={'POST'}>
+      <div className="flex w-full flex-1 flex-col gap-y-8">
         <div className="flex max-w-sm flex-col gap-y-1">
           <Label htmlFor={'data[title]'}>{'Journal Title'}</Label>
           <Input
@@ -35,100 +27,52 @@ export const CreateJournal = () => {
           />
         </div>
         <div className="flex gap-x-4">
-          <div className="flex flex-col gap-y-1">
-            <Label htmlFor={'data[modality]'} className="after:ml-0.5 after:text-red-500 after:content-['*']">
-              {'Modality'}
-            </Label>
-            <Select disabled={pending} required={true} name={'data[modality]'}>
-              <SelectTrigger disabled={pending} className="w-[180px] disabled:cursor-not-allowed disabled:opacity-40">
-                <SelectValue placeholder="Select the modality" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectGroup>
-                  <SelectLabel>Modalities</SelectLabel>
-                  {Object.keys(TripModality).map((key: string) => (
-                    <SelectItem key={`modality-${key}`} value={key as TripModality}>
-                      {/* @ts-ignore */}
-                      {TripModality[key] as string}
-                    </SelectItem>
-                  ))}
-                </SelectGroup>
-              </SelectContent>
-            </Select>
-          </div>
+          <SelectWithHint
+            label={'modality'}
+            innerLabel={'Modalities'}
+            hintText={'What psychedelic did you take?'}
+            options={Object.keys(TripModality).map(key => {
+              // @ts-ignore
+              return TripModality[key] as string
+            })}
+          />
 
-          <div className="flex flex-col gap-y-1">
-            <Label htmlFor={'data[dosage]'} className="after:ml-0.5 after:text-red-500 after:content-['*']">
-              {'Dosage'}
-            </Label>
-            <Select disabled={pending} required={true} name={'data[dosage]'}>
-              <SelectTrigger disabled={pending} className="w-[180px] disabled:cursor-not-allowed disabled:opacity-40">
-                <SelectValue placeholder="Select the dosage" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectGroup>
-                  <SelectLabel>Dosage</SelectLabel>
-                  {Object.keys(TripDosage).map((key: string) => (
-                    <SelectItem key={`dosage-${key}`} value={key as TripDosage} className="capitalize">
-                      {/* @ts-ignore */}
-                      {(TripDosage[key] as string).toLowerCase()}
-                    </SelectItem>
-                  ))}
-                </SelectGroup>
-              </SelectContent>
-            </Select>
-          </div>
+          <SelectWithHint
+            label={'dosage'}
+            innerLabel={'Dosages'}
+            hintText={'How much did you take?'}
+            options={Object.keys(TripDosage).map(key => {
+              // @ts-ignore
+              return TripDosage[key] as string
+            })}
+          />
         </div>
 
         <div className="flex gap-x-4">
-          <div className="flex flex-col gap-y-1">
-            <Label htmlFor={'data[setting]'} className="after:ml-0.5 after:text-red-500 after:content-['*']">
-              {'Setting'}
-            </Label>
-            <Select disabled={pending} required={true} name={'data[setting]'}>
-              <SelectTrigger disabled={pending} className="w-[180px] disabled:cursor-not-allowed disabled:opacity-40">
-                <SelectValue placeholder="Select the setting" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectGroup>
-                  <SelectLabel>Setting</SelectLabel>
-                  {Object.keys(TripSetting).map((key: string) => (
-                    <SelectItem key={`setting-${key}`} value={key as TripSetting} className="capitalize">
-                      {/* @ts-ignore */}
-                      {(TripSetting[key] as string).split('_').join(' ').toLowerCase()}
-                    </SelectItem>
-                  ))}
-                </SelectGroup>
-              </SelectContent>
-            </Select>
-          </div>
+          <SelectWithHint
+            label={'setting'}
+            innerLabel={'Trip Settings'}
+            hintText={'Where did you take the drugs?'}
+            options={Object.keys(TripSetting).map(key => {
+              // @ts-ignore
+              return TripSetting[key] as string
+            })}
+          />
 
-          <div className="flex flex-col gap-y-1">
-            <Label htmlFor={'data[intention]'} className="after:ml-0.5 after:text-red-500 after:content-['*']">
-              {'Your Intention'}
-            </Label>
-            <Select disabled={pending} required={true} name={'data[intention]'}>
-              <SelectTrigger disabled={pending} className="w-[180px] disabled:cursor-not-allowed disabled:opacity-40">
-                <SelectValue placeholder="Select the intention" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectGroup>
-                  <SelectLabel>Intention</SelectLabel>
-                  {Object.keys(TripIntention).map((key: string) => (
-                    <SelectItem key={`intention-${key}`} value={key as TripIntention} className="capitalize">
-                      {/* @ts-ignore */}
-                      {(TripIntention[key] as string).toLowerCase()}
-                    </SelectItem>
-                  ))}
-                </SelectGroup>
-              </SelectContent>
-            </Select>
-          </div>
+          <SelectWithHint
+            label={'intention'}
+            innerLabel={'Intentions'}
+            hintText={'What was your motivation for taking the drugs??'}
+            options={Object.keys(TripIntention).map(key => {
+              // @ts-ignore
+              return TripIntention[key] as string
+            })}
+          />
         </div>
 
         <Button
           disabled={pending}
-          className="disabled:hover:opaci max-w-sm items-center gap-x-2 disabled:cursor-not-allowed disabled:opacity-40"
+          className="hidden max-w-sm items-center gap-x-2 disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:opacity-60 lg:flex"
           variant={'bardo_primary'}
           type={'submit'}
           name={'_action'}
@@ -139,7 +83,7 @@ export const CreateJournal = () => {
         </Button>
       </div>
 
-      <div className="h-full flex-1 gap-y-1">
+      <div className="h-full w-full flex-1 gap-y-1">
         <Label htmlFor={'data[body'} className="after:ml-0.5 after:text-red-500 after:content-['*']">
           {'Describe your trip'}
         </Label>
@@ -153,6 +97,18 @@ export const CreateJournal = () => {
           style={{ resize: 'none' }}
         />
       </div>
+
+      <Button
+        disabled={pending}
+        className="flex max-w-sm items-center gap-x-2 disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:opacity-60 lg:hidden"
+        variant={'bardo_primary'}
+        type={'submit'}
+        name={'_action'}
+        value={'CREATE_JOURNAL'}
+      >
+        {pending && <Icons.loader className="size-5 animate-spin text-white/90" />}
+        {pending ? 'Publishing...' : 'Publish'}
+      </Button>
     </Form>
   )
 }
