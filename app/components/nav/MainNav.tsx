@@ -4,8 +4,8 @@ import type { SerializeFrom } from '@remix-run/node'
 import type { User } from '@prisma/client'
 import { Link } from '@remix-run/react'
 import { Routes } from '@app/services/routes.service'
-import { Button } from '../bardo/Button'
-import { Icons } from '../bardo/Icons'
+import { Button } from '@app/components/bardo/Button'
+import { Icons } from '@app/components/bardo/Icons'
 
 export const MainNav = ({ user }: { user: SerializeFrom<User> }) => {
   return (

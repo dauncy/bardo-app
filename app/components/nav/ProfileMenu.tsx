@@ -1,14 +1,14 @@
 /* eslint-disable react/jsx-pascal-case */
 import { ClientOnly } from '../utility/ClientOnly'
 import { Popover, PopoverContent, PopoverTrigger } from '@app/components/bardo/Popover'
-import { TypographyParagraph } from '../bardo/typography/TypographyParagraph'
-import { Icons } from '../bardo/Icons'
-import { Separator } from '../bardo/Separator'
+import { TypographyParagraph } from '@app/components/bardo/typography/TypographyParagraph'
+import { Icons } from '@app/components/bardo/Icons'
+import { Separator } from '@app/components/bardo/Separator'
 import type { SerializeFrom } from '@remix-run/node'
 import type { User } from '@prisma/client'
 import { Link } from '@remix-run/react'
 import { Routes } from '@app/services/routes.service'
-import { UserAvatar } from '../users/UserAvatar'
+import { UserAvatar } from '@app/components/users/UserAvatar'
 
 export const ProfileMenu = ({ user }: { user: SerializeFrom<User> }) => {
   return (
