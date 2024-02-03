@@ -26,6 +26,13 @@ export interface DecodedClaims {
   fbUid: string
 }
 
+export interface AuthProfile {
+  email: string
+  picture: string
+  name: string
+  fbUid: string
+}
+
 const sessionKey = 'auth:firebase'
 
 @singleton()
@@ -165,7 +172,7 @@ export class AdminAuthService {
     })
   }
 
-  async getAuthProfile(req: Request) {
+  async getAuthProfile(req: Request): Promise<null | AuthProfile> {
     const data = await this.getSession(req)
     if (!data) {
       return null

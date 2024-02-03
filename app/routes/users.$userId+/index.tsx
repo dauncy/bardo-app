@@ -18,7 +18,7 @@ export default function UserPage() {
     return data.user.email.charAt(0).toUpperCase()
   }
   return (
-    <div className="flex flex-col gap-y-8">
+    <div className="flex h-full flex-1 grow flex-col gap-y-8">
       <div className="flex flex-col gap-y-2">
         <Label>{'Email'}</Label>
         <Input
@@ -46,7 +46,7 @@ export default function UserPage() {
           </Avatar>
         </ClientOnly>
       </div>
-      <Link to={Routes.logout}>
+      <Link to={Routes.logout} className="w-max">
         <Button variant={'secondary'} className="mt-5 w-max border border-violet-400 text-violet-400">
           {'Logout'}
         </Button>

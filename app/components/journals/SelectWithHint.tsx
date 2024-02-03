@@ -9,13 +9,14 @@ import {
   SelectItem,
 } from '@app/components/bardo/Select'
 import { useNavigation } from '@remix-run/react'
-import { Popover, PopoverContent, PopoverTrigger } from '../bardo/Popover'
+import { Popover, PopoverContent, PopoverTrigger } from '@app/components/bardo/Popover'
 
 interface SelectWithHintProps {
   options: string[]
   label: string
   innerLabel: string
   hintText: string
+  placeholder: string
 }
 
 const HintPopover = ({ hintText }: { hintText: string }) => {
@@ -50,14 +51,14 @@ export const SelectWithHint = (props: SelectWithHintProps) => {
       </div>
       <Select disabled={pending} required={true} name={`data[${props.label}]`}>
         <SelectTrigger disabled={pending} className="w-[180px] disabled:cursor-not-allowed disabled:opacity-40">
-          <SelectValue placeholder="Select the modality" />
+          <SelectValue placeholder={props.placeholder} />
         </SelectTrigger>
         <SelectContent>
           <SelectGroup>
             <SelectLabel>{props.innerLabel}</SelectLabel>
             {props.options.map(option => (
               <SelectItem key={option} value={option}>
-                {option}
+                {option.split('_').join(' ')}
               </SelectItem>
             ))}
           </SelectGroup>

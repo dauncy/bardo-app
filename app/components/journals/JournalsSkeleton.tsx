@@ -1,6 +1,6 @@
 export const JournalSkeleton = () => {
   return (
-    <div className="relative flex h-[400px] flex-col rounded-md border border-slate-200 px-4 py-5 ">
+    <div className="relative flex h-[400px] w-full flex-col rounded-md border border-slate-200 bg-white px-4 py-5">
       <div className="flex gap-x-4">
         <div className="h-12 w-12 animate-pulse rounded-full bg-slate-200" />
         <div className="flex w-3/4 flex-col gap-y-2">

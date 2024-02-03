@@ -5,7 +5,7 @@ import { defer, type LoaderFunctionArgs } from '@remix-run/node'
 import { Await, Link, useLoaderData, useParams } from '@remix-run/react'
 import { Fragment, Suspense } from 'react'
 import { JournalSkeleton } from '@app/components/journals/JournalsSkeleton'
-import type { Journal } from '@prisma/client'
+import type { Journal, User } from '@prisma/client'
 import { Button } from '@app/components/bardo/Button'
 import { Icons } from '@app/components/bardo/Icons'
 import { JournalCard } from '@app/components/journals/JournalCard'
@@ -16,13 +16,16 @@ export const loader = async (ctx: LoaderFunctionArgs) => {
     throw Error('no user id.')
   }
 
-  const userJournals = new Promise<Journal[]>(async resolve => {
+  const userJournals = new Promise<Array<Journal & { user: User }>>(async resolve => {
     const journals = await prisma.journal.findMany({
       where: {
         user_id: userId,
       },
       orderBy: {
         updated_at: 'desc',
+      },
+      include: {
+        user: true,
       },
     })
     resolve(journals)

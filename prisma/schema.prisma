@@ -33,6 +33,6 @@ model Journal {
   metadata   Json
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
-  User       User?    @relation(fields: [user_id], references: [id], onDelete: Cascade)
-  user_id     String?
+  user       User    @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  user_id     String
 }
