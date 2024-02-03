@@ -12,6 +12,7 @@ import { Routes } from '@app/services/routes.service'
 import { AdminAuthService } from '@app/services/auth/auth-server.service'
 import { Card, CardContent } from '@app/components/bardo/Card'
 import { Icons } from '@app/components/bardo/Icons'
+import { getAccountInfo } from '@app/utils/server.utils/account.utils'
 
 const authSvc = container.resolve(AuthClient)
 
@@ -23,7 +24,11 @@ export const loader = async (ctx: LoaderFunctionArgs) => {
   const adminAuth = container.resolve(AdminAuthService)
   const isAuthenticated = await adminAuth.isAuthenticated(ctx.request)
   if (isAuthenticated) {
-    return redirect(Routes.users)
+    const { user, authProfile } = await getAccountInfo(ctx.request)
+    if (!user || !authProfile) {
+      throw redirect(Routes.logout)
+    }
+    return redirect(`${Routes.users}/${user.id}`)
   }
   return null
 }
@@ -49,11 +54,16 @@ export default function Index() {
     <div className="reltaive h-screen w-screen bg-neutral-50">
       <div className="mx-auto flex h-full w-full max-w-screen-2xl flex-col items-stretch md:flex-row">
         <div className="gapy-4 flex h-full w-full flex-1 flex-col items-center justify-center bg-violet-200">
-          <div className="mt-0 flex flex-col md:mt-auto ">
-            <h1 className="font-bold text-5xl uppercase">{'Bardo App'}</h1>
-            <TypographyParagraph size={'large'} className="ml-1">
-              {'Psychedelic journal'}
-            </TypographyParagraph>
+          <div className="my-0 flex flex-row gap-x-4 md:mt-auto">
+            <div className="flex size-14 items-center justify-center rounded-full bg-violet-500 shadow-md">
+              <img src={'/logo.png'} alt="" className="flex size-8 object-contain object-center" />
+            </div>
+            <div className="flex flex-col">
+              <h1 className="font-bold text-5xl uppercase">{'Bardo App'}</h1>
+              <TypographyParagraph size={'large'} className="ml-1">
+                {'Psychedelic journal'}
+              </TypographyParagraph>
+            </div>
           </div>
 
           <div className="mt-auto hidden items-center gap-x-4 md:flex">

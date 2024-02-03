@@ -1,10 +1,28 @@
 import type { LucideProps } from 'lucide-react'
-import { AlertCircle, ArrowLeft, Loader2 } from 'lucide-react'
+import {
+  AlertCircle,
+  Archive,
+  ArrowLeft,
+  ArrowRight,
+  CircleUserRound,
+  Loader2,
+  LogOut,
+  MoreVertical,
+  Plus,
+  PlusCircle,
+} from 'lucide-react'
 
 export const Icons = {
   loader: Loader2,
   alertCircle: AlertCircle,
   arrowBack: ArrowLeft,
+  arrowForward: ArrowRight,
+  plus: Plus,
+  more: MoreVertical,
+  userRound: CircleUserRound,
+  logout: LogOut,
+  archive: Archive,
+  plusCircle: PlusCircle,
   google: (props: LucideProps) => (
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="64" height="64" {...props}>
       <defs>

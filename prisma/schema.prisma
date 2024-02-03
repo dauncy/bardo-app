@@ -10,11 +10,29 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+generator json {
+  provider = "prisma-json-types-generator"
+}
+
+
 model User {
-  id             String                   @id
-  email          String                   
-  picture        String?
-  name           String?
-  created_at     DateTime                 @default(now())
-  updated_at     DateTime                 @updatedAt
+  id         String    @id
+  email      String
+  picture    String?
+  name       String?
+  journals   Journal[]
+  created_at DateTime  @default(now())
+  updated_at DateTime  @updatedAt
+}
+
+model Journal {
+  id         String   @id @default(uuid()) @db.Uuid
+  title      String?
+  body       String
+  /// [JournalMetadata]
+  metadata   Json
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+  user       User    @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  user_id     String
 }

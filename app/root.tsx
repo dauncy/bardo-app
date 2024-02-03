@@ -5,7 +5,14 @@ import styles from './tailwind.css'
 import { ClientOnly } from '@app/components/utility/ClientOnly'
 import { Toaster } from '@app/components/bardo/toast/Toaster'
 
-export const links: LinksFunction = () => [{ rel: 'stylesheet', href: styles }]
+export const links: LinksFunction = () => [
+  { rel: 'stylesheet', href: styles },
+  {
+    rel: 'icon',
+    href: '/logo.png',
+    type: 'image/png',
+  },
+]
 
 export default function App() {
   return (

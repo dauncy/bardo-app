@@ -31,6 +31,7 @@ export default {
     },
   },
   routes: defineRoutes => {
-    return flatRoutes(['routes'], defineRoutes)
+    const routes = flatRoutes(['routes'], defineRoutes)
+    return routes
   },
 }

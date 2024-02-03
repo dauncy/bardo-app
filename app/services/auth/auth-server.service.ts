@@ -17,12 +17,19 @@ interface FirebaseSession {
   firebase_session_token: string // which can be decoded
 }
 
-interface DecodedClaims {
+export interface DecodedClaims {
   sessionToken: string
   email: string
   name: string
   picture: string
   expiresAt: number
+  fbUid: string
+}
+
+export interface AuthProfile {
+  email: string
+  picture: string
+  name: string
   fbUid: string
 }
 
@@ -113,11 +120,11 @@ export class AdminAuthService {
     }
   }
 
-  private getSession = async (req: Request): Promise<DecodedClaims> => {
+  private getSession = async (req: Request): Promise<null | DecodedClaims> => {
     const session = await this.sessionStorage.getSession(req)
     const firebaseSession: Nullable<FirebaseSession> = session.get(sessionKey) ?? null
     if (!firebaseSession) {
-      throw redirect(Routes.logout)
+      return null
     }
 
     const sessionData = await this.verifySession(firebaseSession.firebase_session_token)
@@ -156,17 +163,20 @@ export class AdminAuthService {
     const firebaseSession: FirebaseSession = {
       firebase_session_token: sessionToken,
     }
-    await this.usersService.upsertUser({ email, picture, name, fbUid })
+    const user = await this.usersService.upsertUser({ email, picture, name, fbUid })
     session.set(sessionKey, firebaseSession)
-    return redirect(Routes.user('foo'), {
+    return redirect(Routes.user(user.id), {
       headers: {
         'Set-Cookie': await this.sessionStorage.commitSession(session),
       },
     })
   }
 
-  async getAuthProfile(req: Request) {
+  async getAuthProfile(req: Request): Promise<null | AuthProfile> {
     const data = await this.getSession(req)
+    if (!data) {
+      return null
+    }
     return {
       email: data.email,
       picture: data.picture,
