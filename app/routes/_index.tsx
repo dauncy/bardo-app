@@ -52,7 +52,7 @@ export default function Index() {
   }, [submit])
   return (
     <div className="reltaive h-screen w-screen bg-neutral-50">
-      <div className="mx-auto flex h-full w-full max-w-screen-2xl flex-col items-stretch md:flex-row">
+      <div className="mx-auto flex h-full w-full max-w-screen-2xl flex-col md:flex-row">
         <div className="gapy-4 flex h-full w-full flex-1 flex-col items-center justify-center bg-violet-200">
           <div className="my-0 flex flex-row gap-x-4 md:mt-auto">
             <div className="flex size-14 items-center justify-center rounded-full bg-violet-500 shadow-md">
@@ -80,7 +80,9 @@ export default function Index() {
           </div>
         </div>
         <div className="flex h-full  w-full flex-1 flex-col items-center justify-center bg-violet-200 px-4 py-0 pb-2 pt-5 md:bg-transparent md:py-5 md:pb-0 md:pt-0">
-          <AuthForm />
+          <div className="mb-20 flex h-full w-full items-center justify-center md:mb-0">
+            <AuthForm />
+          </div>
           <div className="mt-auto flex gap-x-4 md:hidden">
             <Link to={Routes.marketing.privacy}>
               <Button variant={'link'}>

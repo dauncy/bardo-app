@@ -17,6 +17,7 @@ interface SelectWithHintProps {
   innerLabel: string
   hintText: string
   placeholder: string
+  defaultValue?: string
 }
 
 const HintPopover = ({ hintText }: { hintText: string }) => {
@@ -49,7 +50,7 @@ export const SelectWithHint = (props: SelectWithHintProps) => {
         </Label>
         <HintPopover hintText={props.hintText} />
       </div>
-      <Select disabled={pending} required={true} name={`data[${props.label}]`}>
+      <Select disabled={pending} required={true} name={`data[${props.label}]`} defaultValue={props.defaultValue}>
         <SelectTrigger disabled={pending} className="w-[180px] disabled:cursor-not-allowed disabled:opacity-40">
           <SelectValue placeholder={props.placeholder} />
         </SelectTrigger>

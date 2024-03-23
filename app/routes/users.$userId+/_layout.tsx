@@ -5,7 +5,7 @@ import { Routes } from '@app/services/routes.service'
 import { getAccountInfo } from '@app/utils/server.utils/account.utils'
 import type { LoaderFunctionArgs } from '@remix-run/node'
 import { json, redirect } from '@remix-run/node'
-import { Outlet, useLoaderData } from '@remix-run/react'
+import { Outlet, useLoaderData, useParams } from '@remix-run/react'
 
 const validateRequest = async (ctx: LoaderFunctionArgs) => {
   const { authProfile, user } = await getAccountInfo(ctx.request)
@@ -25,6 +25,7 @@ export const loader = async (ctx: LoaderFunctionArgs) => {
 
 export default function UserLayout() {
   const { user, authProfile } = useLoaderData<typeof loader>()
+  const params = useParams()
   const sidebarNavItems = [
     {
       title: 'Profile',
@@ -35,8 +36,8 @@ export default function UserLayout() {
       href: `/users/${user.id}/journals`,
     },
     {
-      title: 'New Journal',
-      href: `/users/${user.id}/journals/new`,
+      title: params.userId && params.id ? 'Edit Journal' : 'New Journal',
+      href: params.userId && params.id ? `/users/${user.id}/journals/${params.id}` : `/users/${user.id}/journals/new`,
     },
     {
       title: 'Feed',
