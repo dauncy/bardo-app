@@ -10,6 +10,8 @@ import {
   MoreVertical,
   Plus,
   PlusCircle,
+  NotebookPen,
+  Trash,
 } from 'lucide-react'
 
 export const Icons = {
@@ -23,6 +25,8 @@ export const Icons = {
   logout: LogOut,
   archive: Archive,
   plusCircle: PlusCircle,
+  NotebookPen: NotebookPen,
+  Trash: Trash,
   google: (props: LucideProps) => (
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="64" height="64" {...props}>
       <defs>

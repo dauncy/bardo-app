@@ -43,4 +43,21 @@ export const journalCrudSchema = z.discriminatedUnion('_action', [
       setting: z.string(),
     }),
   }),
+  z.object({
+    _action: z.literal('UPDATE_JOURNAL'),
+    data: z.object({
+      title: z.string().optional(),
+      body: z.string(),
+      modality: z.string(),
+      intention: z.string(),
+      dosage: z.string(),
+      setting: z.string(),
+    }),
+  }),
+  z.object({
+    _action: z.literal('DELETE_JOURNAL'),
+    data: z.object({
+      id: z.string(),
+    }),
+  }),
 ])

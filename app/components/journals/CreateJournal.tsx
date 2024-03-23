@@ -7,11 +7,20 @@ import { Button } from '@app/components/bardo/Button'
 import { Textarea } from '@app/components/bardo/Textarea'
 import { Icons } from '@app/components/bardo/Icons'
 import { SelectWithHint } from './SelectWithHint'
+import type { SerializeFrom } from '@remix-run/node'
+import type { Journal } from '@prisma/client'
 
-export const CreateJournal = () => {
+export const CreateJournal = ({ journal }: { journal?: SerializeFrom<Journal> }) => {
   const navigation = useNavigation()
   const pending = navigation.state === 'submitting' || navigation.state === 'loading'
 
+  const buttonText = () => {
+    if (journal) {
+      return pending ? 'Updating...' : 'Save Changes'
+    }
+
+    return pending ? 'Publishing...' : 'Publish'
+  }
   return (
     <Form className="flex h-full w-full flex-col justify-center gap-8 lg:flex-row " method={'POST'}>
       <div className="flex w-full flex-1 flex-col gap-y-8">
@@ -24,10 +33,12 @@ export const CreateJournal = () => {
             type={'text'}
             placeholder="optional"
             required={false}
+            defaultValue={journal?.title ?? undefined}
           />
         </div>
         <div className="flex gap-x-4">
           <SelectWithHint
+            defaultValue={journal?.metadata?.modality}
             label={'modality'}
             placeholder={'Select the modality'}
             innerLabel={'Modalities'}
@@ -41,6 +52,7 @@ export const CreateJournal = () => {
           <SelectWithHint
             label={'dosage'}
             innerLabel={'Dosages'}
+            defaultValue={journal?.metadata?.dosage}
             placeholder={'Select the dosage'}
             hintText={'How much did you take?'}
             options={Object.keys(TripDosage).map(key => {
@@ -55,6 +67,7 @@ export const CreateJournal = () => {
             placeholder={'Select the settings'}
             label={'setting'}
             innerLabel={'Trip Settings'}
+            defaultValue={journal?.metadata?.setting}
             hintText={'Where did you take the drugs?'}
             options={Object.keys(TripSetting).map(key => {
               // @ts-ignore
@@ -66,6 +79,7 @@ export const CreateJournal = () => {
             placeholder={'Select your intention'}
             label={'intention'}
             innerLabel={'Intentions'}
+            defaultValue={journal?.metadata?.intention}
             hintText={'What was your motivation for taking the drugs??'}
             options={Object.keys(TripIntention).map(key => {
               // @ts-ignore
@@ -80,10 +94,10 @@ export const CreateJournal = () => {
           variant={'bardo_primary'}
           type={'submit'}
           name={'_action'}
-          value={'CREATE_JOURNAL'}
+          value={journal ? 'UPDATE_JOURNAL' : 'CREATE_JOURNAL'}
         >
           {pending && <Icons.loader className="size-5 animate-spin text-white/90" />}
-          {pending ? 'Publishing...' : 'Publish'}
+          {buttonText()}
         </Button>
       </div>
 
@@ -98,6 +112,7 @@ export const CreateJournal = () => {
           placeholder={
             'Provide details on specific imagery, themes, thoughts, or feelings you felt during your trip. Share anything you want.'
           }
+          defaultValue={journal?.body}
           style={{ resize: 'none' }}
         />
       </div>
@@ -108,10 +123,10 @@ export const CreateJournal = () => {
         variant={'bardo_primary'}
         type={'submit'}
         name={'_action'}
-        value={'CREATE_JOURNAL'}
+        value={journal ? 'UPDATE_JOURNAL' : 'CREATE_JOURNAL'}
       >
         {pending && <Icons.loader className="size-5 animate-spin text-white/90" />}
-        {pending ? 'Publishing...' : 'Publish'}
+        {buttonText()}
       </Button>
     </Form>
   )

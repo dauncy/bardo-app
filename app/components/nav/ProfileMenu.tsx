@@ -17,7 +17,7 @@ export const ProfileMenu = ({ user }: { user: SerializeFrom<User> }) => {
         <PopoverTrigger>
           <UserAvatar user={user} />
         </PopoverTrigger>
-        <PopoverContent className="ml-4 flex w-[240px] flex-col px-0 pb-2">
+        <PopoverContent className="z-[999999] ml-4 flex w-[240px] flex-col px-0 pb-2">
           <Link
             to={`${Routes.users}/${user.id}`}
             className="group flex w-full cursor-pointer flex-row items-center gap-x-2 px-4 py-1.5"
