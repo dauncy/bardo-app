@@ -1,15 +1,64 @@
+/* eslint-disable react/jsx-pascal-case */
 import { Button } from '@app/components/bardo/Button'
+import { Icons } from '@app/components/bardo/Icons'
 import { Input } from '@app/components/bardo/Input'
 import { Label } from '@app/components/bardo/Label'
+import { TypographyParagraph } from '@app/components/bardo/typography/TypographyParagraph'
+import { DeleteAccount } from '@app/components/users/DeleteAccount'
 import { UpdateUserProfileImage } from '@app/components/users/UpdateUserProfile'
 import { ClientOnly } from '@app/components/utility/ClientOnly'
+import { prisma } from '@app/db.server'
+import { AuthClient } from '@app/services/auth/auth-client.service'
 import type { DecodedClaims } from '@app/services/auth/auth-server.service'
 import { Routes } from '@app/services/routes.service'
+import type { RequestCtx } from '@app/types'
+import type { UserCrudPayload } from '@app/types/users'
+import { userCrudSchema } from '@app/types/users'
+import { getAccountInfo } from '@app/utils/server.utils/account.utils'
+import { sleep } from '@app/utils/server.utils/async.utils'
+import { getFormData } from '@app/utils/server.utils/forms.utils'
 import type { User } from '@prisma/client'
-import { Link, useOutletContext } from '@remix-run/react'
+import type { ActionFunctionArgs } from '@remix-run/node'
+import { redirect as serverRedirect } from '@remix-run/node'
+import { useFetcher, useOutletContext } from '@remix-run/react'
+import { stringify } from 'qs'
+import { useRef } from 'react'
+import { container } from 'tsyringe'
 
+const validateRequest = async (ctx: RequestCtx) => {
+  const { user, authProfile } = await getAccountInfo(ctx.request)
+  if (!user || !authProfile) {
+    throw serverRedirect(Routes.logout)
+  }
+  return { user, authProfile }
+}
+
+export const action = async (ctx: ActionFunctionArgs) => {
+  const { user } = await validateRequest(ctx)
+  const body = await getFormData(ctx, userCrudSchema)
+  switch (body._action) {
+    case 'UPDATE_USER':
+      await sleep(500)
+      await prisma.user.update({
+        where: {
+          id: user.id,
+        },
+        data: {
+          name: body.data.name,
+        },
+      })
+      break
+    case 'DELETE_USER':
+      await prisma.user.delete({ where: { id: user.id } })
+      return serverRedirect(Routes.logout)
+  }
+  return null
+}
 export default function UserPage() {
   const data = useOutletContext<{ user: User; authProfile: DecodedClaims }>()
+  const usernameRef = useRef<HTMLInputElement>(null)
+  const fetcher = useFetcher()
+  const pending = fetcher.state === 'loading' || fetcher.state === 'submitting'
   return (
     <div className="flex h-full flex-1 grow flex-col gap-y-8">
       <div className="flex flex-col gap-y-2">
@@ -24,10 +73,10 @@ export default function UserPage() {
       <div className="flex flex-col gap-y-2">
         <Label>{'Username'}</Label>
         <Input
-          value={data.user?.name ?? ''}
+          ref={usernameRef}
+          defaultValue={data.user?.name ?? ''}
           placeholder="enter your username"
-          className="w-full max-w-sm cursor-not-allowed border border-slate-300 bg-violet-100"
-          disabled={true}
+          className="w-full max-w-sm border border-slate-300"
         />
       </div>
       <div className="flex flex-col gap-y-2">
@@ -36,11 +85,44 @@ export default function UserPage() {
           <UpdateUserProfileImage user={data.user} />
         </ClientOnly>
       </div>
-      <Link to={Routes.logout} className="w-max">
-        <Button variant={'secondary'} className="mt-5 w-max border border-violet-400 text-violet-400">
-          {'Logout'}
-        </Button>
-      </Link>
+      <Button
+        disabled={pending}
+        variant={'bardo_primary'}
+        className="flex w-full max-w-sm items-center gap-x-2"
+        onClick={() => {
+          const username = usernameRef.current?.value?.trim()
+          if (!username || username === data.user.name) {
+            return
+          }
+
+          const payload: UserCrudPayload = {
+            _action: 'UPDATE_USER',
+            data: {
+              name: username,
+            },
+          }
+          fetcher.submit(stringify(payload), { method: 'POST' })
+        }}
+      >
+        {pending && <Icons.loader className="size-5 animate-spin text-white/90" />}
+        {'Update Account'}
+      </Button>
+      <div className="flex w-full max-w-sm flex-col gap-y-1 rounded-md border border-destructive p-5">
+        <TypographyParagraph className="font-semibold text-destructive">{'Danger Zone'}</TypographyParagraph>
+        <div className="mt-5 flex flex-col items-center gap-x-2 gap-y-2 md:flex-row">
+          <Button
+            variant={'secondary'}
+            className="w-full border border-violet-400 text-violet-400"
+            onClick={async () => {
+              await container.resolve(AuthClient).signOut()
+              fetcher.submit({}, { method: 'GET', action: Routes.logout })
+            }}
+          >
+            {'Logout'}
+          </Button>
+          <DeleteAccount userId={data.user.id} />
+        </div>
+      </div>
     </div>
   )
 }
