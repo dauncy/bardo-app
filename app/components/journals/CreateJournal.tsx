@@ -36,7 +36,7 @@ export const CreateJournal = ({ journal }: { journal?: SerializeFrom<Journal> })
             defaultValue={journal?.title ?? undefined}
           />
         </div>
-        <div className="flex gap-x-4">
+        <div className="flex flex-col gap-x-4 gap-y-8 md:flex-row ">
           <SelectWithHint
             defaultValue={journal?.metadata?.modality}
             label={'modality'}
@@ -62,7 +62,7 @@ export const CreateJournal = ({ journal }: { journal?: SerializeFrom<Journal> })
           />
         </div>
 
-        <div className="flex gap-x-4">
+        <div className="flex flex-col gap-x-4 gap-y-8 md:flex-row">
           <SelectWithHint
             placeholder={'Select the settings'}
             label={'setting'}

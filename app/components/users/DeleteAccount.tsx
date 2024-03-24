@@ -13,9 +13,12 @@ export const DeleteAccount = ({ userId }: { userId: string }) => {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button variant={'destructive'} className="flex w-full">
-          {'Delete Account'}
-        </Button>
+        <div className="group flex w-full cursor-pointer items-center gap-x-2 rounded-b-md px-4 py-1.5 text-muted-foreground hover:bg-destructive/20 hover:text-destructive">
+          <Icons.Trash className="size-5" />
+          <TypographyParagraph size={'small'} className="text-muted-foreground group-hover:text-destructive">
+            {'Delete Account'}
+          </TypographyParagraph>
+        </div>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>

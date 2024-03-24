@@ -11,7 +11,7 @@ export const UserAvatar = ({ user }: { user: SerializeFrom<User> }) => {
     return user.email.charAt(0).toUpperCase()
   }
   return (
-    <Avatar className="flex size-12 cursor-pointer items-center justify-center rounded-full border border-slate-200 p-1">
+    <Avatar className="flex size-12 cursor-pointer rounded-full border border-slate-200">
       <AvatarImage src={user.picture ?? ''} alt={user.email} />
       <AvatarFallback className="size-12 border border-slate-200 bg-violet-400">{avatarFallback()}</AvatarFallback>
     </Avatar>

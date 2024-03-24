@@ -3,6 +3,8 @@ import { Button } from '@app/components/bardo/Button'
 import { Icons } from '@app/components/bardo/Icons'
 import { Input } from '@app/components/bardo/Input'
 import { Label } from '@app/components/bardo/Label'
+import { Popover, PopoverContent, PopoverTrigger } from '@app/components/bardo/Popover'
+import { Separator } from '@app/components/bardo/Separator'
 import { TypographyParagraph } from '@app/components/bardo/typography/TypographyParagraph'
 import { DeleteAccount } from '@app/components/users/DeleteAccount'
 import { UpdateUserProfileImage } from '@app/components/users/UpdateUserProfile'
@@ -107,22 +109,29 @@ export default function UserPage() {
         {pending && <Icons.loader className="size-5 animate-spin text-white/90" />}
         {'Update Account'}
       </Button>
-      <div className="flex w-full max-w-sm flex-col gap-y-1 rounded-md border border-destructive p-5">
-        <TypographyParagraph className="font-semibold text-destructive">{'Danger Zone'}</TypographyParagraph>
-        <div className="mt-5 flex flex-col items-center gap-x-2 gap-y-2 md:flex-row">
-          <Button
-            variant={'secondary'}
-            className="w-full border border-violet-400 text-violet-400"
+      <Popover>
+        <PopoverTrigger asChild>
+          <Button variant={'outline'} className="w-full max-w-sm">
+            {'Danger Zone'}
+          </Button>
+        </PopoverTrigger>
+        <PopoverContent className="p-0">
+          <div
+            className="group flex w-full cursor-pointer items-center gap-x-2 px-4 py-1.5 text-muted-foreground hover:bg-violet-50 hover:text-violet-500"
             onClick={async () => {
               await container.resolve(AuthClient).signOut()
               fetcher.submit({}, { method: 'GET', action: Routes.logout })
             }}
           >
-            {'Logout'}
-          </Button>
+            <Icons.logout className="size-5" />
+            <TypographyParagraph size={'small'} className="text-muted-foreground group-hover:text-violet-500">
+              {'Sign Out'}
+            </TypographyParagraph>
+          </div>
+          <Separator />
           <DeleteAccount userId={data.user.id} />
-        </div>
-      </div>
+        </PopoverContent>
+      </Popover>
     </div>
   )
 }
