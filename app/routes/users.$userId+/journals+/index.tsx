@@ -41,14 +41,14 @@ export default function UserJournalsPage() {
   const { userJournals } = useLoaderData<typeof loader>()
   return (
     <div className="flex w-full flex-col gap-y-5 pb-10 ">
-      <div className="flex w-full items-center justify-between">
+      <div className="flex w-full flex-col gap-y-2 md:flex-row md:items-center md:justify-between">
         <TypographyParagraph className="" size={'medium'}>
           {'Your Journals'}
         </TypographyParagraph>
         <Link to={`/users/${userId}/journals/new`}>
           <Button
             variant={'outline'}
-            className="items-center gap-x-2 border border-violet-400 text-violet-400 hover:text-violet-600"
+            className="w-full items-center gap-x-2 border border-violet-400 text-violet-400 hover:text-violet-600 md:max-w-48"
           >
             {'Add New Entry'}
             <Icons.plus className="size-5" />

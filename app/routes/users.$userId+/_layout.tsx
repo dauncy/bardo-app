@@ -48,18 +48,18 @@ export default function UserLayout() {
   return (
     <div className="flex min-h-screen w-screen items-center justify-center bg-indigo-50 p-5">
       <div className="max-w-9xl h-full min-h-[calc(100vh-40px)] w-full rounded-md border border-slate-200 bg-white shadow-md">
-        <div className="h-full flex-1 grow space-y-6 p-10 pb-16">
+        <div className="h-full flex-1 grow space-y-6 px-6 py-5 pb-16 md:px-10 md:py-10">
           <div className="space-y-0.5">
-            <TypographyParagraph size={'large'} className="text-3xl text-foreground">
+            <TypographyParagraph size={'large'} className="text-xl text-foreground md:text-3xl">
               {`Welcom back ${user.name ?? user.email}!`}
             </TypographyParagraph>
-            <TypographyParagraph className="text-muted-forground">
+            <TypographyParagraph className="text-sm text-muted-foreground md:text-base">
               {'manage your account settings, view and add to your journals.'}
             </TypographyParagraph>
           </div>
           <Separator className="my-6" />
           <div className="flex h-full min-h-full flex-1 grow flex-col space-y-8 xl:flex-row xl:space-x-12 xl:space-y-0">
-            <aside className="-mx-4 xl:w-1/5">
+            <aside className="-mx-4 px-4 md:px-0 xl:w-1/5">
               <SidebarNav items={sidebarNavItems} />
             </aside>
             <div className="min-h-full flex-1 xl:max-w-5xl">
