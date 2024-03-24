@@ -15,7 +15,7 @@ declare global {
 
 if (!global.__prisma) {
   global.__prisma = new PrismaClient({
-    datasourceUrl: process.env.POSTGRES_PRISMA_URL,
+    datasourceUrl: process.env.DATABASE_PRISMA_URL,
   })
 }
 global.__prisma.$connect()
