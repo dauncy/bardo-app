@@ -2,18 +2,18 @@ import { singleton } from 'tsyringe'
 import dotEnv from 'dotenv'
 @singleton()
 export class Config {
-  private readonly config
   constructor() {
     if (typeof window === 'undefined') {
-      this.config = dotEnv.config()
-      console.log('CONFIG ---- ', this.config)
-    } else {
-      this.config = { parsed: window.ENV }
+      dotEnv.config()
     }
   }
 
   private get env() {
-    return this.config?.parsed
+    try {
+      return process.env
+    } catch (e) {
+      return {} as { [key: string]: string }
+    }
   }
 
   public get development() {
