@@ -34,4 +34,11 @@ export class Config {
       api_key: this.env?.FIREBASE_WEB_API_KEY ?? '',
     }
   }
+
+  public get r2() {
+    return {
+      base_url: process.env.R2_URL ?? '',
+      access_key: process.env.R2_ACCESS_KEY ?? '',
+    }
+  }
 }
