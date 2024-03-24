@@ -3,7 +3,6 @@
   "private": true,
   "sideEffects": false,
   "type": "module",
-  "version": "0.0.1",
   "scripts": {
     "prepare": "husky install",
     "build": "remix build",
