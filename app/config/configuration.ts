@@ -6,6 +6,7 @@ export class Config {
   constructor() {
     if (typeof window === 'undefined') {
       this.config = dotEnv.config()
+      console.log('CONFIG ---- ', this.config)
     } else {
       this.config = { parsed: window.ENV }
     }
