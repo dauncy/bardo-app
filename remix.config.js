@@ -4,7 +4,7 @@ import { flatRoutes } from 'remix-flat-routes'
 export default {
   tailwind: true,
   postcss: true,
-  ignoredRouteFiles: ['**/.*'],
+  ignoredRouteFiles: ['**/.*', '**/__tests__/**', '**/*'],
   serverModuleFormat: 'esm',
   serverPlatform: 'node',
   browserNodeBuiltinsPolyfill: {
