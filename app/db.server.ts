@@ -14,9 +14,7 @@ declare global {
 }
 
 if (!global.__prisma) {
-  global.__prisma = new PrismaClient({
-    datasourceUrl: process.env.DATABASE_PRISMA_URL,
-  })
+  global.__prisma = new PrismaClient()
 }
 global.__prisma.$connect()
 export const prisma = global.__prisma
