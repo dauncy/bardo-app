@@ -19,7 +19,7 @@ export const UpdateUserProfileImage = ({ user }: { user: User }) => {
   }
   const { open, getRootProps, getInputProps } = DROPZONE.useDropzone({
     onDrop: async (acceptedFiles: File[], fileRejections, event) => {
-      if (fileRejections) {
+      if (fileRejections.length > 0) {
         toast.toast({ title: 'files rejected', description: fileRejections.map(r => r.errors[0]?.message).join(', ') })
       }
       const newFile = acceptedFiles[0]
