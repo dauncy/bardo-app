@@ -51,7 +51,10 @@ export const SelectWithHint = (props: SelectWithHintProps) => {
         <HintPopover hintText={props.hintText} />
       </div>
       <Select disabled={pending} required={true} name={`data[${props.label}]`} defaultValue={props.defaultValue}>
-        <SelectTrigger disabled={pending} className="w-[180px] disabled:cursor-not-allowed disabled:opacity-40">
+        <SelectTrigger
+          disabled={pending}
+          className="w-full disabled:cursor-not-allowed disabled:opacity-40 md:w-[180px]"
+        >
           <SelectValue placeholder={props.placeholder} />
         </SelectTrigger>
         <SelectContent>

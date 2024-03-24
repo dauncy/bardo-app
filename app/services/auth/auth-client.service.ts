@@ -1,19 +1,21 @@
 import { singleton } from 'tsyringe'
 import { firebaseConfig } from '@app/config/firebase.client.config'
 import { initializeApp, type FirebaseApp } from 'firebase/app'
-import type { Auth } from 'firebase/auth'
+import type { Auth, User } from 'firebase/auth'
 import {
   getAuth,
   inMemoryPersistence,
   signInWithRedirect,
   GoogleAuthProvider,
-  getRedirectResult,
   fetchSignInMethodsForEmail,
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
   sendPasswordResetEmail,
+  signInWithPopup,
+  signOut,
 } from 'firebase/auth'
 import { LoggerStore } from '@app/services/logger.service'
+import { isIOS } from '@app/utils/ui.utils'
 
 @singleton()
 export class AuthClient {
@@ -29,15 +31,23 @@ export class AuthClient {
     this.googleAuthProvider = new GoogleAuthProvider()
     this.googleAuthProvider.addScope('profile')
     this.googleAuthProvider.addScope('email')
-    this.googleAuthProvider.setCustomParameters({ redirect_uri: 'http://localhost:3000/callback' })
+    this.googleAuthProvider.setCustomParameters({ display: 'popup' })
   }
 
   public signInWithGoogle = async () => {
+    if (isIOS()) {
+      return await signInWithPopup(this.auth, this.googleAuthProvider)
+    }
     return await signInWithRedirect(this.auth, this.googleAuthProvider)
   }
 
-  public getRedirectRes = async () => {
-    return await getRedirectResult(this.auth)
+  public getRedirectRes = async (callback?: (user: null | User) => void) => {
+    return await new Promise<{ user: null | User }>(res => {
+      this.auth.onAuthStateChanged(user => {
+        callback && callback(user)
+        res({ user })
+      })
+    })
   }
 
   public checkEmailExists = async ({ email }: { email: string }) => {
@@ -56,5 +66,9 @@ export class AuthClient {
 
   public onForgotPassword = async ({ email }: { email: string }) => {
     return await sendPasswordResetEmail(this.auth, email)
+  }
+
+  public signOut = async () => {
+    return await signOut(this.auth)
   }
 }

@@ -20,7 +20,6 @@ export class UsersService {
       },
       update: {
         email: data.email,
-        name: data.name,
       },
     })
   }

@@ -39,27 +39,31 @@ export default function Index() {
 
   useEffect(() => {
     async function onRedirect() {
-      setCheckingAuth(true)
-      const user = await authSvc.getRedirectRes()
-      const idToken = await user?.user?.getIdToken()
-      if (!idToken) {
-        setCheckingAuth(false)
-        return
-      }
-      return submit({ idToken }, { action: Routes.login })
+      await authSvc.getRedirectRes(async user => {
+        if (!user) {
+          return
+        }
+        setCheckingAuth(true)
+        const idToken = await user?.getIdToken()
+        if (!idToken) {
+          setCheckingAuth(false)
+          return
+        }
+        return submit({ idToken }, { action: Routes.login })
+      })
     }
     onRedirect()
   }, [submit])
   return (
-    <div className="reltaive h-screen w-screen bg-neutral-50">
+    <div className="reltaive flex h-full min-h-full w-screen bg-violet-200 py-5 md:bg-transparent  md:py-0">
       <div className="mx-auto flex h-full w-full max-w-screen-2xl flex-col md:flex-row">
-        <div className="gapy-4 flex h-full w-full flex-1 flex-col items-center justify-center bg-violet-200">
-          <div className="my-0 flex flex-row gap-x-4 md:mt-auto">
+        <div className="flex w-full flex-1 flex-col items-center justify-center gap-y-4 bg-violet-200 md:h-full">
+          <div className="my-0 flex w-full flex-row gap-x-4 px-4 md:mt-auto md:w-max">
             <div className="flex size-14 items-center justify-center rounded-full bg-violet-500 shadow-md">
               <img src={'/logo.png'} alt="" className="flex size-8 object-contain object-center" />
             </div>
             <div className="flex flex-col">
-              <h1 className="font-bold text-5xl uppercase">{'Bardo App'}</h1>
+              <h1 className="font-bold text-4xl uppercase md:text-5xl">{'Bardo App'}</h1>
               <TypographyParagraph size={'large'} className="ml-1">
                 {'Psychedelic journal'}
               </TypographyParagraph>
@@ -79,8 +83,8 @@ export default function Index() {
             </Link>
           </div>
         </div>
-        <div className="flex h-full  w-full flex-1 flex-col items-center justify-center bg-violet-200 px-4 py-0 pb-2 pt-5 md:bg-transparent md:py-5 md:pb-0 md:pt-0">
-          <div className="mb-20 flex h-full w-full items-center justify-center md:mb-0">
+        <div className="mt-auto flex h-full min-h-[calc(100%-64px)] w-full flex-1 flex-col items-center justify-between px-4 py-0 pt-5 md:bg-transparent md:py-5 md:pb-0 md:pt-0">
+          <div className="flex h-full w-full items-center justify-center md:mb-0">
             <AuthForm />
           </div>
           <div className="mt-auto flex gap-x-4 md:hidden">
