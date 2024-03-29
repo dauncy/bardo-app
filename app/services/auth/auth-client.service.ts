@@ -13,6 +13,8 @@ import {
   sendPasswordResetEmail,
   signInWithPopup,
   signOut,
+  verifyPasswordResetCode,
+  confirmPasswordReset,
 } from 'firebase/auth'
 import { LoggerStore } from '@app/services/logger.service'
 import { isIOS } from '@app/utils/ui.utils'
@@ -70,5 +72,11 @@ export class AuthClient {
 
   public signOut = async () => {
     return await signOut(this.auth)
+  }
+
+  public resetPasswordLink = async ({ oobCode, newPassword }: { oobCode: string; newPassword: string }) => {
+    const accoutEmail = await verifyPasswordResetCode(this.auth, oobCode)
+    await confirmPasswordReset(this.auth, oobCode, newPassword)
+    return accoutEmail
   }
 }

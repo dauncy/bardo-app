@@ -15,7 +15,7 @@ export const UpdateUserProfileImage = ({ user }: { user: User }) => {
   const [imageUrl, setImageUrl] = useState(user.picture ?? '')
   const toast = useToast()
   const avatarFallback = () => {
-    return user.name?.charAt(0) ?? user.email.charAt(0)
+    return (user.name?.charAt(0) || user.email.charAt(0)).toUpperCase()
   }
   const { open, getRootProps, getInputProps } = DROPZONE.useDropzone({
     onDrop: async (acceptedFiles: File[], fileRejections, event) => {
