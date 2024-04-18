@@ -83,11 +83,11 @@ export const SignInForm = ({
           className="relative flex flex-col gap-y-2"
           navigate={false}
         >
-          <Label htmlFor="name">{'email'}</Label>
+          <Label htmlFor="name">{'Email'}</Label>
           <input type={'hidden'} name={'email'} value={currentEmail} />
           <Input type={'email'} name={'email_display'} value={currentEmail} disabled={true} className="bg-violet-200" />
 
-          <Label className="mt-3">{'password'}</Label>
+          <Label className="mt-3">{'Password'}</Label>
           <Input className={`peer`} type={'password'} name={'password'} required={true} placeholder="enter password" />
 
           <Button

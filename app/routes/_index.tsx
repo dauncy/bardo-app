@@ -13,6 +13,7 @@ import { AdminAuthService } from '@app/services/auth/auth-server.service'
 import { Card, CardContent } from '@app/components/bardo/Card'
 import { Icons } from '@app/components/bardo/Icons'
 import { getAccountInfo } from '@app/utils/server.utils/account.utils'
+import { LearnMoreModal } from '@app/components/about/LearnModal'
 
 const authSvc = container.resolve(AuthClient)
 
@@ -59,14 +60,15 @@ export default function Index() {
       <div className="mx-auto flex h-full w-full max-w-screen-2xl flex-col md:flex-row">
         <div className="flex w-full flex-1 flex-col items-center justify-center gap-y-4 bg-violet-200 md:h-full">
           <div className="my-0 flex w-full flex-row gap-x-4 px-4 md:mt-auto md:w-max">
-            <div className="flex size-14 items-center justify-center rounded-full bg-violet-500 shadow-md">
-              <img src={'/logo.png'} alt="" className="flex size-8 object-contain object-center" />
+            <div className="flex size-20 items-center justify-center rounded-full border border-2 border-black bg-yellow-200 shadow-md">
+              <img src={'/logo.png'} alt="" className="flex size-14 object-contain object-center" />
             </div>
             <div className="flex flex-col">
-              <h1 className="font-bold text-4xl uppercase md:text-5xl">{'Bardo App'}</h1>
+              <h1 className="font-bold text-4xl uppercase md:text-5xl">{'Bardo'}</h1>
               <TypographyParagraph size={'large'} className="ml-1">
-                {'Psychedelic journal'}
+                {'A community Trip Journal'}
               </TypographyParagraph>
+              <LearnMoreModal />
             </div>
           </div>
 
