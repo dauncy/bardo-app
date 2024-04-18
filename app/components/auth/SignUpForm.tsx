@@ -75,12 +75,12 @@ export const SignUpForm = ({
           className="flex flex-col gap-y-2"
           navigate={false}
         >
-          <Label htmlFor="name">{'email'}</Label>
+          <Label htmlFor="name">{'Email'}</Label>
           <input type={'hidden'} name={'email'} value={currentEmail} />
           <Input type={'email'} name={'email_display'} value={currentEmail} disabled={true} className="bg-violet-200" />
 
           <Label className="mt-3" htmlFor={'password'}>
-            {'password'}
+            {'Password'}
           </Label>
           <Input type={'password'} name={'password'} required={true} placeholder="enter password" />
 
@@ -105,7 +105,7 @@ export const SignUpForm = ({
       </CardContent>
       <CardFooter className="px-10">
         <TypographyParagraph className="text-center font-light" size={'extraSmall'}>
-          <span>{"By creating an account, you aggree to Bardo's"}</span>
+          <span>{"By creating an account, you agree to Bardo's"}</span>
           <span> </span>
           <span className="cursor-pointer font-medium hover:underline">
             <Link to={Routes.marketing.tos}>{'terms of service'}</Link>

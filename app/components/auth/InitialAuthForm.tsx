@@ -30,9 +30,9 @@ export const InitialAuthForm = ({
   return (
     <Card className="w-full max-w-sm">
       <CardHeader>
-        <CardTitle className="text-xl">{'Login or Sign up'}</CardTitle>
+        <CardTitle className="text-xl">{'Login or Sign Up'}</CardTitle>
         <TypographyParagraph className="font-light leading-3" size={'small'}>
-          {'Enter your email to continue to bardo'}
+          {'Enter your email to continue.'}
         </TypographyParagraph>
       </CardHeader>
       <CardContent className="flex flex-col gap-y-2">
@@ -63,7 +63,7 @@ export const InitialAuthForm = ({
         >
           <div className="flex h-full w-full flex-col gap-y-3">
             <Label className="peer peer-[&:not(:placeholder-shown):not(:focus):invalid]:text-red-500" htmlFor="email">
-              {'email'}
+              {'Email'}
             </Label>
             <Input name="email" type={'email'} className="peer" required={true} placeholder={'hello@bardo.app'} />
 
