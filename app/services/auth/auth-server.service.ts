@@ -8,10 +8,10 @@ import { SessionService } from '@app/services/session.service'
 import { redirect } from '@remix-run/node'
 import { Routes } from '@app/services/routes.service'
 import { LoggerStore } from '@app/services/logger.service'
-import { getSearchParams } from '@app/utils/server.utils/search-params.utils'
 import { authenticateSchema } from '@app/types/auth'
-import type { Nullable, RequestCtx } from '@app/types'
+import type { Nullable } from '@app/types'
 import { UsersService } from '@app/services/users.service'
+import { parse } from 'qs'
 
 interface FirebaseSession {
   firebase_session_token: string // which can be decoded
@@ -157,7 +157,10 @@ export class AdminAuthService {
   }
 
   async authenticate(req: Request) {
-    const { idToken } = getSearchParams({ request: req } as RequestCtx, authenticateSchema)
+    const url = new URL(req.url)
+    const params = new URLSearchParams(url.search)
+    const body = parse(params.toString())
+    const { idToken } = authenticateSchema.parse(body)
     const session = await this.sessionStorage.getSession(req)
     const { sessionToken, email, picture, name, fbUid } = await this.createSession(idToken)
     const firebaseSession: FirebaseSession = {
@@ -165,7 +168,8 @@ export class AdminAuthService {
     }
     const user = await this.usersService.upsertUser({ email, picture, name, fbUid })
     session.set(sessionKey, firebaseSession)
-    return redirect(Routes.user(user.id), {
+    // TODO redirect to feed if onboarding done
+    return redirect(`${Routes.user(user.id)}/settings`, {
       headers: {
         'Set-Cookie': await this.sessionStorage.commitSession(session),
       },

@@ -9,8 +9,10 @@ import * as DROPZONE from 'react-dropzone'
 import { useState } from 'react'
 import { useToast } from '../bardo/toast/use-toast'
 import { Label } from '../bardo/Label'
+import { useRevalidator } from '@remix-run/react'
 
 export const UpdateUserProfileImage = ({ user }: { user: User }) => {
+  const revalidator = useRevalidator()
   const [uploading, setUploading] = useState(false)
   const [imageUrl, setImageUrl] = useState(user.picture ?? '')
   const toast = useToast()
@@ -44,6 +46,7 @@ export const UpdateUserProfileImage = ({ user }: { user: User }) => {
       const data: { staus: number; url: string } = await res.json()
       setImageUrl(data.url)
       setUploading(false)
+      revalidator.revalidate()
     },
     multiple: false,
     accept: {

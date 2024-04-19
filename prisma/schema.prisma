@@ -21,6 +21,9 @@ model User {
   picture    String?
   name       String?
   journals   Journal[]
+  user_id    Int  @default(autoincrement())
+  /// [UserMetadata]
+  metadata   Json @default("{}")
   created_at DateTime  @default(now())
   updated_at DateTime  @updatedAt
 }

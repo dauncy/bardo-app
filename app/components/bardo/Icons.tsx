@@ -14,10 +14,16 @@ import {
   NotebookPen,
   Trash,
   UploadCloud,
+  Newspaper,
+  Triangle,
+  Megaphone,
 } from 'lucide-react'
 
 export const Icons = {
   loader: Loader2,
+  Megaphone,
+  Triangle,
+  Newspaper,
   alertCircle: AlertCircle,
   arrowBack: ArrowLeft,
   arrowForward: ArrowRight,
