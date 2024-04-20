@@ -1,22 +1,38 @@
 import { Separator } from '@app/components/bardo/Separator'
 import { DemographicsForm } from '../components/DemographicsForm'
-import { redirect, type ActionFunctionArgs } from '@remix-run/node'
+import { redirect } from '@remix-run/node'
+import type { LoaderFunctionArgs, ActionFunctionArgs } from '@remix-run/node'
 import { getAccountInfo } from '@app/utils/server.utils/account.utils'
 import { getSearchParams } from '@app/utils/server.utils/search-params.utils'
 import { UserRouteParamsSchema, userCrudSchema } from '@app/types/users'
 import { getFormData } from '@app/utils/server.utils/forms.utils'
 import { sleep } from '@app/utils/server.utils/async.utils'
 import { prisma } from '@app/db.server'
-import { useOutletContext } from '@remix-run/react'
-import type { User } from '@prisma/client'
+import { UserOnboardingStep } from '@prisma/client'
 
-const validateRequest = async (ctx: ActionFunctionArgs) => {
+const validateRequest = async (ctx: ActionFunctionArgs | LoaderFunctionArgs) => {
   const { authProfile, user } = await getAccountInfo(ctx.request)
   if (!authProfile || !user) {
     throw redirect('/logout')
   }
 
   return { user, authProfile }
+}
+
+export const loader = async (ctx: LoaderFunctionArgs) => {
+  const { user } = await validateRequest(ctx)
+  // edge case where users click private tab before updating
+  if (user.onboarding_step === UserOnboardingStep.PROFILE) {
+    await prisma.user.update({
+      where: {
+        id: user.id,
+      },
+      data: {
+        onboarding_step: UserOnboardingStep.DEMOGRAPHICS,
+      },
+    })
+  }
+  return null
 }
 export const action = async (ctx: ActionFunctionArgs) => {
   const { userId } = getSearchParams(ctx, UserRouteParamsSchema)
@@ -29,16 +45,26 @@ export const action = async (ctx: ActionFunctionArgs) => {
   await sleep(500)
   switch (body._action) {
     case 'UPDATE_DEMOGRAPHICS':
+      const shouldRedirect =
+        user.onboarding_step === UserOnboardingStep.DEMOGRAPHICS || user.onboarding_step === UserOnboardingStep.PROFILE
       await prisma.user.update({
         where: {
           id: user.id,
         },
         data: {
+          onboarding_step:
+            user.onboarding_step === UserOnboardingStep.DEMOGRAPHICS ||
+            user.onboarding_step === UserOnboardingStep.PROFILE
+              ? UserOnboardingStep.WELCOME
+              : user.onboarding_step,
           metadata: {
             ...body.data,
           },
         },
       })
+      if (shouldRedirect) {
+        return redirect('/welcome')
+      }
       return null
     default:
       return null
@@ -46,8 +72,6 @@ export const action = async (ctx: ActionFunctionArgs) => {
 }
 
 export default function DemographicsPage() {
-  const { currentUser } = useOutletContext<{ currentUser: User }>()
-  console.log({ currentUser })
   return (
     <div className="flex h-full w-full flex-col gap-y-2 p-5">
       <h1 className="font-foreground font-medium text-2xl">{'Private Information'}</h1>
@@ -59,7 +83,7 @@ export default function DemographicsPage() {
         </p>
       </div>
       <Separator className="mb-3" />
-      <DemographicsForm userMetadata={currentUser.metadata} />
+      <DemographicsForm />
     </div>
   )
 }

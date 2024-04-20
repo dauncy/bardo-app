@@ -14,6 +14,7 @@ import { Card, CardContent } from '@app/components/bardo/Card'
 import { Icons } from '@app/components/bardo/Icons'
 import { getAccountInfo } from '@app/utils/server.utils/account.utils'
 import { LearnMoreModal } from '@app/components/about/LearnModal'
+import { UserOnboardingStep } from '@prisma/client'
 
 const authSvc = container.resolve(AuthClient)
 
@@ -29,7 +30,14 @@ export const loader = async (ctx: LoaderFunctionArgs) => {
     if (!user || !authProfile) {
       throw redirect(Routes.logout)
     }
-    return redirect(`${Routes.users}/${user.id}`)
+    if (user.onboarding_step === UserOnboardingStep.COMPLETED) {
+      return redirect(`/journals`)
+    }
+
+    if (user.onboarding_step === UserOnboardingStep.DEMOGRAPHICS) {
+      return redirect(`${Routes.users}/${user.id}/settings/demographics`)
+    }
+    return redirect(`${Routes.users}/${user.id}/settings`)
   }
   return null
 }

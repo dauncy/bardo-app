@@ -12,6 +12,7 @@ import { authenticateSchema } from '@app/types/auth'
 import type { Nullable } from '@app/types'
 import { UsersService } from '@app/services/users.service'
 import { parse } from 'qs'
+import { UserOnboardingStep } from '@prisma/client'
 
 interface FirebaseSession {
   firebase_session_token: string // which can be decoded
@@ -168,8 +169,16 @@ export class AdminAuthService {
     }
     const user = await this.usersService.upsertUser({ email, picture, name, fbUid })
     session.set(sessionKey, firebaseSession)
-    // TODO redirect to feed if onboarding done
-    return redirect(`${Routes.user(user.id)}/settings`, {
+    let redirect_url = `/journals`
+    if (user.onboarding_step === UserOnboardingStep.PROFILE) {
+      redirect_url = `${Routes.user(user.id)}/settings`
+    }
+
+    if (user.onboarding_step === UserOnboardingStep.DEMOGRAPHICS) {
+      redirect_url = `${Routes.user(user.id)}/settings/demographics`
+    }
+
+    return redirect(redirect_url, {
       headers: {
         'Set-Cookie': await this.sessionStorage.commitSession(session),
       },

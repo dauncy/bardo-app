@@ -65,6 +65,12 @@ export const userCrudSchema = z.discriminatedUnion('_action', [
   z.object({
     _action: z.literal('DELETE_USER'),
   }),
+  z.object({
+    _action: z.literal('COMPLETE_ONBOARDING'),
+    data: z.object({
+      redirect_to: z.enum(['/journals', '/journals/new']),
+    }),
+  }),
 ])
 
 export type UserCrudPayload = z.infer<typeof userCrudSchema>

@@ -15,10 +15,12 @@ import {
 } from '@app/components/bardo/Select'
 import { TypographyParagraph } from '@app/components/bardo/typography/TypographyParagraph'
 import { ClientOnly } from '@app/components/utility/ClientOnly'
-import type { UserCrudPayload, UserMetada } from '@app/types/users'
+import type { UserCrudPayload } from '@app/types/users'
 import { EducationLevel, Ethnicity, Gender } from '@app/types/users'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useFetcher } from '@remix-run/react'
+import type { User } from '@prisma/client'
+import { UserOnboardingStep } from '@prisma/client'
+import { useFetcher, useOutletContext } from '@remix-run/react'
 import { stringify } from 'qs'
 import { useCallback, useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
@@ -53,7 +55,9 @@ const months = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
 
 const defaultDays = Array.from({ length: 31 }, (_, index) => index + 1)
 
-export const DemographicsForm = ({ userMetadata }: { userMetadata: UserMetada }) => {
+export const DemographicsForm = () => {
+  const { currentUser } = useOutletContext<{ currentUser: User }>()
+  const userMetadata = currentUser.metadata
   const fetcher = useFetcher()
   const pending = fetcher.state === 'loading' || fetcher.state === 'submitting'
 
@@ -379,7 +383,7 @@ export const DemographicsForm = ({ userMetadata }: { userMetadata: UserMetada })
             disabled={pending}
           >
             {pending && <Icons.loader className="size 4 animate-spin text-white/90" />}
-            {'Done'}
+            {currentUser.onboarding_step === UserOnboardingStep.DEMOGRAPHICS ? 'Done' : 'Update'}
           </Button>
         </form>
       </Form>

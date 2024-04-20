@@ -28,7 +28,7 @@ export const loader = async (ctx: LoaderFunctionArgs) => {
 export default function ResetPassword() {
   const { error, data } = useLoaderData<typeof loader>()
   return (
-    <div className="flex size-full min-h-full flex-col items-center justify-center gap-y-8 bg-violet-200">
+    <div className="flex size-full min-h-full flex-col items-center justify-center gap-y-8 bg-violet-50">
       <div className="flex w-full w-max flex-row gap-x-4 px-4">
         <div className="flex size-14 items-center justify-center rounded-full bg-violet-500 shadow-md">
           <img src={'/logo.png'} alt="" className="flex size-8 object-contain object-center" />

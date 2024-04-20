@@ -4,12 +4,11 @@ import { Link, useLocation } from '@remix-run/react'
 
 export const SettingsTabs = ({ userId }: { userId: string }) => {
   const { pathname } = useLocation()
-
   const profilePath = `/users/${userId}/settings`
   const demoPath = `/users/${userId}/settings/demographics`
   const defaultPath = pathname === demoPath ? 'demographics' : 'profile'
   return (
-    <Tabs defaultValue={defaultPath} className="w-full rounded-md border border-foreground/80 bg-white p-1 md:w-max">
+    <Tabs value={defaultPath} className="w-full rounded-md border border-foreground/80 bg-white p-1 md:w-max">
       <TabsList className="grid h-full w-full grid-cols-2 bg-transparent p-0">
         <Link to={profilePath} className="col-span-1">
           <TabsTrigger

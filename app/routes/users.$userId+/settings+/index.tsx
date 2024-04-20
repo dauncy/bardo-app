@@ -2,7 +2,6 @@
 import { Button } from '@app/components/bardo/Button'
 import { Icons } from '@app/components/bardo/Icons'
 import { Input } from '@app/components/bardo/Input'
-import { Label } from '@app/components/bardo/Label'
 import { UpdateUserProfileImage } from '@app/components/users/UpdateUserProfileImage'
 import { ClientOnly } from '@app/components/utility/ClientOnly'
 import type { UserCrudPayload } from '@app/types/users'
@@ -10,7 +9,7 @@ import { UserRouteParamsSchema, userCrudSchema } from '@app/types/users'
 import { getAccountInfo } from '@app/utils/server.utils/account.utils'
 import { getFormData } from '@app/utils/server.utils/forms.utils'
 import { getSearchParams } from '@app/utils/server.utils/search-params.utils'
-import type { User } from '@prisma/client'
+import { UserOnboardingStep, type User } from '@prisma/client'
 import { redirect } from '@remix-run/node'
 import type { ActionFunctionArgs } from '@remix-run/node'
 import { useFetcher, useOutletContext } from '@remix-run/react'
@@ -21,6 +20,7 @@ import { useToast } from '@app/components/bardo/toast/use-toast'
 import { stringify } from 'qs'
 import { ZodError } from 'zod'
 import { Separator } from '@app/components/bardo/Separator'
+import { TypographyParagraph } from '@app/components/bardo/typography/TypographyParagraph'
 
 const validateRequest = async (ctx: ActionFunctionArgs) => {
   const { authProfile, user } = await getAccountInfo(ctx.request)
@@ -41,14 +41,26 @@ export const action = async (ctx: ActionFunctionArgs) => {
   await sleep(500)
   switch (body._action) {
     case 'UPDATE_USER':
+      const currentOnboardingStep = user.onboarding_step
+      const shouldRedirect =
+        currentOnboardingStep === UserOnboardingStep.PROFILE ||
+        currentOnboardingStep === UserOnboardingStep.DEMOGRAPHICS
       await prisma.user.update({
         where: {
           id: user.id,
         },
         data: {
           name: body.data.name,
+          // update the user onboarding dtep from PROFILE -> DEMOGRAPHICS
+          onboarding_step:
+            currentOnboardingStep === UserOnboardingStep.PROFILE
+              ? UserOnboardingStep.DEMOGRAPHICS
+              : currentOnboardingStep,
         },
       })
+      if (shouldRedirect) {
+        return redirect(`/users/${user.id}/settings/demographics`)
+      }
     default:
       return null
   }
@@ -81,7 +93,7 @@ export default function UserSettingsPage() {
   }
 
   return (
-    <div className="flex h-full w-full flex-col gap-y-2 p-5">
+    <div className="flex h-full min-h-full w-full flex-1 flex-col gap-y-2 p-5">
       <h1 className="font-foreground font-medium text-2xl">{'Public Profile'}</h1>
       <div className="w-full">
         <p className="mb-2 border-l border-l-2 border-violet-400 pl-4 text-sm font-normal italic text-foreground/60">
@@ -90,10 +102,12 @@ export default function UserSettingsPage() {
           }
         </p>
       </div>
-      <Separator className="mb-6" />
+      <Separator className="mb-3" />
 
-      <div className="flex h-full flex-col pt-8">
-        <Label>{'Username'}</Label>
+      <div className="flex h-full flex-1 flex-col gap-y-1">
+        <TypographyParagraph size={'medium'} className="font-medium text-foreground">
+          {'Username'}
+        </TypographyParagraph>
         <Input
           min={1}
           ref={usernameRef}
@@ -102,7 +116,10 @@ export default function UserSettingsPage() {
           className="peer mt-1 focus-visible:border-violet-400 focus-visible:ring-violet-400 disabled:cursor-not-allowed disabled:bg-violet-100 md:max-w-sm"
           disabled={pending}
         />
-        <div className="mt-8">
+        <div className="mt-8 flex flex-col gap-y-1">
+          <TypographyParagraph size={'medium'} className="font-medium text-foreground">
+            {'Profile Image'}
+          </TypographyParagraph>
           <ClientOnly>
             <UpdateUserProfileImage user={currentUser} />
           </ClientOnly>
@@ -110,7 +127,7 @@ export default function UserSettingsPage() {
         <Button
           disabled={pending}
           variant={'bardo_primary'}
-          className="mt-16 mt-auto flex min-w-40 items-center gap-x-2 peer-invalid:cursor-not-allowed peer-invalid:opacity-40 md:ml-auto md:max-w-sm"
+          className="mt-auto flex min-w-40 items-center gap-x-2 peer-invalid:cursor-not-allowed peer-invalid:opacity-40 md:ml-auto md:max-w-sm"
           onClick={() => {
             const username = usernameRef.current?.value?.trim()
             if (!username) {
@@ -142,7 +159,10 @@ export default function UserSettingsPage() {
           }}
         >
           {pending && <Icons.loader className="size 4 animate-spin text-white/90" />}
-          {'Next'}
+          {currentUser.onboarding_step === UserOnboardingStep.PROFILE ||
+          currentUser.onboarding_step === UserOnboardingStep.DEMOGRAPHICS
+            ? 'Next'
+            : 'Update'}
         </Button>
       </div>
     </div>
