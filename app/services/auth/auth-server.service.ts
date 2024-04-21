@@ -171,11 +171,15 @@ export class AdminAuthService {
     session.set(sessionKey, firebaseSession)
     let redirect_url = `/journals`
     if (user.onboarding_step === UserOnboardingStep.PROFILE) {
-      redirect_url = `${Routes.user(user.id)}/settings`
+      redirect_url = `/user-settings`
     }
 
     if (user.onboarding_step === UserOnboardingStep.DEMOGRAPHICS) {
-      redirect_url = `${Routes.user(user.id)}/settings/demographics`
+      redirect_url = `/user-settings/demographics`
+    }
+
+    if (user.onboarding_step === UserOnboardingStep.WELCOME) {
+      redirect_url = '/welcome'
     }
 
     return redirect(redirect_url, {

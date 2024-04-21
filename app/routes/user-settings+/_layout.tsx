@@ -1,11 +1,9 @@
-import { UserRouteParamsSchema } from '@app/types/users'
 import { getAccountInfo } from '@app/utils/server.utils/account.utils'
-import { getSearchParams } from '@app/utils/server.utils/search-params.utils'
 import type { LoaderFunctionArgs } from '@remix-run/node'
 import { json, redirect } from '@remix-run/node'
 import { Outlet, useLoaderData } from '@remix-run/react'
-import { SettingsTabs } from './components/SettingsTabs'
 import { MainNav } from '@app/components/nav/MainNav'
+import { SettingsTabs } from '@app/components/settings/settingsTabs'
 
 const validateRequest = async (ctx: LoaderFunctionArgs) => {
   const { authProfile, user } = await getAccountInfo(ctx.request)
@@ -16,10 +14,6 @@ const validateRequest = async (ctx: LoaderFunctionArgs) => {
 }
 export const loader = async (ctx: LoaderFunctionArgs) => {
   const { user: currentUser } = await validateRequest(ctx)
-  const { userId } = getSearchParams(ctx, UserRouteParamsSchema)
-  if (currentUser.id !== userId) {
-    throw redirect(`/users/${currentUser.id}/settings`)
-  }
   return json({ currentUser })
 }
 

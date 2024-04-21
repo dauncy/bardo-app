@@ -15,7 +15,6 @@ const resetPasswordSchema = z.object({
 })
 export const loader = async (ctx: LoaderFunctionArgs) => {
   const params = Object.fromEntries(new URL(ctx.request.url).searchParams)
-  console.log('params ', params)
   try {
     const { oobCode } = resetPasswordSchema.parse(params)
     return json({ error: false, data: { oobCode } })

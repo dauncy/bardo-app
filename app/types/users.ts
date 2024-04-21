@@ -1,3 +1,4 @@
+import type { Prisma } from '@prisma/client'
 import { z } from 'zod'
 
 export interface UserDTO {
@@ -83,3 +84,12 @@ export interface UserMetada {
   ethnicity?: Ethnicity
   education_level?: EducationLevel
 }
+
+export type PublicUser = Prisma.UserGetPayload<{
+  select: {
+    id: true
+    name: true
+    picture: true
+    user_id: true
+  }
+}>

@@ -5,10 +5,9 @@ import { Input } from '@app/components/bardo/Input'
 import { UpdateUserProfileImage } from '@app/components/users/UpdateUserProfileImage'
 import { ClientOnly } from '@app/components/utility/ClientOnly'
 import type { UserCrudPayload } from '@app/types/users'
-import { UserRouteParamsSchema, userCrudSchema } from '@app/types/users'
+import { userCrudSchema } from '@app/types/users'
 import { getAccountInfo } from '@app/utils/server.utils/account.utils'
 import { getFormData } from '@app/utils/server.utils/forms.utils'
-import { getSearchParams } from '@app/utils/server.utils/search-params.utils'
 import { UserOnboardingStep, type User } from '@prisma/client'
 import { redirect } from '@remix-run/node'
 import type { ActionFunctionArgs } from '@remix-run/node'
@@ -30,36 +29,35 @@ const validateRequest = async (ctx: ActionFunctionArgs) => {
 
   return { user, authProfile }
 }
-export const action = async (ctx: ActionFunctionArgs) => {
-  const { userId } = getSearchParams(ctx, UserRouteParamsSchema)
-  const { user } = await validateRequest(ctx)
-  if (userId !== user.id) {
-    return null
+
+const checkRedirect = (currentStep: UserOnboardingStep) => {
+  if (currentStep === UserOnboardingStep.PROFILE) {
+    return true
   }
 
+  if (currentStep === UserOnboardingStep.DEMOGRAPHICS) {
+    return true
+  }
+
+  return false
+}
+export const action = async (ctx: ActionFunctionArgs) => {
+  const { user } = await validateRequest(ctx)
   const body = await getFormData(ctx, userCrudSchema)
-  await sleep(500)
+  await sleep(350)
   switch (body._action) {
     case 'UPDATE_USER':
-      const currentOnboardingStep = user.onboarding_step
-      const shouldRedirect =
-        currentOnboardingStep === UserOnboardingStep.PROFILE ||
-        currentOnboardingStep === UserOnboardingStep.DEMOGRAPHICS
+      const shouldRedirect = checkRedirect(user.onboarding_step)
       await prisma.user.update({
         where: {
           id: user.id,
         },
         data: {
           name: body.data.name,
-          // update the user onboarding dtep from PROFILE -> DEMOGRAPHICS
-          onboarding_step:
-            currentOnboardingStep === UserOnboardingStep.PROFILE
-              ? UserOnboardingStep.DEMOGRAPHICS
-              : currentOnboardingStep,
         },
       })
       if (shouldRedirect) {
-        return redirect(`/users/${user.id}/settings/demographics`)
+        return redirect(`/user-settings/demographics`)
       }
     default:
       return null

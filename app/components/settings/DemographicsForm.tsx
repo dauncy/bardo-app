@@ -104,9 +104,7 @@ export const DemographicsForm = () => {
 
   const formatDob = (dob?: { day?: number; year?: number; month?: number }) => {
     if (dob?.day && dob.month && dob.year) {
-      console.log(dob)
       const date = new Date(dob.year, dob.month - 1, dob.day)
-      console.log(date.toLocaleDateString('en', { month: 'long', day: '2-digit', year: 'numeric' }))
       return date
     }
     return null

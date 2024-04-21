@@ -8,17 +8,31 @@ import { JournalSkeleton } from '@app/components/journals/JournalsSkeleton'
 import { UserAvatar } from '@app/components/users/UserAvatar'
 import { prisma } from '@app/db.server'
 import { Routes } from '@app/services/routes.service'
+import type { JournalWithUser } from '@app/types/journals'
 import { getAccountInfo } from '@app/utils/server.utils/account.utils'
-import type { Journal, User } from '@prisma/client'
+import type { User } from '@prisma/client'
 import { defer, redirect } from '@remix-run/node'
-import type { SerializeFrom, LoaderFunctionArgs } from '@remix-run/node'
+import type { LoaderFunctionArgs } from '@remix-run/node'
 import { Await, Link, useLoaderData, useOutletContext } from '@remix-run/react'
 import { Fragment, Suspense } from 'react'
 
-const getAllJournals = async (): Promise<Array<Journal & { user: User }>> => {
+const getAllJournals = async (): Promise<JournalWithUser[]> => {
   return await prisma.journal.findMany({
-    include: {
-      user: true,
+    select: {
+      id: true,
+      title: true,
+      metadata: true,
+      body: true,
+      updated_at: true,
+      created_at: true,
+      user: {
+        select: {
+          id: true,
+          picture: true,
+          name: true,
+          user_id: true,
+        },
+      },
     },
     orderBy: {
       updated_at: 'desc',
@@ -27,45 +41,38 @@ const getAllJournals = async (): Promise<Array<Journal & { user: User }>> => {
 }
 
 export const loader = async (ctx: LoaderFunctionArgs) => {
-  const { authProfile } = await getAccountInfo(ctx.request)
-  if (!authProfile) {
+  const { user } = await getAccountInfo(ctx.request)
+  if (!user) {
     throw redirect(Routes.logout)
   }
-  const userJournals = await prisma.user.findFirst({
+  const userJournalsCount = await prisma.journal.count({
     where: {
-      id: authProfile.fbUid,
-    },
-    select: {
-      journals: {
-        select: {
-          id: true,
-        },
-      },
+      user_id: user.id,
     },
   })
   const journals = getAllJournals()
   return defer({
     userStats: {
-      num_journals: userJournals?.journals?.length ?? 0,
+      num_journals: userJournalsCount,
     },
     feed: journals,
   })
 }
 
 export default function JournalsFeedPage() {
-  const { user } = useOutletContext<{ user: SerializeFrom<User> }>()
+  const { currentUser } = useOutletContext<{ currentUser: User }>()
   const { feed, userStats } = useLoaderData<typeof loader>()
   return (
     <div className="mx-auto mt-10 flex w-full max-w-7xl flex-col gap-4 pb-10 md:flex-row">
       <Card className="h-max w-full md:w-[302px]">
         <CardHeader>
           <div className="flex flex-row gap-x-2">
-            <UserAvatar user={user} />
+            <UserAvatar user={currentUser} />
             <div className="flex flex-col">
-              <CardTitle>{user.name ?? user.email}</CardTitle>
+              <CardTitle>{currentUser.name ?? currentUser.email}</CardTitle>
               <CardDescription>{`
                 Member since 
-                ${new Date(user.created_at).toLocaleDateString('en', {
+                ${new Date(currentUser.created_at).toLocaleDateString('en', {
                   month: 'long',
                   year: 'numeric',
                 })}
@@ -84,7 +91,7 @@ export default function JournalsFeedPage() {
           </div>
         </CardContent>
         <CardFooter className="items-center justify-center">
-          <Link className="w-max min-w-36 md:w-full" to={Routes.user(user.id)}>
+          <Link className="w-max min-w-36 md:w-full" to={'/user-settings'}>
             <Button variant={'bardo_primary'} className="w-full rounded-full">
               {'Visit Profile'}
             </Button>
@@ -114,7 +121,7 @@ export default function JournalsFeedPage() {
                     <TypographyParagraph className="text-center" size={'small'}>
                       {'Be the first to share your experience with others.'}
                     </TypographyParagraph>
-                    <Link to={`/users/${user.id}/journals/new`}>
+                    <Link to={`/journals/new`}>
                       <Button
                         className="mt-5 mt-8 items-center gap-x-2 self-center border border-violet-600 text-violet-600"
                         variant={'secondary'}

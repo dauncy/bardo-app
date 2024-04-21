@@ -1,14 +1,13 @@
 import { Separator } from '@app/components/bardo/Separator'
-import { DemographicsForm } from '../components/DemographicsForm'
 import { redirect } from '@remix-run/node'
 import type { LoaderFunctionArgs, ActionFunctionArgs } from '@remix-run/node'
 import { getAccountInfo } from '@app/utils/server.utils/account.utils'
-import { getSearchParams } from '@app/utils/server.utils/search-params.utils'
-import { UserRouteParamsSchema, userCrudSchema } from '@app/types/users'
+import { userCrudSchema } from '@app/types/users'
 import { getFormData } from '@app/utils/server.utils/forms.utils'
 import { sleep } from '@app/utils/server.utils/async.utils'
 import { prisma } from '@app/db.server'
 import { UserOnboardingStep } from '@prisma/client'
+import { DemographicsForm } from '@app/components/settings/DemographicsForm'
 
 const validateRequest = async (ctx: ActionFunctionArgs | LoaderFunctionArgs) => {
   const { authProfile, user } = await getAccountInfo(ctx.request)
@@ -34,29 +33,31 @@ export const loader = async (ctx: LoaderFunctionArgs) => {
   }
   return null
 }
-export const action = async (ctx: ActionFunctionArgs) => {
-  const { userId } = getSearchParams(ctx, UserRouteParamsSchema)
-  const { user } = await validateRequest(ctx)
-  if (userId !== user.id) {
-    return null
+
+const checkRedirect = (currentStep: UserOnboardingStep) => {
+  if (currentStep === UserOnboardingStep.PROFILE) {
+    return true
   }
 
+  if (currentStep === UserOnboardingStep.DEMOGRAPHICS) {
+    return true
+  }
+
+  return false
+}
+
+export const action = async (ctx: ActionFunctionArgs) => {
+  const { user } = await validateRequest(ctx)
   const body = await getFormData(ctx, userCrudSchema)
-  await sleep(500)
+  await sleep(350)
   switch (body._action) {
     case 'UPDATE_DEMOGRAPHICS':
-      const shouldRedirect =
-        user.onboarding_step === UserOnboardingStep.DEMOGRAPHICS || user.onboarding_step === UserOnboardingStep.PROFILE
+      const shouldRedirect = checkRedirect(user.onboarding_step)
       await prisma.user.update({
         where: {
           id: user.id,
         },
         data: {
-          onboarding_step:
-            user.onboarding_step === UserOnboardingStep.DEMOGRAPHICS ||
-            user.onboarding_step === UserOnboardingStep.PROFILE
-              ? UserOnboardingStep.WELCOME
-              : user.onboarding_step,
           metadata: {
             ...body.data,
           },

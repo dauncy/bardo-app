@@ -45,8 +45,6 @@ export const DateFormChild = forwardRef((props: DateFormProps, ref) => {
     if (!values.year || !values.month) {
       return
     }
-
-    console.log('getting day options... ', { year: values.year, month: values.month })
     const daysInMonth = new Date(values.year, values.month, 0).getDate()
     const dayOptions = Array.from({ length: daysInMonth }, (_, index) => index + 1)
 

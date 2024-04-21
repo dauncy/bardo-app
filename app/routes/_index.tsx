@@ -34,10 +34,14 @@ export const loader = async (ctx: LoaderFunctionArgs) => {
       return redirect(`/journals`)
     }
 
-    if (user.onboarding_step === UserOnboardingStep.DEMOGRAPHICS) {
-      return redirect(`${Routes.users}/${user.id}/settings/demographics`)
+    if (user.onboarding_step === UserOnboardingStep.WELCOME) {
+      return redirect('/welcome')
     }
-    return redirect(`${Routes.users}/${user.id}/settings`)
+
+    if (user.onboarding_step === UserOnboardingStep.DEMOGRAPHICS) {
+      return redirect(`/user-settings/demographics`)
+    }
+    return redirect(`/user-settings`)
   }
   return null
 }
