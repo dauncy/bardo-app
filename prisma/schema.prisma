@@ -21,8 +21,19 @@ model User {
   picture    String?
   name       String?
   journals   Journal[]
+  user_id    Int  @default(autoincrement())
+  onboarding_step UserOnboardingStep @default(PROFILE)
+  /// [UserMetadata]
+  metadata   Json @default("{}")
   created_at DateTime  @default(now())
   updated_at DateTime  @updatedAt
+}
+
+enum UserOnboardingStep {
+  PROFILE
+  DEMOGRAPHICS
+  WELCOME
+  COMPLETED
 }
 
 model Journal {

@@ -14,10 +14,17 @@ import {
   NotebookPen,
   Trash,
   UploadCloud,
+  Newspaper,
+  Triangle,
+  Megaphone,
+  LibraryBig,
 } from 'lucide-react'
 
 export const Icons = {
   loader: Loader2,
+  Megaphone,
+  Triangle,
+  Newspaper,
   alertCircle: AlertCircle,
   arrowBack: ArrowLeft,
   arrowForward: ArrowRight,
@@ -31,6 +38,7 @@ export const Icons = {
   NotebookPen: NotebookPen,
   Trash: Trash,
   Upload: UploadCloud,
+  LibraryBig,
   google: (props: LucideProps) => (
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="64" height="64" {...props}>
       <defs>

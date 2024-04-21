@@ -1,3 +1,4 @@
+import type { Prisma } from '@prisma/client'
 import { z } from 'zod'
 
 export enum TripModality {
@@ -61,3 +62,22 @@ export const journalCrudSchema = z.discriminatedUnion('_action', [
     }),
   }),
 ])
+
+export type JournalWithUser = Prisma.JournalGetPayload<{
+  select: {
+    id: true
+    metadata: true
+    title: true
+    body: true
+    updated_at: true
+    created_at: true
+    user: {
+      select: {
+        id: true
+        name: true
+        picture: true
+        user_id: true
+      }
+    }
+  }
+}>

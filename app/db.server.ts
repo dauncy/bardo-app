@@ -1,5 +1,6 @@
 import { PrismaClient } from '@prisma/client'
 import type { TripDosage, TripIntention, TripModality, TripSetting } from '@app/types/journals'
+import type { UserMetada as UserMetadataDTO } from '@app/types/users'
 
 declare global {
   var __prisma: PrismaClient
@@ -10,6 +11,7 @@ declare global {
       setting: TripSetting | string
       dosage: TripDosage
     }
+    type UserMetadata = UserMetadataDTO
   }
 }
 

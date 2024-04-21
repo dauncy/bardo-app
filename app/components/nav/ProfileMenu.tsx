@@ -20,48 +20,59 @@ export const ProfileMenu = ({ user }: { user: SerializeFrom<User> }) => {
         <PopoverTrigger>
           <UserAvatar user={user} />
         </PopoverTrigger>
-        <PopoverContent className="z-[999999] ml-4 flex w-[240px] flex-col px-0 pb-2">
+        <PopoverContent className="shadow-ld z-[999999] ml-4 mr-14 flex w-[240px] flex-col rounded-lg p-0">
           <Link
-            to={`${Routes.users}/${user.id}`}
-            className="group flex w-full cursor-pointer flex-row items-center gap-x-2 px-4 py-1.5"
+            to={`${Routes.users}/${user.id}/settings`}
+            className="group flex w-full cursor-pointer flex-row items-center gap-x-2 rounded-t-lg px-4 py-2 hover:bg-violet-200"
           >
-            <Icons.userRound className="size-5 text-muted-foreground" strokeWidth={1.5} />
-            <TypographyParagraph className="text-muted-foreground group-hover:underline">
+            <Icons.userRound className="size-5 text-muted-foreground group-hover:text-foreground" strokeWidth={1.5} />
+            <TypographyParagraph className="text-muted-foreground group-hover:text-foreground">
               {'Profile'}
             </TypographyParagraph>
           </Link>
 
           <Link
-            to={`${Routes.users}/${user.id}/journals`}
-            className="group flex w-full cursor-pointer flex-row items-center gap-x-2 px-4 py-1.5"
+            to={`/journals`}
+            className="group flex w-full cursor-pointer flex-row items-center gap-x-2 px-4 py-2 hover:bg-violet-200"
           >
-            <Icons.archive className="size-5 text-muted-foreground" strokeWidth={1.5} />
-            <TypographyParagraph className="text-muted-foreground group-hover:underline">
-              {'My journals'}
+            <Icons.Newspaper className="size-5 text-muted-foreground group-hover:text-foreground" strokeWidth={1.5} />
+            <TypographyParagraph className="text-muted-foreground group-hover:text-foreground">
+              {'Feed'}
             </TypographyParagraph>
           </Link>
 
           <Link
-            to={`${Routes.users}/${user.id}/journals/new`}
-            className="group flex w-full cursor-pointer flex-row items-center gap-x-2 px-4 py-1.5"
+            to={`/journals`}
+            className="group flex w-full cursor-pointer flex-row items-center gap-x-2 px-4 py-2 hover:bg-violet-200"
           >
-            <Icons.plusCircle className="size-5 text-muted-foreground" strokeWidth={1.5} />
-            <TypographyParagraph className="text-muted-foreground group-hover:underline">
-              {'New journal'}
+            <Icons.NotebookPen className="size-5 text-muted-foreground group-hover:text-foreground" strokeWidth={1.5} />
+            <TypographyParagraph className="text-muted-foreground group-hover:text-foreground">
+              {'New Journal'}
             </TypographyParagraph>
           </Link>
-          <Separator className="my-2" />
+
+          <Link
+            to={`/journals`}
+            className="group flex w-full cursor-pointer flex-row items-center gap-x-2 px-4 py-2 hover:bg-violet-200"
+          >
+            <Icons.archive className="size-5 text-muted-foreground group-hover:text-foreground" strokeWidth={1.5} />
+            <TypographyParagraph className="text-muted-foreground group-hover:text-foreground">
+              {'My Journals'}
+            </TypographyParagraph>
+          </Link>
+
+          <Separator className="" />
           <button
             onClick={async () => {
               await container.resolve(AuthClient).signOut()
               fetcher.submit({}, { method: 'GET', action: Routes.logout })
             }}
-            className="group flex w-full cursor-pointer flex-row items-center gap-x-2 px-4 py-1.5"
+            className="group flex w-full cursor-pointer flex-row items-center justify-between gap-x-2 rounded-b-lg px-4 py-2 hover:bg-violet-200"
           >
-            <Icons.logout className="size-5 text-muted-foreground" strokeWidth={1.5} />
-            <TypographyParagraph className="text-muted-foreground group-hover:underline">
+            <TypographyParagraph className="text-muted-foreground group-hover:text-foreground">
               {'Sign out'}
             </TypographyParagraph>
+            <Icons.logout className="size-5 text-muted-foreground group-hover:text-foreground" strokeWidth={1.5} />
           </button>
         </PopoverContent>
       </Popover>
