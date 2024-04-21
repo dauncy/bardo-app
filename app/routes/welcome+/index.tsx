@@ -95,9 +95,9 @@ export default function WelcomePage() {
     fetcher.submit(stringify(payload), { method: 'POST', action: '/welcome' })
   }
   return (
-    <div className="relative flex h-full min-h-full w-full flex-col items-center bg-violet-50">
+    <div className="relative flex h-max min-h-full w-full flex-col items-center bg-violet-50">
       <MainNav user={currentUser} />
-      <div className="flex h-full min-h-full w-full max-w-[968px] flex-1 flex-col items-center gap-y-2 p-6 pt-[88px]">
+      <div className="flex h-max min-h-full w-full max-w-[968px] flex-1 flex-col items-center gap-y-2 p-6 pt-[88px]">
         <TypographyParagraph size={'large'} className="font-bold text-xl">
           <span>{`Welcome to Bardo App`}</span>
           <span> </span>
@@ -107,11 +107,11 @@ export default function WelcomePage() {
           {'What would you like to do today? \nSelect one of the options below to contiune.'}
         </TypographyParagraph>
 
-        <div className="w-ful mt-8 flex flex-row justify-center gap-6">
+        <div className="w-ful mt-8 flex flex-col justify-center gap-6 md:flex-row">
           <div
             className={`
               ${pending ? 'cursor-not-allowed opacity-40' : 'cursor-pointer transition-all delay-150 duration-150 ease-in hover:shadow-lg'}
-              flex flex h-[350px] w-full max-w-[302px] flex-col items-center rounded-xl border bg-white p-6
+              flex flex h-[350px] w-full flex-col items-center rounded-xl border bg-white p-6 md:max-w-[302px]
             `}
             onClick={() => handleSubmit('/journals')}
           >
@@ -130,7 +130,7 @@ export default function WelcomePage() {
           <div
             className={`
               ${pending ? 'cursor-not-allowed opacity-40' : 'cursor-pointer transition-all delay-150 duration-150 ease-in hover:shadow-lg'}
-              flex flex h-[350px] w-full max-w-[302px] flex-col items-center rounded-xl border bg-white p-6
+              flex flex h-[350px] w-full flex-col items-center rounded-xl border bg-white p-6 md:max-w-[302px]
             `}
             onClick={() => {
               handleSubmit('/journals/new')

@@ -29,13 +29,13 @@ export default function ResetPassword() {
   return (
     <div className="flex size-full min-h-full flex-col items-center justify-center gap-y-8 bg-violet-50">
       <div className="flex w-full w-max flex-row gap-x-4 px-4">
-        <div className="flex size-14 items-center justify-center rounded-full bg-violet-500 shadow-md">
-          <img src={'/logo.png'} alt="" className="flex size-8 object-contain object-center" />
+        <div className="flex size-20 items-center justify-center rounded-full border border-2 border-black bg-yellow-200 shadow-md">
+          <img src={'/logo.png'} alt="" className="flex size-14 object-contain object-center" />
         </div>
         <div className="flex flex-col">
-          <h1 className="font-bold text-4xl uppercase md:text-5xl">{'Bardo App'}</h1>
+          <h1 className="font-bold text-4xl uppercase md:text-5xl">{'Bardo'}</h1>
           <TypographyParagraph size={'large'} className="ml-1">
-            {'Psychedelic journal'}
+            {'A community Trip Journal'}
           </TypographyParagraph>
         </div>
       </div>
