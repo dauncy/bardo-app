@@ -38,10 +38,36 @@ export const journalCrudSchema = z.discriminatedUnion('_action', [
     data: z.object({
       title: z.string().optional(),
       body: z.string(),
-      modality: z.string(),
+      modalities: z
+        .object({
+          modality: z.enum([
+            TripModality.LSD,
+            TripModality.PSILOCYBIN,
+            TripModality.MDMA,
+            TripModality.MESCALINE,
+            TripModality.KETAMINE,
+            TripModality.PEYOTE,
+            TripModality.DMT,
+            TripModality.AYAHUASCA,
+          ]),
+          dosage: z.enum([TripDosage.HEROIC, TripDosage.HIGH, TripDosage.LOW, TripDosage.MICRO]),
+        })
+        .array(),
+      date_of_experience: z.coerce.date(),
       intention: z.string(),
-      dosage: z.string(),
       setting: z.string(),
+      public: z.coerce.boolean(),
+    }),
+  }),
+  z.object({
+    _action: z.literal('SAVE_DRAFT'),
+    data: z.object({
+      title: z.string().optional(),
+      body: z.string().optional(),
+      modality: z.string().optional(),
+      intention: z.string().optional(),
+      dosage: z.string().optional(),
+      setting: z.string().optional(),
     }),
   }),
   z.object({

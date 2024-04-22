@@ -6,6 +6,7 @@ import {
   ArrowRight,
   ArrowUpRight,
   CircleUserRound,
+  Check,
   Loader2,
   LogOut,
   MoreVertical,
@@ -18,9 +19,12 @@ import {
   Triangle,
   Megaphone,
   LibraryBig,
+  Lightbulb,
 } from 'lucide-react'
 
 export const Icons = {
+  Lightbulb,
+  Check,
   loader: Loader2,
   Megaphone,
   Triangle,

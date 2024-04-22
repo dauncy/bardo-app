@@ -20,12 +20,16 @@ export const loader = async (ctx: LoaderFunctionArgs) => {
   })
 }
 
+export const action = async () => {
+  return null
+}
+
 export default function FeedLayout() {
   const { currentUser } = useLoaderData<typeof loader>()
   return (
-    <div className="min-w-screen relative flex min-h-screen flex-col items-center bg-indigo-50/40 px-5">
+    <div className="relative flex size-full h-max min-h-full flex-col items-center bg-violet-50">
       <MainNav user={currentUser} />
-      <div className="mt-16 size-full bg-transparent">
+      <div className="flex h-full min-h-full w-full flex-1 flex-col px-2 py-6 pt-[88px] md:px-6">
         <Outlet context={{ currentUser }} />
       </div>
     </div>

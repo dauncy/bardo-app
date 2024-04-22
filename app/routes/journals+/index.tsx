@@ -18,6 +18,10 @@ import { Fragment, Suspense } from 'react'
 
 const getAllJournals = async (): Promise<JournalWithUser[]> => {
   return await prisma.journal.findMany({
+    where: {
+      status: 'PUBLISHED',
+      public: true,
+    },
     select: {
       id: true,
       title: true,

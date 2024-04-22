@@ -1,7 +1,6 @@
 /* eslint-disable react/jsx-pascal-case */
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@app/components/bardo/Card'
 import type { User } from '@prisma/client'
-import { Badge } from '@app/components/bardo/Badge'
 import { UserAvatar } from '@app/components/users/UserAvatar'
 import { JournalBody } from './JournalBody'
 import { Popover, PopoverContent, PopoverTrigger } from '@app/components/bardo/Popover'
@@ -96,19 +95,14 @@ export const JournalCard = ({ journal }: { journal: SerializeFrom<JournalWithUse
         <UserAvatar user={journal.user} />
         <div className="flex flex-col gap-y-2">
           <CardTitle>{journal.title}</CardTitle>
-          <div className="flex w-full flex-wrap items-center gap-2">
-            <Badge className="bg-violet-600">{journal.metadata.modality}</Badge>
+          <div className="flex w-full flex-wrap items-center gap-4">
+            <div className="flex items-center gap-x-1.5">
+              <div className="flex size-7 items-center justify-center rounded-md bg-muted">
+                <Icons.Lightbulb className="size-4 text-pink-500" />
+              </div>
 
-            <Badge className="bg-[#92a7c5]">
-              <span className="capitalize">{journal.metadata.dosage.toLowerCase()}</span>
-              &nbsp;
-              <span>{'dosage'}</span>
-            </Badge>
-            <Badge className="capitalize">{journal.metadata.intention.toLowerCase()}</Badge>
-
-            <Badge className="bg-[#f472b6] capitalize">
-              {journal.metadata.setting.toLowerCase().split('_').join(' ')}
-            </Badge>
+              <TypographyParagraph size={'extraSmall'}>{journal.metadata.intention}</TypographyParagraph>
+            </div>
           </div>
           <CardDescription>
             {`Last updated: `}
@@ -124,7 +118,7 @@ export const JournalCard = ({ journal }: { journal: SerializeFrom<JournalWithUse
       </CardHeader>
 
       <CardContent className="flex flex-col gap-y-1 px-8 py-5">
-        <JournalBody body={journal.body} id={journal.id} />
+        <JournalBody body={journal.body ?? ''} id={journal.id} />
       </CardContent>
       <CardFooter />
     </Card>
