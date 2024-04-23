@@ -59,7 +59,7 @@ export const action = async (ctx: ActionFunctionArgs) => {
         },
         data: {
           metadata: {
-            ...body.data,
+            ...(body.data ?? {}),
           },
         },
       })

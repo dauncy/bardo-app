@@ -20,11 +20,10 @@ export const action = async (ctx: ActionFunctionArgs) => {
   const { user } = await validateRequest(ctx)
   const body = await getFormData(ctx, journalCrudSchema)
   switch (body._action) {
-    case 'CREATE_JOURNAL':
+    case 'CREATE_JOURNAL': {
       await sleep(350)
       const data = body.data
-      console.log('creating journal', data)
-      const journal = await prisma.journal.create({
+      await prisma.journal.create({
         data: {
           user_id: user.id,
           title: data.title,
@@ -38,9 +37,29 @@ export const action = async (ctx: ActionFunctionArgs) => {
           public: data.public,
         },
       })
-      console.log({ journal })
       return redirect('/journals')
-      return null
+    }
+    case 'SAVE_DRAFT': {
+      await sleep(350)
+      const data = body.data
+      console.log('saving draft: ', data)
+      const draft = await prisma.journal.create({
+        data: {
+          status: 'DRAFT',
+          user_id: user.id,
+          title: data.title,
+          body: data.body,
+          metadata: {
+            date_of_experience: data.date_of_experience,
+            modalities: data.modalities,
+            intention: data.intention,
+            setting: data.setting,
+          },
+        },
+      })
+      console.log({ draft })
+      return redirect(`/users/${user.id}`)
+    }
     default:
       return null
   }

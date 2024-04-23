@@ -1,11 +1,10 @@
 /* eslint-disable react/jsx-pascal-case */
 import { Button } from '@app/components/bardo/Button'
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@app/components/bardo/Card'
 import { Icons } from '@app/components/bardo/Icons'
 import { TypographyParagraph } from '@app/components/bardo/typography/TypographyParagraph'
 import { JournalCard } from '@app/components/journals/JournalCard'
 import { JournalSkeleton } from '@app/components/journals/JournalsSkeleton'
-import { UserAvatar } from '@app/components/users/UserAvatar'
+import { UserPreviewCard } from '@app/components/users/UserPreviewCard'
 import { prisma } from '@app/db.server'
 import { Routes } from '@app/services/routes.service'
 import type { JournalWithUser } from '@app/types/journals'
@@ -35,6 +34,7 @@ const getAllJournals = async (): Promise<JournalWithUser[]> => {
           picture: true,
           name: true,
           user_id: true,
+          created_at: true,
         },
       },
     },
@@ -68,41 +68,10 @@ export default function JournalsFeedPage() {
   const { feed, userStats } = useLoaderData<typeof loader>()
   return (
     <div className="mx-auto mt-10 flex w-full max-w-7xl flex-col gap-4 pb-10 md:flex-row">
-      <Card className="h-max w-full md:w-[302px]">
-        <CardHeader>
-          <div className="flex flex-row gap-x-2">
-            <UserAvatar user={currentUser} />
-            <div className="flex flex-col">
-              <CardTitle>{currentUser.name ?? currentUser.email}</CardTitle>
-              <CardDescription>{`
-                Member since 
-                ${new Date(currentUser.created_at).toLocaleDateString('en', {
-                  month: 'long',
-                  year: 'numeric',
-                })}
-              `}</CardDescription>
-            </div>
-          </div>
-        </CardHeader>
-
-        <CardContent>
-          <div className="flex flex-row items-center justify-between">
-            <TypographyParagraph className="text-muted-foreground">{'Total Entries: '}</TypographyParagraph>
-
-            <TypographyParagraph size={'medium'} className="font-semibold text-violet-800">
-              {userStats.num_journals}
-            </TypographyParagraph>
-          </div>
-        </CardContent>
-        <CardFooter className="items-center justify-center">
-          <Link className="w-max min-w-36 md:w-full" to={'/user-settings'}>
-            <Button variant={'bardo_primary'} className="w-full rounded-full">
-              {'Visit Profile'}
-            </Button>
-          </Link>
-        </CardFooter>
-      </Card>
-      <div className="flex w-full flex-col items-center gap-y-5 md:max-w-xl">
+      <div className="flex w-full px-6 md:w-[302px] md:px-0">
+        <UserPreviewCard numJournals={userStats.num_journals} user={currentUser} />
+      </div>
+      <div className="mt-5 flex w-full flex-col items-center gap-y-5 md:mt-0 md:max-w-xl">
         <Suspense
           fallback={
             <>

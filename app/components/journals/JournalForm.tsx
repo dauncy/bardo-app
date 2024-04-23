@@ -1,7 +1,8 @@
 /* eslint-disable react/jsx-pascal-case */
 import { z } from 'zod'
 import { ClientOnly } from '../utility/ClientOnly'
-import { TripDosage, TripIntention, TripModality, TripSetting, journalCrudSchema } from '@app/types/journals'
+import type { journalCrudSchema } from '@app/types/journals'
+import { TripDosage, TripIntention, TripModality, TripSetting } from '@app/types/journals'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Form, FormControl, FormDescription, FormField, FormItem, FormMessage } from '../bardo/Form'
@@ -178,6 +179,57 @@ export const JournalForm = () => {
     }
     form.setValue('metadata.modalities', updatedModalities)
     setModalityErrors(prev => [...prev].filter(e => e.modality !== modality))
+  }
+
+  const handleSaveAsDraft = () => {
+    const canSaveAsDraft = () => {
+      const { title, body, metadata, date_of_experience } = form.getValues()
+      const date = formatDateOfExperience(date_of_experience)
+      const modalities = metadata?.modalities ?? []
+      const intention = metadata?.intention
+      const setting = metadata?.setting
+      const validTitle = () => {
+        return title && title.trim().length > 0
+      }
+
+      const validBody = () => {
+        return body && body.trim().length > 0
+      }
+      if (!validTitle() && !validBody() && modalities.length === 0 && !intention && !setting && !date) {
+        return false
+      }
+
+      return true
+    }
+
+    if (!canSaveAsDraft()) {
+      toast({
+        variant: 'destructive',
+        title: 'Unable to save draft',
+        description: 'Please fill out at least one of the fields to save a draft.',
+      })
+      return
+    }
+
+    const { title, body, metadata, date_of_experience, public: pub } = form.getValues()
+    const date = formatDateOfExperience(date_of_experience)
+    const modalities = metadata?.modalities ?? []
+    const intention = metadata?.intention
+    const setting = metadata?.setting
+    const payload: z.infer<typeof journalCrudSchema> = {
+      _action: 'SAVE_DRAFT',
+      data: {
+        title,
+        body,
+        date_of_experience: date ?? undefined,
+        modalities,
+        intention,
+        setting,
+        public: pub,
+      },
+    }
+
+    fetcher.submit(stringify(payload), { method: 'POST' })
   }
 
   return (
@@ -470,6 +522,7 @@ export const JournalForm = () => {
               className="flex flex-1 items-center gap-x-2 border-violet-500 text-violet-500 hover:text-violet-800"
               onClick={() => {
                 form.setValue('status', JournalStatus.DRAFT)
+                handleSaveAsDraft()
               }}
             >
               {pending && form.getValues().status === JournalStatus.DRAFT && (

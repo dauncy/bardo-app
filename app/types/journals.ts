@@ -64,10 +64,26 @@ export const journalCrudSchema = z.discriminatedUnion('_action', [
     data: z.object({
       title: z.string().optional(),
       body: z.string().optional(),
-      modality: z.string().optional(),
+      modalities: z
+        .object({
+          modality: z.enum([
+            TripModality.LSD,
+            TripModality.PSILOCYBIN,
+            TripModality.MDMA,
+            TripModality.MESCALINE,
+            TripModality.KETAMINE,
+            TripModality.PEYOTE,
+            TripModality.DMT,
+            TripModality.AYAHUASCA,
+          ]),
+          dosage: z.enum([TripDosage.HEROIC, TripDosage.HIGH, TripDosage.LOW, TripDosage.MICRO]).optional(),
+        })
+        .array()
+        .optional(),
+      date_of_experience: z.coerce.date().optional(),
       intention: z.string().optional(),
-      dosage: z.string().optional(),
       setting: z.string().optional(),
+      public: z.coerce.boolean(),
     }),
   }),
   z.object({
@@ -103,6 +119,7 @@ export type JournalWithUser = Prisma.JournalGetPayload<{
         name: true
         picture: true
         user_id: true
+        created_at: true
       }
     }
   }

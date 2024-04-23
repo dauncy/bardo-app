@@ -44,24 +44,26 @@ export const userCrudSchema = z.discriminatedUnion('_action', [
   }),
   z.object({
     _action: z.literal('UPDATE_DEMOGRAPHICS'),
-    data: z.object({
-      gender: z.enum([Gender.MALE, Gender.FEMALE, Gender.OTHER]).optional(),
-      education_level: z
-        .enum([
-          EducationLevel.NO_HIGH_SCHOOL,
-          EducationLevel.SOME_HIGH_SCOOL,
-          EducationLevel.HIGH_SCOOL,
-          EducationLevel.SOME_COLLEGE,
-          EducationLevel.COLLEGE,
-          EducationLevel.MASTERS,
-          EducationLevel.PHD,
-        ])
-        .optional(),
-      ethnicity: z
-        .enum([Ethnicity.WHITE, Ethnicity.BLACK, Ethnicity.ASIAN, Ethnicity.HISPANIC, Ethnicity.PACIFIC_ISLANDER])
-        .optional(),
-      date_of_birth: z.coerce.date().optional(),
-    }),
+    data: z
+      .object({
+        gender: z.enum([Gender.MALE, Gender.FEMALE, Gender.OTHER]).optional(),
+        education_level: z
+          .enum([
+            EducationLevel.NO_HIGH_SCHOOL,
+            EducationLevel.SOME_HIGH_SCOOL,
+            EducationLevel.HIGH_SCOOL,
+            EducationLevel.SOME_COLLEGE,
+            EducationLevel.COLLEGE,
+            EducationLevel.MASTERS,
+            EducationLevel.PHD,
+          ])
+          .optional(),
+        ethnicity: z
+          .enum([Ethnicity.WHITE, Ethnicity.BLACK, Ethnicity.ASIAN, Ethnicity.HISPANIC, Ethnicity.PACIFIC_ISLANDER])
+          .optional(),
+        date_of_birth: z.coerce.date().optional(),
+      })
+      .optional(),
   }),
   z.object({
     _action: z.literal('DELETE_USER'),
@@ -87,6 +89,7 @@ export interface UserMetada {
 
 export type PublicUser = Prisma.UserGetPayload<{
   select: {
+    created_at: true
     id: true
     name: true
     picture: true
