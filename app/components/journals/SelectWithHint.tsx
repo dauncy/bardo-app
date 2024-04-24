@@ -10,17 +10,21 @@ import {
 } from '@app/components/bardo/Select'
 import { useNavigation } from '@remix-run/react'
 import { Popover, PopoverContent, PopoverTrigger } from '@app/components/bardo/Popover'
+import { cn } from '@app/utils/ui.utils'
+import { paragraphVariants } from '../bardo/typography/TypographyParagraph'
 
 interface SelectWithHintProps {
-  options: string[]
+  options: { value: string; label: string }[]
   label: string
   innerLabel: string
   hintText: string
   placeholder: string
   defaultValue?: string
+  className?: string
+  onValueChange: (value: string) => void
 }
 
-const HintPopover = ({ hintText }: { hintText: string }) => {
+export const HintPopover = ({ hintText }: { hintText: string }) => {
   return (
     <Popover>
       <PopoverTrigger asChild>
@@ -44,16 +48,24 @@ export const SelectWithHint = (props: SelectWithHintProps) => {
       <div className="flex flex-row items-center justify-between">
         <Label
           htmlFor={`data[${props.label}]`}
-          className="capitalize after:ml-0.5 after:text-red-500 after:content-['*']"
+          className={cn(
+            paragraphVariants({ size: 'medium' }),
+            "font-medium capitalize text-foreground after:ml-0.5 after:text-red-500 after:content-['*']",
+          )}
         >
           {props.label}
         </Label>
         <HintPopover hintText={props.hintText} />
       </div>
-      <Select disabled={pending} required={true} name={`data[${props.label}]`} defaultValue={props.defaultValue}>
+      <Select
+        onValueChange={value => props.onValueChange(value)}
+        disabled={pending}
+        name={`data[${props.label}]`}
+        defaultValue={props.defaultValue}
+      >
         <SelectTrigger
           disabled={pending}
-          className="w-full disabled:cursor-not-allowed disabled:opacity-40 md:w-[180px]"
+          className={cn(props.className, 'w-full w-full disabled:cursor-not-allowed disabled:opacity-40')}
         >
           <SelectValue placeholder={props.placeholder} />
         </SelectTrigger>
@@ -61,8 +73,8 @@ export const SelectWithHint = (props: SelectWithHintProps) => {
           <SelectGroup>
             <SelectLabel>{props.innerLabel}</SelectLabel>
             {props.options.map(option => (
-              <SelectItem key={option} value={option}>
-                {option.split('_').join(' ')}
+              <SelectItem key={option.value} value={option.value}>
+                {option.label}
               </SelectItem>
             ))}
           </SelectGroup>

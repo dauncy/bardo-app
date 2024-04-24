@@ -6,10 +6,10 @@ declare global {
   var __prisma: PrismaClient
   namespace PrismaJson {
     type JournalMetadata = {
-      modality: TripModality | string
-      intention: TripIntention | string
-      setting: TripSetting | string
-      dosage: TripDosage
+      modalities?: { modality: TripModality; dosage?: TripDosage | undefined }[]
+      intention?: TripIntention | string
+      setting?: TripSetting | string
+      date_of_experience?: Date
     }
     type UserMetadata = UserMetadataDTO
   }

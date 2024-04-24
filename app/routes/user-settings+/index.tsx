@@ -75,19 +75,16 @@ export default function UserSettingsPage() {
       return currentUser.name
     }
 
-    let defaultName = `bardo_user`
-    if (currentUser.user_id < 10) {
-      defaultName += `_00${currentUser.user_id}`
+    const id = currentUser.user_id
+    if (id < 10) {
+      return `bardo_user_00${id}`
     }
 
-    if (currentUser.user_id < 100) {
-      defaultName += `_0${currentUser.user_id}`
+    if (id < 100) {
+      return `bardo_user_0${id}`
     }
 
-    if (currentUser.user_id >= 100) {
-      defaultName += `_${currentUser.user_id}`
-    }
-    return defaultName
+    return `bardo_user_$${id}`
   }
 
   return (

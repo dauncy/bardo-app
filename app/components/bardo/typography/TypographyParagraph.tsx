@@ -2,7 +2,7 @@ import type { HTMLAttributes } from 'react'
 import { cva, type VariantProps } from 'class-variance-authority'
 import { cn } from '@app/utils/ui.utils'
 
-const paragraphVariants = cva('text-black', {
+export const paragraphVariants = cva('text-black', {
   variants: {
     size: {
       default: 'text-base leading-normal font-regular',
