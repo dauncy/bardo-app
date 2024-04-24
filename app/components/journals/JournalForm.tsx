@@ -1,7 +1,7 @@
 /* eslint-disable react/jsx-pascal-case */
 import { z } from 'zod'
 import { ClientOnly } from '../utility/ClientOnly'
-import type { journalCrudSchema } from '@app/types/journals'
+import type { JournalWithUserEditable, journalCrudSchema } from '@app/types/journals'
 import { TripDosage, TripIntention, TripModality, TripSetting } from '@app/types/journals'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -29,6 +29,8 @@ import { Accordion } from '../bardo/Accordion'
 import { ModalitySelect } from './ModalitySelect'
 import { useToast } from '../bardo/toast/use-toast'
 import { stringify } from 'qs'
+import type { SerializeFrom } from '@remix-run/node'
+import { INTENTION, SETTING } from '@app/constants/journal.constants'
 
 const journalFormSchema = z.object({
   title: z.string().min(1, 'Please enter a title.'),
@@ -37,20 +39,18 @@ const journalFormSchema = z.object({
     modalities: z
       .object({
         modality: z.enum([
-          TripModality.AYAHUASCA,
-          TripModality.DMT,
+          TripModality.AYAHUASCA_OR_DMT,
           TripModality.KETAMINE,
           TripModality.LSD,
           TripModality.MDMA,
-          TripModality.MESCALINE,
-          TripModality.PEYOTE,
+          TripModality.PEYOTE_OR_MESCALINE,
           TripModality.PSILOCYBIN,
         ]),
         dosage: z.enum([TripDosage.MICRO, TripDosage.LOW, TripDosage.HIGH, TripDosage.HEROIC]),
       })
       .array()
       .min(1, 'Required.'),
-    setting: z.enum([TripSetting.CLINIC, TripSetting.CONCERT_OR_FESTIVAL, TripSetting.NATURE]),
+    setting: z.enum([TripSetting.CLINIC, TripSetting.CONCERT_OR_FESTIVAL, TripSetting.NATURE, TripSetting.INDOORS]),
     intention: z.enum([
       TripIntention.CURIOSITY,
       TripIntention.RECREATION,
@@ -70,16 +70,45 @@ const journalFormSchema = z.object({
 const months = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
 const defaultDays = Array.from({ length: 31 }, (_, index) => index + 1)
 
-export const JournalForm = () => {
+export const JournalForm = ({
+  journal,
+  onUpdate,
+}: {
+  journal?: SerializeFrom<JournalWithUserEditable>
+  onUpdate?: (data: z.infer<typeof journalCrudSchema>) => void
+}) => {
   const { toast } = useToast()
   const [days, setDays] = useState(defaultDays)
   const [modalityErrors, setModalityErrors] = useState<{ modality: TripModality; error: string }[]>([])
   const fetcher = useFetcher()
   const pending = fetcher.state === 'loading' || fetcher.state === 'submitting'
+
+  const defaultDateOfExperience = () => {
+    if (!journal?.metadata?.date_of_experience) {
+      return undefined
+    }
+    const date = new Date(journal.metadata.date_of_experience)
+    const day = date.getUTCDate()
+    const month = date.getUTCMonth() + 1
+    const year = date.getUTCFullYear()
+    return {
+      day,
+      month,
+      year,
+    }
+  }
   const form = useForm<z.infer<typeof journalFormSchema>>({
     resolver: zodResolver(journalFormSchema),
     defaultValues: {
-      public: true,
+      public: journal?.public ?? true,
+      title: journal?.title ?? undefined,
+      body: journal?.body ?? undefined,
+      metadata: {
+        intention: (journal?.metadata?.intention ?? undefined) as TripIntention,
+        modalities: journal?.metadata?.modalities ?? undefined,
+        setting: (journal?.metadata.setting ?? undefined) as TripSetting,
+      },
+      date_of_experience: defaultDateOfExperience(),
     },
   })
 
@@ -98,11 +127,33 @@ export const JournalForm = () => {
       return
     }
 
+    if (!data.title || !data.body) {
+      return
+    }
+
     const date = formatDateOfExperience(data.date_of_experience)
     if (!date) {
       form.setError('date_of_experience', { message: 'Enter a valid date.' })
       return
     }
+
+    if (onUpdate) {
+      const updatePayload: z.infer<typeof journalCrudSchema> = {
+        _action: 'UPDATE_JOURNAL',
+        data: {
+          title: data.title,
+          date_of_experience: date,
+          public: data.public,
+          body: data.body,
+          modalities: modalities,
+          intention: data.metadata.intention,
+          setting: data.metadata.setting,
+        },
+      }
+      onUpdate(updatePayload)
+      return null
+    }
+
     const payload: z.infer<typeof journalCrudSchema> = {
       _action: 'CREATE_JOURNAL',
       data: {
@@ -115,7 +166,6 @@ export const JournalForm = () => {
         setting: data.metadata.setting,
       },
     }
-    console.log(payload)
     fetcher.submit(stringify(payload), { method: 'POST' })
     return null
   }
@@ -143,7 +193,7 @@ export const JournalForm = () => {
   const handleModalities = (modalities: TripModality[]) => {
     const formModalities = form.getValues().metadata.modalities ?? []
     const updatedModalities: { modality: TripModality; dosage: TripDosage }[] = []
-    const modalitiesToAppend: { modality: TripModality }[] = []
+    const modalitiesToAppend: { modality: TripModality; dosage?: TripDosage }[] = []
 
     for (const modality of formModalities) {
       const removed = modalities.find(m => m === modality.modality) === undefined
@@ -158,7 +208,8 @@ export const JournalForm = () => {
       if (alreadyInList) {
         continue
       }
-      modalitiesToAppend.push({ modality: m })
+      const maybeDosage = form.formState.defaultValues?.metadata?.modalities?.find(mod => mod?.modality === m)?.dosage
+      modalitiesToAppend.push({ modality: m, dosage: maybeDosage })
     }
 
     //@ts-ignore
@@ -228,7 +279,10 @@ export const JournalForm = () => {
         public: pub,
       },
     }
-
+    if (onUpdate) {
+      onUpdate(payload)
+      return null
+    }
     fetcher.submit(stringify(payload), { method: 'POST' })
   }
 
@@ -249,6 +303,7 @@ export const JournalForm = () => {
                 </TypographyParagraph>
                 <FormControl>
                   <Input
+                    defaultValue={form.formState.defaultValues?.title}
                     autoComplete={'off'}
                     className={`${form.formState.errors.title ? 'border-destructive ring-destructive' : ''}`}
                     placeholder="My first psychedelic trip"
@@ -407,13 +462,23 @@ export const JournalForm = () => {
                 </div>
 
                 <Accordion
+                  defaultValue={
+                    form.formState.defaultValues?.metadata?.modalities?.map(m => m?.modality ?? '') ?? undefined
+                  }
                   type={'multiple'}
                   className="w-full"
                   onValueChange={e => handleModalities(e as TripModality[])}
                 >
                   {Object.values(TripModality).map(value => (
                     <Fragment key={value}>
-                      <ModalitySelect handleDosage={handleDosage} modality={value} modalityErrors={modalityErrors} />
+                      <ModalitySelect
+                        defaultValue={
+                          form.formState.defaultValues?.metadata?.modalities?.find(m => m?.modality === value)?.dosage
+                        }
+                        handleDosage={handleDosage}
+                        modality={value}
+                        modalityErrors={modalityErrors}
+                      />
                     </Fragment>
                   ))}
                 </Accordion>
@@ -434,13 +499,19 @@ export const JournalForm = () => {
               <FormItem className="flex flex-col gap-y-1">
                 <FormControl>
                   <SelectWithHint
+                    defaultValue={form.formState.defaultValues?.metadata?.intention}
                     onValueChange={value => field.onChange(value)}
                     className={`${form.formState.errors.metadata?.intention ? 'border-destructive ring-destructive' : ''}`}
                     label={'Intention'}
                     hintText="What was the reason for your trip"
-                    placeholder={'Select Intentioon'}
+                    placeholder={'Select Intention'}
                     innerLabel={'Select an Intention'}
-                    options={Object.values(TripIntention)}
+                    options={Object.keys(TripIntention).map(key => {
+                      return {
+                        value: key,
+                        label: INTENTION[key] ?? key,
+                      }
+                    })}
                   />
                 </FormControl>
                 <FormMessage />
@@ -455,13 +526,19 @@ export const JournalForm = () => {
               <FormItem className="flex flex-col gap-y-1">
                 <FormControl>
                   <SelectWithHint
+                    defaultValue={form.formState.defaultValues?.metadata?.setting}
                     onValueChange={value => field.onChange(value)}
                     className={`${form.formState.errors.metadata?.setting ? 'border-destructive ring-destructive' : ''}`}
                     label={'Setting'}
                     hintText="Where did you take the psychedelics"
                     placeholder={'Select Setting'}
                     innerLabel={'Select a setting'}
-                    options={Object.values(TripSetting)}
+                    options={Object.keys(TripSetting).map(key => {
+                      return {
+                        value: key,
+                        label: SETTING[key] ?? key,
+                      }
+                    })}
                   />
                 </FormControl>
                 <FormMessage />
@@ -482,6 +559,7 @@ export const JournalForm = () => {
                 </TypographyParagraph>
                 <FormControl>
                   <Textarea
+                    defaultValue={form.formState.defaultValues?.body}
                     onChange={value => field.onChange(value)}
                     className={`h-48 resize-none ${form.formState.errors.body ? 'border-destructive ring-destructive' : ''}`}
                     placeholder="Jot down any thoughts, visions, feelings or anything else you experienced during or after your trip"
@@ -504,7 +582,7 @@ export const JournalForm = () => {
                 <div className="flex flex-row items-center gap-x-2">
                   <TypographyParagraph size={'extraSmall'}>{'Private'}</TypographyParagraph>
                   <Switch
-                    defaultChecked={true}
+                    defaultChecked={form.formState.defaultValues?.public}
                     onCheckedChange={checked => {
                       form.setValue('public', checked)
                     }}
@@ -515,26 +593,32 @@ export const JournalForm = () => {
             )}
           />
           <div className="mt-auto flex w-full items-center gap-x-4">
-            <Button
-              disabled={pending}
-              type={'button'}
-              variant={'outline'}
-              className="flex flex-1 items-center gap-x-2 border-violet-500 text-violet-500 hover:text-violet-800"
-              onClick={() => {
-                form.setValue('status', JournalStatus.DRAFT)
-                handleSaveAsDraft()
-              }}
-            >
-              {pending && form.getValues().status === JournalStatus.DRAFT && (
-                <Icons.loader className="size 4 animate-spin text-white/90" />
-              )}
-              {'Save as draft'}
-            </Button>
+            {journal?.status !== 'PUBLISHED' && (
+              <Button
+                disabled={pending}
+                type={'button'}
+                variant={'outline'}
+                className="flex flex-1 items-center gap-x-2 border-violet-500 text-violet-500 hover:text-violet-800"
+                onClick={() => {
+                  form.setValue('status', JournalStatus.DRAFT)
+
+                  handleSaveAsDraft()
+                }}
+              >
+                {pending && form.getValues().status === JournalStatus.DRAFT && (
+                  <Icons.loader className="size 4 animate-spin text-white/90" />
+                )}
+                {journal ? 'Save Changes' : 'Save as draft'}
+              </Button>
+            )}
             <Button
               disabled={pending}
               type={'button'}
               variant={'bardo_primary'}
-              className="flex flex-1 items-center gap-x-2"
+              className={`
+                ${journal?.status === 'PUBLISHED' ? 'ml-auto w-48' : 'flex-1'}
+                flex  items-center gap-x-2
+              `}
               onClick={() => {
                 setModalityErrors([])
                 form.setValue('status', JournalStatus.PUBLISHED)
@@ -567,7 +651,7 @@ export const JournalForm = () => {
               {pending && form.getValues().status === JournalStatus.PUBLISHED && (
                 <Icons.loader className="size 4 animate-spin text-white/90" />
               )}
-              {'Publish'}
+              {journal?.status === 'PUBLISHED' ? 'Save Changes' : 'Publish'}
             </Button>
           </div>
         </div>

@@ -42,8 +42,7 @@ export const action = async (ctx: ActionFunctionArgs) => {
     case 'SAVE_DRAFT': {
       await sleep(350)
       const data = body.data
-      console.log('saving draft: ', data)
-      const draft = await prisma.journal.create({
+      await prisma.journal.create({
         data: {
           status: 'DRAFT',
           user_id: user.id,
@@ -57,8 +56,7 @@ export const action = async (ctx: ActionFunctionArgs) => {
           },
         },
       })
-      console.log({ draft })
-      return redirect(`/users/${user.id}`)
+      return redirect(`/users/${user.id}?type=draft`)
     }
     default:
       return null

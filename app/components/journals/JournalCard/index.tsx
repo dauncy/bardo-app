@@ -12,8 +12,9 @@ import type { SerializeFrom } from '@remix-run/node'
 import { TripDosage, type JournalWithUser } from '@app/types/journals'
 import type { LucideProps } from 'lucide-react'
 import { PopoverText } from './PopoverText'
+import { DOSAGE, INTENTION, MODALITIES, SETTING } from '@app/constants/journal.constants'
 
-const JournalCardMenu = ({ journalId }: { journalId: string }) => {
+export const JournalCardMenu = ({ journalId }: { journalId: string }) => {
   // const { currentUser } = useOutletContext<{ currentUser: User }>()
   return (
     <Popover>
@@ -24,7 +25,7 @@ const JournalCardMenu = ({ journalId }: { journalId: string }) => {
       </PopoverTrigger>
       <PopoverContent className="max-w-[224px] p-0" side="left">
         <Link
-          to={`/journals/${journalId}`}
+          to={`/journals/${journalId}?edit=true`}
           className="group flex w-full cursor-pointer items-center gap-x-2 px-4 py-1.5 hover:bg-violet-200"
         >
           <Icons.NotebookPen className="size-4 text-muted-foreground group-hover:text-foreground" />
@@ -69,12 +70,17 @@ export const JournalCard = ({ journal }: { journal: SerializeFrom<JournalWithUse
                 journal.metadata?.modalities?.map(m => {
                   const Icon = DosageToIcon[m?.dosage ?? 'default']
                   return (
-                    <PopoverText key={m.modality} text={`${m.dosage?.toLowerCase() ?? 'Unknown '} dosage.`}>
+                    <PopoverText
+                      key={m.modality}
+                      text={`${DOSAGE[m.dosage ?? ''] ?? m.dosage?.toLowerCase() ?? 'Unknown '} dosage.`}
+                    >
                       <div className="flex cursor-pointer items-center gap-x-1.5">
                         <div className="flex size-7 items-center justify-center rounded-md bg-muted">
                           <Icon className="size-4 text-blue-500" />
                         </div>
-                        <TypographyParagraph size={'extraSmall'}>{m.modality}</TypographyParagraph>
+                        <TypographyParagraph size={'extraSmall'}>
+                          {MODALITIES[m.modality] ?? m.modality.trim()}
+                        </TypographyParagraph>
                       </div>
                     </PopoverText>
                   )
@@ -89,7 +95,9 @@ export const JournalCard = ({ journal }: { journal: SerializeFrom<JournalWithUse
                 </div>
 
                 <TypographyParagraph className="select-none capitalize" size={'extraSmall'}>
-                  {journal.metadata?.intention?.toLowerCase() ?? 'Unknown intention'}
+                  {INTENTION[journal.metadata?.intention ?? ''] ??
+                    journal.metadata.intention?.trim() ??
+                    'Unknown intention'}
                 </TypographyParagraph>
               </div>
             </PopoverText>
@@ -101,7 +109,7 @@ export const JournalCard = ({ journal }: { journal: SerializeFrom<JournalWithUse
                 </div>
 
                 <TypographyParagraph className="capitalize" size={'extraSmall'}>
-                  {journal?.metadata?.setting?.toLowerCase() ?? 'Unknown setting'}
+                  {SETTING[journal?.metadata?.setting ?? ''] ?? journal?.metadata?.setting?.trim() ?? 'Unknown setting'}
                 </TypographyParagraph>
               </div>
             </PopoverText>

@@ -13,12 +13,15 @@ import {
   SelectValue,
 } from '../bardo/Select'
 import { Icons } from '../bardo/Icons'
+import { DOSAGE, MODALITIES } from '@app/constants/journal.constants'
 
 export const ModalitySelect = ({
   modality,
   modalityErrors,
   handleDosage,
+  defaultValue,
 }: {
+  defaultValue?: string | TripDosage
   modality: TripModality
   modalityErrors: { modality: TripModality; error: string }[]
   handleDosage: ({ modality, dosage }: { modality: TripModality; dosage: TripDosage }) => void
@@ -35,23 +38,24 @@ export const ModalitySelect = ({
           <div className="flex size-4 items-center justify-center rounded border border-foreground group-data-[state=open]:border-violet-400 group-data-[state=open]:bg-violet-400">
             <Icons.Check className="hidden size-3 text-white group-data-[state=open]:flex" strokeWidth={2} />
           </div>
-          <Label>{modality.split('_').join(' ')}</Label>
+          <Label>{MODALITIES[modality]}</Label>
         </AccordionTrigger>
         <AccordionContent className="flex w-max flex-col gap-y-1 py-2 pl-5 pr-4">
           <Select
+            defaultValue={defaultValue}
             onValueChange={e => {
               handleDosage({ modality, dosage: e as TripDosage })
             }}
           >
             <SelectTrigger className={`w-max min-w-48 ${hasError ? 'border-destructive ring-destructive' : ''}`}>
-              <SelectValue placeholder={'Select a dosage'} />
+              <SelectValue placeholder={'Select a dose'} />
             </SelectTrigger>
             <SelectContent>
               <SelectGroup>
-                <SelectLabel>{'Select a dosage'}</SelectLabel>
+                <SelectLabel>{'Select a dose'}</SelectLabel>
                 {Object.values(TripDosage).map(dosage => (
                   <SelectItem key={dosage} value={dosage}>
-                    {dosage.split('_').join(' ')}
+                    {DOSAGE[dosage]}
                   </SelectItem>
                 ))}
               </SelectGroup>

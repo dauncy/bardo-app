@@ -14,7 +14,7 @@ import { cn } from '@app/utils/ui.utils'
 import { paragraphVariants } from '../bardo/typography/TypographyParagraph'
 
 interface SelectWithHintProps {
-  options: string[]
+  options: { value: string; label: string }[]
   label: string
   innerLabel: string
   hintText: string
@@ -73,8 +73,8 @@ export const SelectWithHint = (props: SelectWithHintProps) => {
           <SelectGroup>
             <SelectLabel>{props.innerLabel}</SelectLabel>
             {props.options.map(option => (
-              <SelectItem key={option} value={option}>
-                {option.split('_').join(' ')}
+              <SelectItem key={option.value} value={option.value}>
+                {option.label}
               </SelectItem>
             ))}
           </SelectGroup>

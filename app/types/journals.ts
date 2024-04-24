@@ -5,11 +5,9 @@ export enum TripModality {
   LSD = 'LSD',
   PSILOCYBIN = 'PSILOCYBIN',
   MDMA = 'MDMA',
-  MESCALINE = 'MESCALINE',
   KETAMINE = 'KETAMINE',
-  PEYOTE = 'PEYOTE',
-  DMT = 'DMT',
-  AYAHUASCA = 'AYAHUASCA',
+  PEYOTE_OR_MESCALINE = 'PEYOTE_OR_MESCALINE',
+  AYAHUASCA_OR_DMT = 'AYAHUASCA_OR_DMT',
 }
 
 export enum TripIntention {
@@ -23,6 +21,7 @@ export enum TripSetting {
   NATURE = 'NATURE',
   CONCERT_OR_FESTIVAL = 'CONCERT_OR_FESTIVAL',
   CLINIC = 'CLINIC',
+  INDOORS = 'INDOORS',
 }
 
 export enum TripDosage {
@@ -44,11 +43,9 @@ export const journalCrudSchema = z.discriminatedUnion('_action', [
             TripModality.LSD,
             TripModality.PSILOCYBIN,
             TripModality.MDMA,
-            TripModality.MESCALINE,
             TripModality.KETAMINE,
-            TripModality.PEYOTE,
-            TripModality.DMT,
-            TripModality.AYAHUASCA,
+            TripModality.PEYOTE_OR_MESCALINE,
+            TripModality.AYAHUASCA_OR_DMT,
           ]),
           dosage: z.enum([TripDosage.HEROIC, TripDosage.HIGH, TripDosage.LOW, TripDosage.MICRO]),
         })
@@ -70,11 +67,9 @@ export const journalCrudSchema = z.discriminatedUnion('_action', [
             TripModality.LSD,
             TripModality.PSILOCYBIN,
             TripModality.MDMA,
-            TripModality.MESCALINE,
+            TripModality.PEYOTE_OR_MESCALINE,
             TripModality.KETAMINE,
-            TripModality.PEYOTE,
-            TripModality.DMT,
-            TripModality.AYAHUASCA,
+            TripModality.AYAHUASCA_OR_DMT,
           ]),
           dosage: z.enum([TripDosage.HEROIC, TripDosage.HIGH, TripDosage.LOW, TripDosage.MICRO]).optional(),
         })
@@ -91,10 +86,26 @@ export const journalCrudSchema = z.discriminatedUnion('_action', [
     data: z.object({
       title: z.string().optional(),
       body: z.string(),
-      modality: z.string(),
-      intention: z.string(),
-      dosage: z.string(),
+      modalities: z
+        .object({
+          modality: z.enum([
+            TripModality.LSD,
+            TripModality.PSILOCYBIN,
+            TripModality.MDMA,
+            TripModality.KETAMINE,
+            TripModality.PEYOTE_OR_MESCALINE,
+            TripModality.AYAHUASCA_OR_DMT,
+          ]),
+          dosage: z.enum([TripDosage.HEROIC, TripDosage.HIGH, TripDosage.LOW, TripDosage.MICRO]),
+        })
+        .array(),
+      date_of_experience: z.coerce.date(),
+      intention: z.union([
+        z.enum([TripIntention.CURIOSITY, TripIntention.RECREATION, TripIntention.SPIRITUAL, TripIntention.SPIRITUAL]),
+        z.string(),
+      ]),
       setting: z.string(),
+      public: z.coerce.boolean(),
     }),
   }),
   z.object({
@@ -111,6 +122,28 @@ export type JournalWithUser = Prisma.JournalGetPayload<{
     metadata: true
     title: true
     body: true
+    updated_at: true
+    created_at: true
+    user: {
+      select: {
+        id: true
+        name: true
+        picture: true
+        user_id: true
+        created_at: true
+      }
+    }
+  }
+}>
+
+export type JournalWithUserEditable = Prisma.JournalGetPayload<{
+  select: {
+    id: true
+    metadata: true
+    title: true
+    body: true
+    status: true
+    public: true
     updated_at: true
     created_at: true
     user: {
