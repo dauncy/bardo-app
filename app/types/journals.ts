@@ -39,13 +39,17 @@ export const journalCrudSchema = z.discriminatedUnion('_action', [
       body: z.string(),
       modalities: z
         .object({
-          modality: z.enum([
-            TripModality.LSD,
-            TripModality.PSILOCYBIN,
-            TripModality.MDMA,
-            TripModality.KETAMINE,
-            TripModality.PEYOTE_OR_MESCALINE,
-            TripModality.AYAHUASCA_OR_DMT,
+          modality: 
+          z.union([
+            z.string(),
+            z.enum([
+              TripModality.LSD,
+              TripModality.PSILOCYBIN,
+              TripModality.MDMA,
+              TripModality.KETAMINE,
+              TripModality.PEYOTE_OR_MESCALINE,
+              TripModality.AYAHUASCA_OR_DMT,
+            ]),
           ]),
           dosage: z.enum([TripDosage.HEROIC, TripDosage.HIGH, TripDosage.LOW, TripDosage.MICRO]),
         })
@@ -63,13 +67,16 @@ export const journalCrudSchema = z.discriminatedUnion('_action', [
       body: z.string().optional(),
       modalities: z
         .object({
-          modality: z.enum([
-            TripModality.LSD,
-            TripModality.PSILOCYBIN,
-            TripModality.MDMA,
-            TripModality.PEYOTE_OR_MESCALINE,
-            TripModality.KETAMINE,
-            TripModality.AYAHUASCA_OR_DMT,
+          modality: z.union([
+            z.string(),
+            z.enum([
+              TripModality.LSD,
+              TripModality.PSILOCYBIN,
+              TripModality.MDMA,
+              TripModality.KETAMINE,
+              TripModality.PEYOTE_OR_MESCALINE,
+              TripModality.AYAHUASCA_OR_DMT,
+            ]),
           ]),
           dosage: z.enum([TripDosage.HEROIC, TripDosage.HIGH, TripDosage.LOW, TripDosage.MICRO]).optional(),
         })
@@ -88,13 +95,16 @@ export const journalCrudSchema = z.discriminatedUnion('_action', [
       body: z.string(),
       modalities: z
         .object({
-          modality: z.enum([
-            TripModality.LSD,
-            TripModality.PSILOCYBIN,
-            TripModality.MDMA,
-            TripModality.KETAMINE,
-            TripModality.PEYOTE_OR_MESCALINE,
-            TripModality.AYAHUASCA_OR_DMT,
+          modality: z.union([
+            z.string(),
+            z.enum([
+              TripModality.LSD,
+              TripModality.PSILOCYBIN,
+              TripModality.MDMA,
+              TripModality.KETAMINE,
+              TripModality.PEYOTE_OR_MESCALINE,
+              TripModality.AYAHUASCA_OR_DMT,
+            ]),
           ]),
           dosage: z.enum([TripDosage.HEROIC, TripDosage.HIGH, TripDosage.LOW, TripDosage.MICRO]),
         })

@@ -26,7 +26,7 @@ import { JournalStatus } from '@prisma/client'
 import { useFetcher } from '@remix-run/react'
 import { Icons } from '../bardo/Icons'
 import { Accordion } from '../bardo/Accordion'
-import { ModalitySelect } from './ModalitySelect'
+import { ModalitySelect, NotListedModality } from './ModalitySelect'
 import { useToast } from '../bardo/toast/use-toast'
 import { stringify } from 'qs'
 import type { SerializeFrom } from '@remix-run/node'
@@ -38,13 +38,16 @@ const journalFormSchema = z.object({
   metadata: z.object({
     modalities: z
       .object({
-        modality: z.enum([
-          TripModality.AYAHUASCA_OR_DMT,
-          TripModality.KETAMINE,
-          TripModality.LSD,
-          TripModality.MDMA,
-          TripModality.PEYOTE_OR_MESCALINE,
-          TripModality.PSILOCYBIN,
+        modality: z.union([
+          z.enum([
+            TripModality.AYAHUASCA_OR_DMT,
+            TripModality.KETAMINE,
+            TripModality.LSD,
+            TripModality.MDMA,
+            TripModality.PEYOTE_OR_MESCALINE,
+            TripModality.PSILOCYBIN,
+          ]),
+          z.string(),
         ]),
         dosage: z.enum([TripDosage.MICRO, TripDosage.LOW, TripDosage.HIGH, TripDosage.HEROIC]),
       })
@@ -190,7 +193,7 @@ export const JournalForm = ({
     setDays(dayOptions)
   }, [form])
 
-  const handleModalities = (modalities: TripModality[]) => {
+  const handleModalities = (modalities: (TripModality)[]) => {
     const formModalities = form.getValues().metadata.modalities ?? []
     const updatedModalities: { modality: TripModality; dosage: TripDosage }[] = []
     const modalitiesToAppend: { modality: TripModality; dosage?: TripDosage }[] = []
@@ -200,6 +203,7 @@ export const JournalForm = ({
       if (removed) {
         continue
       }
+      // @ts-ignore
       updatedModalities.push(modality)
     }
 
@@ -208,17 +212,22 @@ export const JournalForm = ({
       if (alreadyInList) {
         continue
       }
+      // @ts-ignore
+      if (m === 'other') {
+        modalitiesToAppend.push({ modality: '' as TripModality});
+        continue
+      }
       const maybeDosage = form.formState.defaultValues?.metadata?.modalities?.find(mod => mod?.modality === m)?.dosage
       modalitiesToAppend.push({ modality: m, dosage: maybeDosage })
     }
-
+    console.log([...updatedModalities, ...modalitiesToAppend])
     //@ts-ignore
     form.setValue('metadata.modalities', [...updatedModalities, ...modalitiesToAppend])
   }
 
-  const handleDosage = ({ dosage, modality }: { dosage: TripDosage; modality: TripModality }) => {
+  const handleDosage = ({ dosage, modality }: { dosage: TripDosage; modality: TripModality | string }) => {
     const formModalities = form.getValues().metadata.modalities ?? []
-    const updatedModalities: { modality: TripModality; dosage: TripDosage }[] = []
+    const updatedModalities: { modality: TripModality | string; dosage: TripDosage }[] = []
     for (const m of formModalities) {
       if (m.modality === modality && !m.dosage) {
         updatedModalities.push({ dosage, modality })
@@ -230,6 +239,39 @@ export const JournalForm = ({
     }
     form.setValue('metadata.modalities', updatedModalities)
     setModalityErrors(prev => [...prev].filter(e => e.modality !== modality))
+  }
+
+  const handleOtherModality = (modality: string) => {
+    const formModalities = form.getValues().metadata.modalities ?? [];
+    const modalitiesToAppend: { modality: string; dosage?: TripDosage }[] = [];
+    for (const m of formModalities) {
+      //@ts-ignore
+      if (!Object.values(TripModality).includes(m.modality)) {
+        continue
+      }
+      modalitiesToAppend.push(m)
+    }
+
+    const newModality = { modality }
+    modalitiesToAppend.push(newModality);
+    //@ts-ignore
+    form.setValue('metadata.modalities', modalitiesToAppend)
+  }
+
+  const handleOtherDosage = ({ dosage }: { dosage: TripDosage }) => {
+    const formModalities = form.getValues().metadata.modalities ?? [];
+    const modalitiesToAppend: { modality: string; dosage: TripDosage }[] = [];
+    for (const m of formModalities) {
+      // @ts-ignore
+      if (Object.values(TripModality).includes(m.modality)) {
+        modalitiesToAppend.push(m)
+        continue
+      }
+      // obviously other
+      modalitiesToAppend.push({ modality: m.modality, dosage})
+    }
+
+    form.setValue('metadata.modalities', modalitiesToAppend)
   }
 
   const handleSaveAsDraft = () => {
@@ -481,6 +523,14 @@ export const JournalForm = ({
                       />
                     </Fragment>
                   ))}
+                  <NotListedModality 
+                    //@ts-ignore
+                    defaultModality={form.formState.defaultValues?.metadata?.modalities?.find((m) => Object.values(TripModality).includes(m?.modality) === false)?.modality ?? undefined}
+                    defaultDosage={form.formState.defaultValues?.metadata?.modalities?.find((m) => Object.values(TripModality).includes(m?.modality) === false)?.dosage ?? undefined}
+                    modalityErrors={modalityErrors}
+                    handleModality={(value) => handleOtherModality(value)}
+                    handleDosage={handleOtherDosage}
+                  />
                 </Accordion>
                 <FormDescription>{'Select all that apply'}</FormDescription>
                 {form.formState.errors.metadata?.modalities?.message && (
@@ -624,12 +674,20 @@ export const JournalForm = ({
                 form.setValue('status', JournalStatus.PUBLISHED)
 
                 const modalities = form.getValues().metadata.modalities ?? []
+                console.log({ modalities })
                 for (const modality of modalities) {
+                  const errors: { modality: TripModality; error: string}[] = []
                   if (!modality.dosage) {
-                    setModalityErrors(prev => [...prev, { modality: modality.modality, error: 'Dosage is required.' }])
+                    errors.push({ modality: (modality.modality as TripModality), error: 'Dosage is required.' })
                   }
+                  if (modality.modality.trim().length === 0) {
+                    console.log('HELLOOO')
+                    errors.push({ modality: modality.modality as TripModality, error: 'Modality is required.'})
+                  }
+                  setModalityErrors((prev) => [...prev, ...errors])
                 }
                 form.handleSubmit(onSubmit, error => {
+                  console.log(error)
                   let toasted = false
                   // eslint-disable-next-line @typescript-eslint/no-unused-vars
                   for (const _err of Object.values(error)) {

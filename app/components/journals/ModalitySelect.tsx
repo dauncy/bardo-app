@@ -14,6 +14,8 @@ import {
 } from '../bardo/Select'
 import { Icons } from '../bardo/Icons'
 import { DOSAGE, MODALITIES } from '@app/constants/journal.constants'
+import { Input } from '../bardo/Input'
+import { useState } from 'react'
 
 export const ModalitySelect = ({
   modality,
@@ -30,7 +32,7 @@ export const ModalitySelect = ({
   const hasError = currentError !== undefined
   return (
     <ClientOnly>
-      <AccordionItem value={modality} className="group w-full border-0 py-0" onChange={e => console.log({ e })}>
+      <AccordionItem value={modality} className="group w-full border-0 py-0">
         <AccordionTrigger
           chevron={false}
           className="flex w-min flex-row items-center justify-start gap-x-2 border-0 py-1"
@@ -66,4 +68,70 @@ export const ModalitySelect = ({
       </AccordionItem>
     </ClientOnly>
   )
+}
+
+export const NotListedModality = ({ 
+  handleModality,
+  handleDosage,
+  modalityErrors,
+  defaultModality,
+  defaultDosage
+}: { 
+  handleModality: (value: string) => void;
+  handleDosage: ({ dosage }: { dosage: TripDosage }) => void;
+  modalityErrors: { modality: TripModality | string; error: string }[],
+  defaultModality?: string;
+  defaultDosage?: TripDosage
+}) => {
+  const [modality, setModality] = useState<string>(defaultModality ?? '');
+  const currentErrors = modalityErrors.filter(err => err.modality === modality)
+  const hasError = currentErrors.length > 0;
+  const dosageError = currentErrors.find((e) => e.error === 'Dosage is required.')
+  const inputError = currentErrors.find((e) => e.error === 'Modality is required.')
+
+  return(
+    <ClientOnly>
+      <AccordionItem defaultValue={defaultModality} value={defaultModality ?? ''} className="group w-full border-0 py-0">
+        <AccordionTrigger
+          chevron={false}
+          className="flex w-min flex-row items-center justify-start gap-x-2 border-0 py-1 w-max"
+        >
+          <div className="flex size-4 items-center justify-center rounded border border-foreground group-data-[state=open]:border-violet-400 group-data-[state=open]:bg-violet-400">
+            <Icons.Check className="hidden size-3 text-white group-data-[state=open]:flex" strokeWidth={2} />
+          </div>
+          <Label>{'Other'}</Label>
+        </AccordionTrigger>
+        <AccordionContent className="flex w-full flex-col gap-y-1 py-2 pl-5 pr-4">
+          <Input 
+            defaultValue={defaultModality}
+            onChange={(e) => {
+              setModality(e.currentTarget.value)
+              handleModality(e.currentTarget.value)
+            }}
+            className={`w-full max-w-sm ${inputError ? 'ring-destructive border-destructive' : ''}`} placeholder="Enter modality"/>
+          <Select
+            defaultValue={defaultDosage}
+            onValueChange={(e) => {
+              handleDosage({ dosage: e as TripDosage })
+            }}
+          >
+            <SelectTrigger className={`w-max min-w-48 ${dosageError ? 'border-destructive ring-destructive' : ''}`}>
+              <SelectValue placeholder={'Select a dose'} />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectGroup>
+                <SelectLabel>{'Select a dose'}</SelectLabel>
+                {Object.values(TripDosage).map(dosage => (
+                  <SelectItem key={dosage} value={dosage}>
+                    {DOSAGE[dosage]}
+                  </SelectItem>
+                ))}
+              </SelectGroup>
+            </SelectContent>
+          </Select>
+          {hasError && <p className="mt-1 font-medium text-[0.8rem] text-destructive">{currentErrors.map((e) => e?.error).join(', ')}</p>}
+        </AccordionContent>
+      </AccordionItem>
+    </ClientOnly>
+  );
 }
