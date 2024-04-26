@@ -28,6 +28,8 @@ const getAllJournals = async (): Promise<JournalWithUser[]> => {
       body: true,
       updated_at: true,
       created_at: true,
+      public: true,
+      status: true,
       user: {
         select: {
           id: true,
@@ -55,6 +57,7 @@ export const loader = async (ctx: LoaderFunctionArgs) => {
     },
   })
   const journals = getAllJournals()
+  console.log({ journals })
   return defer({
     userStats: {
       num_journals: userJournalsCount,
@@ -85,6 +88,7 @@ export default function JournalsFeedPage() {
         >
           <Await resolve={feed}>
             {feed => {
+              console.log(feed)
               if (feed.length === 0) {
                 return (
                   <div className="flex min-h-full w-full flex-col items-center justify-center rounded-md border border-violet-400/60 bg-muted px-4 py-5 shadow">

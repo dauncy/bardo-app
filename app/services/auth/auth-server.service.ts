@@ -219,4 +219,9 @@ export class AdminAuthService {
     }
     return true
   }
+
+  async getPasswordResetLink({ email }: { email: string }) {
+    const link = await this.adminAuth.generatePasswordResetLink(email, { url: 'http://localhost:3000/reset-password' })
+    return link
+  }
 }
