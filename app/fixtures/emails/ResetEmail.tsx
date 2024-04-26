@@ -1,14 +1,12 @@
 import {
   Body,
   Button,
-  Column,
   Container,
   Font,
   Head,
   Html,
   Img,
   Preview,
-  Row,
   Section,
   Tailwind,
   Text,
@@ -96,32 +94,7 @@ export const ResetEmailTemplate = ({
         <Body className="mx-auto my-auto">
           <Container className="flex max-w-[480px] flex-1 flex-col px-6 py-14">
             <Section>
-              <Row className="flex items-center gap-x-4">
-                <Container
-                  className="flex size-16 items-center justify-center rounded-full border border-2 border-black bg-yellow-200 p-0"
-                  style={{
-                    height: '64px',
-                    width: '64px',
-                    display: 'flex',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    border: '2px solid #000',
-                    padding: 0,
-                  }}
-                >
-                  <Img
-                    src={`${baseUrl}/logo.png`}
-                    className="m-0 mx-0 my-0 size-10 object-contain object-center p-0"
-                    height={40}
-                    width={40}
-                    style={{ objectFit: 'contain', objectPosition: 'center' }}
-                  />
-                </Container>
-                <Column className="ml-6 gap-y-1 py-0" style={{ marginLeft: '16px' }}>
-                  <Text className="m-0 my-0 font-semibold text-3xl leading-none">{'BARDO APP'}</Text>
-                  <Text className="my-0 font-light text-base leading-none">{'A community trip journal'}</Text>
-                </Column>
-              </Row>
+              <Img width={320} height={80} className="object-contain object-center" />
             </Section>
 
             <Section className="mt-8 px-6">
@@ -137,7 +110,7 @@ export const ResetEmailTemplate = ({
               </Text>
               <Button
                 href={passwordResetLink}
-                className="mt-5 rounded-md bg-violet-600  px-6 py-3 font-medium text-white"
+                className="mt-5 w-full rounded-md  bg-violet-600 px-6 py-3 font-medium text-white"
               >
                 <strong>{'Reset Password'}</strong>
               </Button>
@@ -154,7 +127,7 @@ export const ResetEmailTemplate = ({
             </Section>
             <Section className="px-6">
               <Text className="text-base font-normal">{'Thanks,'}</Text>
-              <Text className="-mt-2 text-base font-normal">
+              <Text className="-mt-4 text-base font-normal">
                 <strong className="text-violet-500">{'Bardo App Team'}</strong>
               </Text>
             </Section>
