@@ -6,8 +6,8 @@
   "version": "0.0.2",
   "scripts": {
     "prepare": "husky install",
-    "build": "remix build",
-    "setup": "npx prisma generate && yarn run build && npx prisma migrate deploy",
+    "build": "px prisma generate && remix build && npx prisma migrate deploy",
+    "setup": "npx prisma generate && npx prisma migrate deploy",
     "dev": "remix dev --manual -c \"node --watch server.js\"",
     "format": "prettier --write .",
     "lint": "eslint . && yarn prisma-lint",
