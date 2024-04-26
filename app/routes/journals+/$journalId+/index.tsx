@@ -123,7 +123,6 @@ export const action = async (ctx: ActionFunctionArgs) => {
   switch (body._action) {
     case 'UPDATE_JOURNAL': {
       const data = body.data
-      console.log('UPDATING,,, ', data)
       const updated = await prisma.journal.update({
         where: {
           user_id: user.id,
@@ -170,7 +169,6 @@ export const action = async (ctx: ActionFunctionArgs) => {
     default:
       return null
   }
-  return null
 }
 
 const DosageToIcon: Record<string, (props: LucideProps) => JSX.Element> = {

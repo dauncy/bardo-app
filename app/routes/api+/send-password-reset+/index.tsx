@@ -28,15 +28,3 @@ export const action = async (ctx: ActionFunctionArgs) => {
   })
   return json({ success: true })
 }
-
-// export const loader = async (ctx: ActionFunctionArgs) => {
-//   const html = render(<ResetEmailTemplate email={"Daniel"} passwordResetLink={""}/>);
-//   return html
-// }
-
-// export default function Page() {
-//   const html: string = useLoaderData()
-//   return(
-//     <div dangerouslySetInnerHTML={{__html: html }}></div>
-//   )
-// }

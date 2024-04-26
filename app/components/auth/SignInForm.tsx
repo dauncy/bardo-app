@@ -37,7 +37,7 @@ export const SignInForm = ({
   const [loading, setLoading] = useState(false)
   const fetcher = useFetcher<{ success: true }>()
   const pending = fetcher.state === 'loading' || fetcher.state === 'submitting'
-  console.log(fetcher.data)
+
   return (
     <Card className="w-full max-w-sm">
       <CardHeader>

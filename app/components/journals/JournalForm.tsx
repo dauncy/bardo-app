@@ -150,7 +150,6 @@ export const JournalForm = ({
           setting: data.metadata.setting,
         },
       }
-      console.log(updatePayload)
       onUpdate(updatePayload)
       return null
     }
@@ -634,7 +633,6 @@ export const JournalForm = ({
                   let toasted = false
                   // eslint-disable-next-line @typescript-eslint/no-unused-vars
                   for (const _err of Object.values(error)) {
-                    console.log(error)
                     if (toasted) {
                       continue
                     }
