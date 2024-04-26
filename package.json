@@ -12,7 +12,7 @@
     "format": "prettier --write .",
     "lint": "eslint . && yarn prisma-lint",
     "start": "cross-env NODE_ENV=production node ./server.js",
-    "typecheck": "tsc",
+    "typecheck": "tsc --skipLibCheck --noEmit",
     "prisma:generate": "npx prisma generate",
     "prisma:migrate:dev": "npx prisma migrate dev"
   },
@@ -34,6 +34,9 @@
     "@radix-ui/react-tabs": "^1.0.4",
     "@radix-ui/react-toast": "^1.1.5",
     "@radix-ui/react-tooltip": "^1.0.7",
+    "@react-email/components": "^0.0.12",
+    "@react-email/html": "^0.0.7",
+    "@react-email/render": "^0.0.10",
     "@remix-run/css-bundle": "^2.4.1",
     "@remix-run/express": "^2.4.1",
     "@remix-run/node": "^2.4.1",
@@ -50,6 +53,7 @@
     "isbot": "^3.6.8",
     "lucide-react": "^0.309.0",
     "morgan": "^1.10.0",
+    "postmark": "^4.0.2",
     "qs": "^6.11.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
@@ -106,5 +110,8 @@
   ],
   "prisma": {
     "seed": "tsx prisma/seed.ts"
+  },
+  "resolutions": {
+    "strip-ansi": "^6.0.1"
   }
 }

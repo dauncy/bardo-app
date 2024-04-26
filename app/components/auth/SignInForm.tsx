@@ -1,7 +1,7 @@
 /* eslint-disable react/jsx-pascal-case */
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@app/components/bardo/Card'
 import { TypographyParagraph } from '@app/components/bardo/typography/TypographyParagraph'
-import { Form, useSubmit } from '@remix-run/react'
+import { Form, useFetcher, useSubmit } from '@remix-run/react'
 import { Button } from '@app/components/bardo/Button'
 import { Input } from '@app/components/bardo/Input'
 import { Label } from '@app/components/bardo/Label'
@@ -14,7 +14,6 @@ import { useState } from 'react'
 import { AuthStep } from '@app/types/auth'
 import { Icons } from '@app/components/bardo/Icons'
 import { FirebaseError } from 'firebase/app'
-import { useToast } from '../bardo/toast/use-toast'
 
 const authSvc = container.resolve(AuthClient)
 const signInSchema = z.object({
@@ -36,7 +35,8 @@ export const SignInForm = ({
   const submit = useSubmit()
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
-  const { toast } = useToast()
+  const fetcher = useFetcher<{ success: true }>()
+  const pending = fetcher.state === 'loading' || fetcher.state === 'submitting'
 
   return (
     <Card className="w-full max-w-sm">
@@ -110,19 +110,24 @@ export const SignInForm = ({
         </Form>
       </CardContent>
       <CardFooter className="p-0 px-2 py-3 pb-6 pt-4">
-        <Button
-          variant={'link'}
-          className="text-blue-500"
-          onClick={async () => {
-            await authSvc.onForgotPassword({ email: currentEmail })
-            toast({
-              title: 'Password reset email sent',
-              description: `An email to reset your password has be sent to ${currentEmail}`,
-            })
-          }}
-        >
-          {'Forgot password?'}
-        </Button>
+        <fetcher.Form method={'POST'} action={'/api/send-password-reset'}>
+          <input type={'hidden'} name={'email'} value={currentEmail} />
+          <Button
+            disabled={pending}
+            type={'submit'}
+            variant={'link'}
+            className="flex items-center gap-x-2 text-blue-500"
+          >
+            {pending ? (
+              <>
+                <Icons.loader className="size-4 animate-spin text-violet-600" />
+                {'Sending reset email...'}
+              </>
+            ) : (
+              <>{'Forgot password?'}</>
+            )}
+          </Button>
+        </fetcher.Form>
       </CardFooter>
     </Card>
   )

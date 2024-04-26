@@ -42,4 +42,10 @@ export class Config {
       access_key: process.env.R2_ACCESS_KEY ?? '',
     }
   }
+
+  public get postmark() {
+    return {
+      api_key: this.env?.POSTMARK_API_KEY ?? '',
+    }
+  }
 }

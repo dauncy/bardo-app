@@ -169,7 +169,6 @@ export const action = async (ctx: ActionFunctionArgs) => {
     default:
       return null
   }
-  return null
 }
 
 const DosageToIcon: Record<string, (props: LucideProps) => JSX.Element> = {
