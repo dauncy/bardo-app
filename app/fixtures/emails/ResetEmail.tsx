@@ -110,7 +110,7 @@ export const ResetEmailTemplate = ({
               </Text>
               <Button
                 href={passwordResetLink}
-                className="mt-5 w-full rounded-md  bg-violet-600 px-6 py-3 font-medium text-white"
+                className="mt-5 rounded-md  bg-violet-600 px-10 py-3 font-medium text-white"
               >
                 <strong>{'Reset Password'}</strong>
               </Button>
