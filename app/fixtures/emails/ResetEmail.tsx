@@ -94,7 +94,7 @@ export const ResetEmailTemplate = ({
         <Body className="mx-auto my-auto">
           <Container className="flex max-w-[480px] flex-1 flex-col px-6 py-14">
             <Section>
-              <Img width={320} height={80} className="object-contain object-center" />
+              <Img src={`${baseUrl}/logo-alt.png`} width={320} height={80} className="object-contain object-center" />
             </Section>
 
             <Section className="mt-8 px-6">
