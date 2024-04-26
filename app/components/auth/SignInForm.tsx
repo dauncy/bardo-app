@@ -35,9 +35,10 @@ export const SignInForm = ({
   const submit = useSubmit()
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
-  const fetcher = useFetcher<{ success: true }>()
+  const fetcher = useFetcher<{ success?: boolean; error?: string | null }>()
   const pending = fetcher.state === 'loading' || fetcher.state === 'submitting'
-
+  const success = fetcher?.data?.success
+  const resetError = fetcher.data?.error
   return (
     <Card className="w-full max-w-sm">
       <CardHeader>
@@ -110,24 +111,58 @@ export const SignInForm = ({
         </Form>
       </CardContent>
       <CardFooter className="p-0 px-2 py-3 pb-6 pt-4">
-        <fetcher.Form method={'POST'} action={'/api/send-password-reset'}>
-          <input type={'hidden'} name={'email'} value={currentEmail} />
-          <Button
-            disabled={pending}
-            type={'submit'}
-            variant={'link'}
-            className="flex items-center gap-x-2 text-blue-500"
-          >
-            {pending ? (
-              <>
-                <Icons.loader className="size-4 animate-spin text-violet-600" />
-                {'Sending reset email...'}
-              </>
-            ) : (
-              <>{'Forgot password?'}</>
-            )}
-          </Button>
-        </fetcher.Form>
+        {!success && !resetError && (
+          <fetcher.Form method={'POST'} action={'/api/send-password-reset'}>
+            <input type={'hidden'} name={'email'} value={currentEmail} />
+            <Button
+              disabled={pending}
+              type={'submit'}
+              variant={'link'}
+              className="flex items-center gap-x-2 text-blue-500"
+            >
+              {pending ? (
+                <>
+                  <Icons.loader className="size-4 animate-spin text-violet-600" />
+                  {'Sending reset email...'}
+                </>
+              ) : (
+                <>{'Forgot password?'}</>
+              )}
+            </Button>
+          </fetcher.Form>
+        )}
+
+        {success && (
+          <div className="full mx-4 -mt-5 flex gap-x-2 rounded-xl border border-green-300 p-4 shadow">
+            <div className="flex size-5 items-center justify-center rounded-full bg-green-500">
+              <Icons.Check className="size-3 text-white" />
+            </div>
+            <TypographyParagraph size={'extraSmall'} className="w-[90%] cursor-default text-muted-foreground">
+              <span>{'A password reset email has been sent to'}</span>
+              <span> </span>
+              <span>
+                <strong className="text-foreground">{currentEmail}</strong>
+              </span>
+            </TypographyParagraph>
+          </div>
+        )}
+
+        {resetError && (
+          <div className="full mx-4 -mt-5 flex gap-x-2 rounded-xl border border-red-300 p-4 shadow">
+            <div className="flex size-5 items-center justify-center rounded-full bg-red-500">
+              <p className="cursor-default font-semibold text-sm text-white">{'!'}</p>
+            </div>
+            <TypographyParagraph size={'extraSmall'} className="w-[90%] cursor-default text-muted-foreground">
+              <span>{'we were unable to send a passowrd reset email.'}</span>
+              <span> </span>
+              <span>
+                <strong className="text-foreground">{resetError}</strong>
+              </span>
+              <span> </span>
+              <span>{'please try again later.'}</span>
+            </TypographyParagraph>
+          </div>
+        )}
       </CardFooter>
     </Card>
   )

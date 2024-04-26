@@ -94,7 +94,7 @@ export const ResetEmailTemplate = ({
         <Body className="mx-auto my-auto">
           <Container className="flex max-w-[480px] flex-1 flex-col px-6 py-14">
             <Section>
-              <Img src={`${baseUrl}/logo-alt.png`} width={320} height={80} className="object-contain object-center" />
+              <Img src={`${baseUrl}/logo-alt.png`} width={320} height={82} className="object-contain object-center" />
             </Section>
 
             <Section className="mt-8 px-6">
@@ -110,7 +110,7 @@ export const ResetEmailTemplate = ({
               </Text>
               <Button
                 href={passwordResetLink}
-                className="mt-5 w-full rounded-md  bg-violet-600 px-6 py-3 font-medium text-white"
+                className="mt-5 rounded-md  bg-violet-600 px-10 py-3 font-medium text-white"
               >
                 <strong>{'Reset Password'}</strong>
               </Button>
