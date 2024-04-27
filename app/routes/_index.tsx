@@ -18,10 +18,6 @@ import { UserOnboardingStep } from '@prisma/client'
 
 const authSvc = container.resolve(AuthClient)
 
-export const meta: MetaFunction = () => {
-  return [{ title: 'Bardo' }, { name: 'description', content: 'Psychedilic journal' }]
-}
-
 export const loader = async (ctx: LoaderFunctionArgs) => {
   const adminAuth = container.resolve(AdminAuthService)
   const isAuthenticated = await adminAuth.isAuthenticated(ctx.request)
@@ -44,6 +40,26 @@ export const loader = async (ctx: LoaderFunctionArgs) => {
     return redirect(`/user-settings`)
   }
   return null
+}
+
+export const meta: MetaFunction = () => {
+  return [
+    {
+      title: 'Bardo',
+    },
+    {
+      property: 'og:title',
+      content: 'Bardo',
+    },
+    {
+      property: 'og:image',
+      content: '/meta/meta-default.png',
+    },
+    {
+      name: 'description',
+      content: 'A community trip journal',
+    },
+  ]
 }
 
 export default function Index() {

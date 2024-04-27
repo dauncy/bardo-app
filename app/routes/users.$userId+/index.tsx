@@ -6,7 +6,7 @@ import { prisma } from '@app/db.server'
 import { getAccountInfo } from '@app/utils/server.utils/account.utils'
 import { getDynamicParams, getSearchParams } from '@app/utils/server.utils/search-params.utils'
 import type { User } from '@prisma/client'
-import type { LoaderFunctionArgs } from '@remix-run/node'
+import type { LoaderFunctionArgs, MetaFunction } from '@remix-run/node'
 import { json } from '@remix-run/node'
 import { useLoaderData, useOutletContext } from '@remix-run/react'
 import { Fragment } from 'react'
@@ -168,6 +168,66 @@ export const loader = async (ctx: LoaderFunctionArgs) => {
     user: currentUser,
     numJournals,
   })
+}
+
+export const meta: MetaFunction<typeof loader> = ({ data }) => {
+  const name = () => {
+    if (data?.user.name) {
+      return data.user.name
+    }
+    const id = data?.user.user_id
+    if (!id) {
+      return ''
+    }
+    if (id < 10) {
+      return `bardo_user_00${id}`
+    }
+
+    if (id < 100) {
+      return `bardo_user_0${id}`
+    }
+
+    return `bardo_user_${id}`
+  }
+
+  const description = () => {
+    if (!data) {
+      return 'Join our community today'
+    }
+
+    const numJournals = data.numJournals
+    const memberSince = new Date(data.user.created_at).toLocaleDateString('en-US', {
+      month: 'long',
+      year: 'numeric',
+      day: 'numeric',
+    })
+    const seeJournals = data.journals
+      .slice(0, 4)
+      .map(j => j.title)
+      .join(', ')
+    return `Member since ${memberSince} | Total posts - ${numJournals} | Read - ${seeJournals}`
+  }
+  return [
+    {
+      title: `Bardo | ${name()}`,
+    },
+    {
+      property: 'description',
+      content: description(),
+    },
+    {
+      property: 'og:title',
+      content: `Bardo | ${name()}`,
+    },
+    {
+      property: 'og:description',
+      content: description(),
+    },
+    {
+      property: 'og:image',
+      content: '/meta/meta-default.png',
+    },
+  ]
 }
 
 export default function UserJournalsPage() {

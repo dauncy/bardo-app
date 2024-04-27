@@ -19,7 +19,7 @@ import { getFormData } from '@app/utils/server.utils/forms.utils'
 import { getDynamicParams } from '@app/utils/server.utils/search-params.utils'
 import { cn } from '@app/utils/ui.utils'
 import type { User } from '@prisma/client'
-import type { ActionFunctionArgs, LoaderFunctionArgs, SerializeFrom } from '@remix-run/node'
+import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction, SerializeFrom } from '@remix-run/node'
 import { json, redirect } from '@remix-run/node'
 import { Link, useFetcher, useLoaderData, useOutletContext, useSearchParams } from '@remix-run/react'
 import type { LucideProps } from 'lucide-react'
@@ -110,6 +110,62 @@ export const loader = async (ctx: LoaderFunctionArgs) => {
   return json({
     journal,
   })
+}
+
+export const meta: MetaFunction<typeof loader> = ({ data }) => {
+  const title = () => {
+    const t = data?.journal?.title
+    if (!t) {
+      return 'Bardo'
+    }
+
+    return `Bardo | ${t}`
+  }
+
+  const description = () => {
+    const journal = data?.journal
+    if (!journal) {
+      return 'A community trip journal'
+    }
+    const name = () => {
+      if (journal.user.name) {
+        return journal.user.name
+      }
+      const id = journal.user.user_id
+      if (id < 10) {
+        return `bardo_user_00${id}`
+      }
+
+      if (id < 100) {
+        return `bardo_user_0${id}`
+      }
+
+      return `bardo_user_${id}`
+    }
+
+    return `${name()} - ${journal.body?.slice(0, 120)} - read more...`
+  }
+  return [
+    {
+      title: title(),
+    },
+    {
+      property: 'og:title',
+      content: title(),
+    },
+    {
+      property: 'description',
+      content: description(),
+    },
+    {
+      property: 'og:description',
+      content: description(),
+    },
+    {
+      property: 'og:image',
+      content: `/meta/meta-default.png`,
+    },
+  ]
 }
 
 export const action = async (ctx: ActionFunctionArgs) => {
