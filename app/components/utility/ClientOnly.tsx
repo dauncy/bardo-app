@@ -1,18 +1,6 @@
-import { useEffect, useState } from 'react'
-import type { ReactNode } from 'react'
-let isHydrating = true
+import { useHydrated } from '@app/utils/client.utils/use-hydrated'
+import { ReactNode } from 'react'
 
-export const ClientOnly = ({ children }: { children: ReactNode | ReactNode[] }) => {
-  const [isHydrated, setIsHydrated] = useState(!isHydrating)
-
-  useEffect(() => {
-    isHydrating = false
-    setIsHydrated(true)
-  }, [])
-
-  if (isHydrated) {
-    return <>{children}</>
-  } else {
-    return <div />
-  }
+export const ClientOnly = ({ children, fallback = null }: { children: () => ReactNode; fallback?: ReactNode }) => {
+  return useHydrated() ? <>{children()}</> : <>{fallback}</>
 }

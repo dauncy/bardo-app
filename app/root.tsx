@@ -28,9 +28,7 @@ export default function App() {
         <ScrollRestoration />
         <Scripts />
         <LiveReload />
-        <ClientOnly>
-          <Toaster />
-        </ClientOnly>
+        <ClientOnly>{() => <Toaster />}</ClientOnly>
       </body>
     </html>
   )

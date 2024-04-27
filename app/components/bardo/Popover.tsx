@@ -5,11 +5,7 @@ import { ClientOnly } from '../utility/ClientOnly'
 
 const PopoverRoot = PopoverPrimitive.Root
 
-const Popover = (props: PopoverPrimitive.PopoverProps) => (
-  <ClientOnly>
-    <PopoverRoot {...props} />
-  </ClientOnly>
-)
+const Popover = (props: PopoverPrimitive.PopoverProps) => <ClientOnly>{() => <PopoverRoot {...props} />}</ClientOnly>
 
 const PopoverTrigger = PopoverPrimitive.Trigger
 

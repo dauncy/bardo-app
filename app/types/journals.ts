@@ -1,4 +1,4 @@
-import type { Prisma } from '@prisma/client'
+import type { JournalStatus, Prisma } from '@prisma/client'
 import { z } from 'zod'
 
 export enum TripModality {
@@ -157,3 +157,15 @@ export type JournalWithUserEditable = Prisma.JournalGetPayload<{
     }
   }
 }>
+
+export type ExportedJournal = {
+  title: string
+  body: string
+  created_at: string
+  status: JournalStatus
+  public: 'TRUE' | 'FALSE'
+  modalities: { modality: TripModality | string; dosage: TripDosage | string }[]
+  intention: string
+  setting: string
+  date_of_experience: string
+}

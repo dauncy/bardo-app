@@ -6,9 +6,7 @@ import { ClientOnly } from '../utility/ClientOnly'
 const TooltipProviderChild = TooltipPrimitive.Provider
 
 const TooltipProvider: React.FC<TooltipPrimitive.TooltipProviderProps> = props => (
-  <ClientOnly>
-    <TooltipProviderChild {...props} />
-  </ClientOnly>
+  <ClientOnly>{() => <TooltipProviderChild {...props} />}</ClientOnly>
 )
 
 const Tooltip = TooltipPrimitive.Root

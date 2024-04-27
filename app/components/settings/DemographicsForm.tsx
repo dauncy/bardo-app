@@ -157,234 +157,236 @@ export const DemographicsForm = () => {
 
   return (
     <ClientOnly>
-      <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="flex w-full flex-col gap-y-8">
-          <FormField
-            control={form.control}
-            name={'gender'}
-            render={({ field }) => (
-              <FormItem className="flex flex-col gap-y-1">
-                <TypographyParagraph size={'medium'} className="font-medium text-foreground">
-                  {'Gender'}
-                </TypographyParagraph>
-                <FormControl>
-                  <RadioGroup
-                    onValueChange={value => field.onChange(value)}
-                    defaultValue={form.formState.defaultValues?.gender}
-                  >
-                    {Object.values(Gender).map(value => (
-                      <div className="flex items-center space-x-2" key={value}>
-                        <RadioGroupItem value={value} id={value} />
-                        <Label htmlFor={value}>{value.split('_').join(' ')}</Label>
-                      </div>
-                    ))}
-                  </RadioGroup>
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+      {() => (
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(onSubmit)} className="flex w-full flex-col gap-y-8">
+            <FormField
+              control={form.control}
+              name={'gender'}
+              render={({ field }) => (
+                <FormItem className="flex flex-col gap-y-1">
+                  <TypographyParagraph size={'medium'} className="font-medium text-foreground">
+                    {'Gender'}
+                  </TypographyParagraph>
+                  <FormControl>
+                    <RadioGroup
+                      onValueChange={value => field.onChange(value)}
+                      defaultValue={form.formState.defaultValues?.gender}
+                    >
+                      {Object.values(Gender).map(value => (
+                        <div className="flex items-center space-x-2" key={value}>
+                          <RadioGroupItem value={value} id={value} />
+                          <Label htmlFor={value}>{value.split('_').join(' ')}</Label>
+                        </div>
+                      ))}
+                    </RadioGroup>
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
-          <FormField
-            control={form.control}
-            name={'race'}
-            render={({ field }) => (
-              <FormItem className="flex flex-col gap-y-1">
-                <TypographyParagraph size={'medium'} className="font-medium text-foreground">
-                  {'Ethnicity'}
-                </TypographyParagraph>
-                <FormControl>
-                  <Select onValueChange={value => field.onChange(value)} value={field.value}>
-                    <SelectTrigger className="max-w-[302px]">
-                      <SelectValue placeholder={'Select your race'} />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectGroup>
-                        <SelectLabel>{'Select your race'}</SelectLabel>
-                        {Object.values(Ethnicity).map(option => (
-                          <SelectItem key={option} value={option}>
-                            {option.split('_').join(' ')}
-                          </SelectItem>
-                        ))}
-                      </SelectGroup>
-                    </SelectContent>
-                  </Select>
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+            <FormField
+              control={form.control}
+              name={'race'}
+              render={({ field }) => (
+                <FormItem className="flex flex-col gap-y-1">
+                  <TypographyParagraph size={'medium'} className="font-medium text-foreground">
+                    {'Ethnicity'}
+                  </TypographyParagraph>
+                  <FormControl>
+                    <Select onValueChange={value => field.onChange(value)} value={field.value}>
+                      <SelectTrigger className="max-w-[302px]">
+                        <SelectValue placeholder={'Select your race'} />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectGroup>
+                          <SelectLabel>{'Select your race'}</SelectLabel>
+                          {Object.values(Ethnicity).map(option => (
+                            <SelectItem key={option} value={option}>
+                              {option.split('_').join(' ')}
+                            </SelectItem>
+                          ))}
+                        </SelectGroup>
+                      </SelectContent>
+                    </Select>
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
-          <FormField
-            control={form.control}
-            name={'education_level'}
-            render={({ field }) => (
-              <FormItem className="flex flex-col gap-y-1">
-                <TypographyParagraph size={'medium'} className="font-medium text-foreground">
-                  {'Highest Level of Education'}
-                </TypographyParagraph>
-                <FormControl>
-                  <Select
-                    onValueChange={value => {
-                      form.setValue('education_level', value as EducationLevel)
-                    }}
-                    value={field.value}
-                  >
-                    <SelectTrigger className="max-w-[302px]">
-                      <SelectValue placeholder={'Select the highest that applies'} />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectGroup>
-                        <SelectLabel>{'Select the highest level of education that applies'}</SelectLabel>
-                        {Object.values(EducationLevel).map(option => (
-                          <SelectItem key={option} value={option}>
-                            {option.split('_').join(' ')}
-                          </SelectItem>
-                        ))}
-                      </SelectGroup>
-                    </SelectContent>
-                  </Select>
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <div className="flex flex-col gap-y-1">
-            <TypographyParagraph size={'medium'} className="font-medium text-foreground">
-              {'Date of Birth'}
-            </TypographyParagraph>
-            <div className="flex items-center gap-x-4">
-              <FormField
-                control={form.control}
-                name={'date_of_birth.month'}
-                render={({ field }) => (
-                  <FormItem>
-                    <FormControl>
-                      <Select
-                        defaultValue={
-                          form.formState.defaultValues?.date_of_birth?.month
-                            ? `${form.formState.defaultValues?.date_of_birth?.month}`
-                            : undefined
-                        }
-                        onValueChange={value => {
-                          const month = parseInt(value)
-                          field.onChange(month)
-                          getDayOptions()
-                        }}
-                      >
-                        <SelectTrigger className="w-fit md:w-32">
-                          <SelectValue placeholder={'MM'} />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectGroup>
-                            <SelectLabel>{'Month'}</SelectLabel>
-                            {months.map(month => (
-                              <SelectItem key={`month-${month}`} value={`${month}`}>
-                                {`${month < 10 ? '0' : ''}${month}`}
-                              </SelectItem>
-                            ))}
-                          </SelectGroup>
-                        </SelectContent>
-                      </Select>
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name={'date_of_birth.day'}
-                render={({ field }) => (
-                  <FormItem>
-                    <FormControl>
-                      <Select
-                        defaultValue={
-                          form.formState.defaultValues?.date_of_birth?.day
-                            ? `${form.formState.defaultValues?.date_of_birth?.day}`
-                            : undefined
-                        }
-                        onValueChange={value => {
-                          const day = parseInt(value)
-                          field.onChange(day)
-                        }}
-                      >
-                        <SelectTrigger className="w-fit md:w-32">
-                          <SelectValue placeholder={'DD'} />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectGroup>
-                            <SelectLabel>{'Day'}</SelectLabel>
-                            {days.map(day => (
-                              <SelectItem key={`day-${day}`} value={`${day}`}>
-                                {`${day < 10 ? '0' : ''}${day}`}
-                              </SelectItem>
-                            ))}
-                          </SelectGroup>
-                        </SelectContent>
-                      </Select>
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name={'date_of_birth.year'}
-                render={({ field }) => (
-                  <FormItem>
-                    <FormControl>
-                      <Select
-                        defaultValue={
-                          form.formState.defaultValues?.date_of_birth?.year
-                            ? `${form.formState.defaultValues?.date_of_birth?.year}`
-                            : undefined
-                        }
-                        onValueChange={value => {
-                          const year = parseInt(value)
-                          field.onChange(year)
-                          getDayOptions()
-                        }}
-                      >
-                        <SelectTrigger className="w-fit md:w-32">
-                          <SelectValue placeholder={'YYYY'} />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectGroup>
-                            <SelectLabel>{'Year'}</SelectLabel>
-                            {yearsArray.map(year => (
-                              <SelectItem key={`year-${year}`} value={`${year}`}>
-                                {year}
-                              </SelectItem>
-                            ))}
-                          </SelectGroup>
-                        </SelectContent>
-                      </Select>
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
-          </div>
-          {form.formState.errors.root && (
-            <div className="-mt-5 flex w-full items-center gap-x-2 rounded-xl border border-destructive p-2">
-              <Icons.alertCircle className="size-4 text-destructive" />
-              <TypographyParagraph size={'extraSmall'} className="font-medium text-destructive">
-                {form.formState.errors.root.message}
+            <FormField
+              control={form.control}
+              name={'education_level'}
+              render={({ field }) => (
+                <FormItem className="flex flex-col gap-y-1">
+                  <TypographyParagraph size={'medium'} className="font-medium text-foreground">
+                    {'Highest Level of Education'}
+                  </TypographyParagraph>
+                  <FormControl>
+                    <Select
+                      onValueChange={value => {
+                        form.setValue('education_level', value as EducationLevel)
+                      }}
+                      value={field.value}
+                    >
+                      <SelectTrigger className="max-w-[302px]">
+                        <SelectValue placeholder={'Select the highest that applies'} />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectGroup>
+                          <SelectLabel>{'Select the highest level of education that applies'}</SelectLabel>
+                          {Object.values(EducationLevel).map(option => (
+                            <SelectItem key={option} value={option}>
+                              {option.split('_').join(' ')}
+                            </SelectItem>
+                          ))}
+                        </SelectGroup>
+                      </SelectContent>
+                    </Select>
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <div className="flex flex-col gap-y-1">
+              <TypographyParagraph size={'medium'} className="font-medium text-foreground">
+                {'Date of Birth'}
               </TypographyParagraph>
+              <div className="flex items-center gap-x-4">
+                <FormField
+                  control={form.control}
+                  name={'date_of_birth.month'}
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormControl>
+                        <Select
+                          defaultValue={
+                            form.formState.defaultValues?.date_of_birth?.month
+                              ? `${form.formState.defaultValues?.date_of_birth?.month}`
+                              : undefined
+                          }
+                          onValueChange={value => {
+                            const month = parseInt(value)
+                            field.onChange(month)
+                            getDayOptions()
+                          }}
+                        >
+                          <SelectTrigger className="w-fit md:w-32">
+                            <SelectValue placeholder={'MM'} />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectGroup>
+                              <SelectLabel>{'Month'}</SelectLabel>
+                              {months.map(month => (
+                                <SelectItem key={`month-${month}`} value={`${month}`}>
+                                  {`${month < 10 ? '0' : ''}${month}`}
+                                </SelectItem>
+                              ))}
+                            </SelectGroup>
+                          </SelectContent>
+                        </Select>
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name={'date_of_birth.day'}
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormControl>
+                        <Select
+                          defaultValue={
+                            form.formState.defaultValues?.date_of_birth?.day
+                              ? `${form.formState.defaultValues?.date_of_birth?.day}`
+                              : undefined
+                          }
+                          onValueChange={value => {
+                            const day = parseInt(value)
+                            field.onChange(day)
+                          }}
+                        >
+                          <SelectTrigger className="w-fit md:w-32">
+                            <SelectValue placeholder={'DD'} />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectGroup>
+                              <SelectLabel>{'Day'}</SelectLabel>
+                              {days.map(day => (
+                                <SelectItem key={`day-${day}`} value={`${day}`}>
+                                  {`${day < 10 ? '0' : ''}${day}`}
+                                </SelectItem>
+                              ))}
+                            </SelectGroup>
+                          </SelectContent>
+                        </Select>
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name={'date_of_birth.year'}
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormControl>
+                        <Select
+                          defaultValue={
+                            form.formState.defaultValues?.date_of_birth?.year
+                              ? `${form.formState.defaultValues?.date_of_birth?.year}`
+                              : undefined
+                          }
+                          onValueChange={value => {
+                            const year = parseInt(value)
+                            field.onChange(year)
+                            getDayOptions()
+                          }}
+                        >
+                          <SelectTrigger className="w-fit md:w-32">
+                            <SelectValue placeholder={'YYYY'} />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectGroup>
+                              <SelectLabel>{'Year'}</SelectLabel>
+                              {yearsArray.map(year => (
+                                <SelectItem key={`year-${year}`} value={`${year}`}>
+                                  {year}
+                                </SelectItem>
+                              ))}
+                            </SelectGroup>
+                          </SelectContent>
+                        </Select>
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
             </div>
-          )}
-          <Button
-            type={'submit'}
-            variant={'bardo_primary'}
-            className="flex w-full items-center gap-x-2 md:ml-auto md:max-w-48"
-            disabled={pending}
-          >
-            {pending && <Icons.loader className="size 4 animate-spin text-white/90" />}
-            {currentUser.onboarding_step === UserOnboardingStep.DEMOGRAPHICS ? 'Done' : 'Update'}
-          </Button>
-        </form>
-      </Form>
+            {form.formState.errors.root && (
+              <div className="-mt-5 flex w-full items-center gap-x-2 rounded-xl border border-destructive p-2">
+                <Icons.alertCircle className="size-4 text-destructive" />
+                <TypographyParagraph size={'extraSmall'} className="font-medium text-destructive">
+                  {form.formState.errors.root.message}
+                </TypographyParagraph>
+              </div>
+            )}
+            <Button
+              type={'submit'}
+              variant={'bardo_primary'}
+              className="flex w-full items-center gap-x-2 md:ml-auto md:max-w-48"
+              disabled={pending}
+            >
+              {pending && <Icons.loader className="size 4 animate-spin text-white/90" />}
+              {currentUser.onboarding_step === UserOnboardingStep.DEMOGRAPHICS ? 'Done' : 'Update'}
+            </Button>
+          </form>
+        </Form>
+      )}
     </ClientOnly>
   )
 }

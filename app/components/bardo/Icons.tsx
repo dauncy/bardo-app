@@ -29,9 +29,16 @@ import {
   Signal,
   CalendarDays,
   HelpCircle,
+  Users,
+  UserPlus,
+  DownloadCloud,
+  Settings,
 } from 'lucide-react'
 
 export const Icons = {
+  DownloadCloud,
+  Settings,
+  Users,
   HelpCircle,
   CalendarDays,
   Micro: SignalLow,
@@ -61,6 +68,7 @@ export const Icons = {
   Trash: Trash,
   Upload: UploadCloud,
   LibraryBig,
+  UserPlus,
   google: (props: LucideProps) => (
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="64" height="64" {...props}>
       <defs>

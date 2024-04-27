@@ -11,3 +11,12 @@ export const getFormData = async <T extends ZodDiscriminatedUnionOption<string>[
   const parsed = zodSchema.parse(json)
   return parsed
 }
+
+export const getJsonData = async <T extends ZodDiscriminatedUnionOption<string>[]>(
+  ctx: ActionFunctionArgs,
+  zodSchema: ZodDiscriminatedUnion<string, T>,
+): Promise<z.infer<typeof zodSchema>> => {
+  const json = await ctx.request.json()
+  const parsed = zodSchema.parse(json)
+  return parsed
+}

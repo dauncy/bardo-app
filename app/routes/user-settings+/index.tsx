@@ -3,7 +3,6 @@ import { Button } from '@app/components/bardo/Button'
 import { Icons } from '@app/components/bardo/Icons'
 import { Input } from '@app/components/bardo/Input'
 import { UpdateUserProfileImage } from '@app/components/users/UpdateUserProfileImage'
-import { ClientOnly } from '@app/components/utility/ClientOnly'
 import type { UserCrudPayload } from '@app/types/users'
 import { userCrudSchema } from '@app/types/users'
 import { getAccountInfo } from '@app/utils/server.utils/account.utils'
@@ -115,9 +114,7 @@ export default function UserSettingsPage() {
           <TypographyParagraph size={'medium'} className="font-medium text-foreground">
             {'Profile Image'}
           </TypographyParagraph>
-          <ClientOnly>
-            <UpdateUserProfileImage user={currentUser} />
-          </ClientOnly>
+          <UpdateUserProfileImage user={currentUser} />
         </div>
         <Button
           disabled={pending}

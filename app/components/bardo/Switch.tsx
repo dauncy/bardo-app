@@ -6,11 +6,7 @@ import { ClientOnly } from '../utility/ClientOnly'
 const Switch = React.forwardRef<
   React.ElementRef<typeof SwitchPrimitives.Root>,
   React.ComponentPropsWithoutRef<typeof SwitchPrimitives.Root>
->((props, ref) => (
-  <ClientOnly>
-    <SwitchChild {...props} ref={ref} />
-  </ClientOnly>
-))
+>((props, ref) => <ClientOnly>{() => <SwitchChild {...props} ref={ref} />}</ClientOnly>)
 
 Switch.displayName = 'Switch'
 

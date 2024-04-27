@@ -6,11 +6,7 @@ import { ClientOnly } from '../utility/ClientOnly'
 const TabsChild = TabsPrimitive.Root
 
 const Tabs: React.FC<TabsPrimitive.TabsProps> = props => {
-  return (
-    <ClientOnly>
-      <TabsChild {...props} />
-    </ClientOnly>
-  )
+  return <ClientOnly>{() => <TabsChild {...props} />}</ClientOnly>
 }
 
 const TabsList = React.forwardRef<

@@ -48,4 +48,10 @@ export class Config {
       api_key: this.env?.POSTMARK_API_KEY ?? '',
     }
   }
+
+  public get bardo() {
+    return {
+      api_key: this.env?.BARDO_API_KEY ?? '',
+    }
+  }
 }
