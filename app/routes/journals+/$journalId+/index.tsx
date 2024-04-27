@@ -264,7 +264,7 @@ export default function JournalViewPage() {
 
       {journal && !editable && (
         <div className="relative mx-auto flex h-max min-h-full w-full max-w-7xl flex-1 flex-col border bg-white p-6 shadow md:rounded-xl md:p-14">
-          {currentUser?.id === journal.user.id && <JournalCardMenu journalId={journal.id} />}
+          {currentUser?.id === journal.user.id && <JournalCardMenu journal={journal} />}
           <div className="flex gap-x-2">
             <UserAvatar user={journal.user} />
             <div className="flex flex-col gap-y-1">

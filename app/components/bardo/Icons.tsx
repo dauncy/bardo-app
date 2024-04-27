@@ -33,9 +33,11 @@ import {
   UserPlus,
   DownloadCloud,
   Settings,
+  Share,
 } from 'lucide-react'
 
 export const Icons = {
+  Share,
   DownloadCloud,
   Settings,
   Users,

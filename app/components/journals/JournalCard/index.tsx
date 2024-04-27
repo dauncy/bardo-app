@@ -6,34 +6,96 @@ import { JournalBody } from './JournalBody'
 import { Popover, PopoverContent, PopoverTrigger } from '@app/components/bardo/Popover'
 import { Icons } from '@app/components/bardo/Icons'
 import { TypographyParagraph } from '@app/components/bardo/typography/TypographyParagraph'
-import { Separator } from '@app/components/bardo/Separator'
 import { Link, useOutletContext } from '@remix-run/react'
 import type { SerializeFrom } from '@remix-run/node'
 import { TripDosage, type JournalWithUser } from '@app/types/journals'
 import type { LucideProps } from 'lucide-react'
 import { PopoverText } from './PopoverText'
 import { DOSAGE, INTENTION, MODALITIES, SETTING } from '@app/constants/journal.constants'
+import { Button, buttonVariants } from '@app/components/bardo/Button'
+import { useToast } from '@app/components/bardo/toast/use-toast'
+import { cn } from '@app/utils/ui.utils'
+import { useState } from 'react'
 
-export const JournalCardMenu = ({ journalId }: { journalId: string }) => {
-  // const { currentUser } = useOutletContext<{ currentUser: User }>()
+export const JournalCardMenu = ({ journal }: { journal: SerializeFrom<JournalWithUser> }) => {
+  const [open, setOpen] = useState(false)
+  const { currentUser } = useOutletContext<{ currentUser: User | null }>()
+  const { toast } = useToast()
+  const handleShare = async () => {
+    const name = () => {
+      if (journal.user.name) {
+        return journal.user.name
+      }
+      const id = journal.user.user_id
+      if (id < 10) {
+        return `bardo_user_00${id}`
+      }
+
+      if (id < 100) {
+        return `bardo_user_0${id}`
+      }
+
+      return `bardo_user_${id}`
+    }
+    if (navigator.share) {
+      setOpen(false)
+      await navigator.share({
+        title: `Bardo | ${journal.title}`,
+        text: `${name()} - ${journal.body?.slice(0, 120)} - read more...`,
+        url: `${window.location.origin}/journals/${journal.id}`,
+      })
+    } else {
+      setOpen(false)
+      navigator.clipboard.writeText(`${window.location.origin}/journals/${journal.id}`)
+      toast({
+        title: 'Link copied to clipboard.',
+        description: 'You can now share this journal.',
+        action: (
+          <Link
+            className={cn(buttonVariants({ variant: 'ghost' }), 'font-medium text-violet-800')}
+            to={`/journals/${journal.id}`}
+          >
+            {'View'}
+          </Link>
+        ),
+      })
+    }
+  }
   return (
-    <Popover>
+    <Popover open={open} onOpenChange={e => setOpen(e)}>
       <PopoverTrigger asChild>
         <div className="absolute right-2 top-2 flex cursor-pointer items-center justify-center">
           <Icons.more className="size-6 text-slate-200 hover:text-violet-600" />
         </div>
       </PopoverTrigger>
-      <PopoverContent className="max-w-[224px] p-0" side="left">
-        <Link
-          to={`/journals/${journalId}?edit=true`}
-          className="group flex w-full cursor-pointer items-center gap-x-2 px-4 py-1.5 hover:bg-violet-200"
+      <PopoverContent className="flex max-w-[224px] flex-col gap-y-2 rounded-xl px-4 py-3 shadow-lg" side={'left'}>
+        <Button
+          onClick={async () => await handleShare()}
+          tabIndex={-1}
+          variant={'ghost'}
+          className={`
+              group flex w-full 
+              cursor-pointer 
+              items-center justify-start gap-x-4 rounded-md px-4 
+              py-1.5 hover:bg-violet-200
+            `}
         >
-          <Icons.NotebookPen className="size-4 text-muted-foreground group-hover:text-foreground" />
+          <Icons.Share className="size-4 text-muted-foreground group-hover:text-foreground" />
           <TypographyParagraph size={'small'} className="text-muted-foreground group-hover:text-foreground">
-            {'Edit Journal'}
+            {'Share Journal'}
           </TypographyParagraph>
-        </Link>
-        <Separator />
+        </Button>
+        {currentUser?.id === journal?.user?.id && (
+          <Link
+            to={`/journals/${journal.id}?edit=true`}
+            className="group flex w-full cursor-pointer items-center justify-start gap-x-4 rounded-md px-4 py-1.5 font-medium text-sm hover:bg-violet-200"
+          >
+            <Icons.NotebookPen className="size-4 text-muted-foreground group-hover:text-foreground" />
+            <TypographyParagraph size={'small'} className="text-muted-foreground group-hover:text-foreground">
+              {'Edit Journal'}
+            </TypographyParagraph>
+          </Link>
+        )}
       </PopoverContent>
     </Popover>
   )
@@ -48,10 +110,9 @@ const DosageToIcon: Record<string, (props: LucideProps) => JSX.Element> = {
 }
 
 export const JournalCard = ({ journal }: { journal: SerializeFrom<JournalWithUser> }) => {
-  const { currentUser } = useOutletContext<{ currentUser: User | null }>()
   return (
     <Card className="relative w-full cursor-default rounded-none px-0 shadow-none md:rounded-md md:shadow">
-      {journal.user.id === currentUser?.id && <JournalCardMenu journalId={journal.id} />}
+      <JournalCardMenu journal={journal} />
       <CardHeader className="flex flex-row gap-x-2 px-4 py-5 pb-0 md:gap-x-4 md:px-8 md:py-6">
         <UserAvatar user={journal.user} />
         <div className="flex flex-col gap-y-2">

@@ -25,10 +25,10 @@ export const ProfileMenu = ({ user }: { user: SerializeFrom<User> }) => {
       <PopoverTrigger>
         <UserAvatar user={user} link={false} />
       </PopoverTrigger>
-      <PopoverContent className="shadow-ld z-[999999] ml-4 mr-14 flex w-[240px] flex-col rounded-lg p-0">
+      <PopoverContent className="z-20 mr-12 flex max-w-[224px] flex-col gap-y-2 rounded-xl px-4 py-3 shadow-lg md:mr-16">
         <Link
           to={`/user-settings`}
-          className="group flex w-full cursor-pointer flex-row items-center gap-x-2 rounded-t-lg px-4 py-2 hover:bg-violet-200"
+          className="group flex w-full cursor-pointer flex-row items-center gap-x-4 rounded-md px-4 py-2 font-medium hover:bg-violet-200"
         >
           <Icons.userRound className="size-4 text-muted-foreground group-hover:text-foreground" strokeWidth={1.5} />
           <TypographyParagraph size={'small'} className="text-muted-foreground group-hover:text-foreground">
@@ -38,7 +38,7 @@ export const ProfileMenu = ({ user }: { user: SerializeFrom<User> }) => {
 
         <Link
           to={`/journals`}
-          className="group flex w-full cursor-pointer flex-row items-center gap-x-2 px-4 py-2 hover:bg-violet-200"
+          className="group flex w-full cursor-pointer flex-row items-center gap-x-4 rounded-md px-4 py-2 font-medium hover:bg-violet-200"
         >
           <Icons.Newspaper className="size-4 text-muted-foreground group-hover:text-foreground" strokeWidth={1.5} />
           <TypographyParagraph size={'small'} className="text-muted-foreground group-hover:text-foreground">
@@ -48,7 +48,7 @@ export const ProfileMenu = ({ user }: { user: SerializeFrom<User> }) => {
 
         <Link
           to={`/journals/new`}
-          className="group flex w-full cursor-pointer flex-row items-center gap-x-2 px-4 py-2 hover:bg-violet-200"
+          className="group flex w-full cursor-pointer flex-row items-center gap-x-4 rounded-md px-4 py-2 font-medium hover:bg-violet-200"
         >
           <Icons.NotebookPen className="size-4 text-muted-foreground group-hover:text-foreground" strokeWidth={1.5} />
           <TypographyParagraph size={'small'} className="text-muted-foreground group-hover:text-foreground">
@@ -58,7 +58,7 @@ export const ProfileMenu = ({ user }: { user: SerializeFrom<User> }) => {
 
         <Link
           to={`/users/${user.id}`}
-          className="group flex w-full cursor-pointer flex-row items-center gap-x-2 px-4 py-2 hover:bg-violet-200"
+          className="group flex w-full cursor-pointer flex-row items-center gap-x-4 rounded-md px-4 py-2 font-medium hover:bg-violet-200"
         >
           <Icons.archive className="size-4 text-muted-foreground group-hover:text-foreground" strokeWidth={1.5} />
           <TypographyParagraph size={'small'} className="text-muted-foreground group-hover:text-foreground">
@@ -70,9 +70,9 @@ export const ProfileMenu = ({ user }: { user: SerializeFrom<User> }) => {
         {user.roles.includes(UserRole.admin) && (
           <Link
             to={`/admin`}
-            className="group flex w-full cursor-pointer flex-row items-center gap-x-2 px-4 py-2 hover:bg-violet-200"
+            className="group flex w-full cursor-pointer flex-row items-center gap-x-4 rounded-md px-4 py-2 font-medium hover:bg-violet-200"
           >
-            <Icons.archive className="size-4 text-muted-foreground group-hover:text-foreground" strokeWidth={1.5} />
+            <Icons.Settings className="size-4 text-muted-foreground group-hover:text-foreground" strokeWidth={1.5} />
             <TypographyParagraph size={'small'} className="text-muted-foreground group-hover:text-foreground">
               {'Admin'}
             </TypographyParagraph>
@@ -83,7 +83,7 @@ export const ProfileMenu = ({ user }: { user: SerializeFrom<User> }) => {
             await container.resolve(AuthClient).signOut()
             fetcher.submit({}, { method: 'GET', action: Routes.logout })
           }}
-          className="group flex w-full cursor-pointer flex-row items-center justify-between gap-x-2 rounded-b-lg px-4 py-2 hover:bg-violet-200"
+          className="group flex w-full cursor-pointer flex-row items-center justify-between gap-x-4 rounded-md px-4 py-2 font-medium hover:bg-violet-200"
         >
           <TypographyParagraph size={'small'} className="text-muted-foreground group-hover:text-foreground">
             {'Sign out'}
