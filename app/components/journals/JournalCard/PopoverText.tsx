@@ -10,7 +10,7 @@ export const PopoverText = ({ text, children }: PopoverTextProps) => {
   return (
     <Popover>
       <PopoverTrigger asChild>{children}</PopoverTrigger>
-      <PopoverContent className="bg-violet-600 px-4 py-2 shadow-md">
+      <PopoverContent className="w-max bg-violet-600 px-4 py-2 shadow-md">
         <TypographyParagraph className="select-none border-none text-white/90" size={'extraSmall'}>
           {text}
         </TypographyParagraph>
