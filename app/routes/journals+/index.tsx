@@ -67,8 +67,8 @@ export default function JournalsFeedPage() {
   const { currentUser } = useOutletContext<{ currentUser: User }>()
   const { feed, userStats } = useLoaderData<typeof loader>()
   return (
-    <div className="mx-auto mt-10 flex w-full max-w-7xl flex-col gap-4 pb-10 md:flex-row">
-      <div className="flex w-full px-6 md:w-[302px] md:px-0">
+    <div className="mx-auto flex w-full max-w-7xl flex-col gap-4 pb-10 md:flex-row">
+      <div className="flex w-full md:w-[302px] md:px-0 md:px-6">
         <UserPreviewCard numJournals={userStats.num_journals} user={currentUser} />
       </div>
       <div className="mt-5 flex w-full flex-col items-center gap-y-5 md:mt-0 md:max-w-xl">

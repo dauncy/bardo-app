@@ -52,7 +52,7 @@ export const JournalCard = ({ journal }: { journal: SerializeFrom<JournalWithUse
   return (
     <Card className="relative w-full cursor-default rounded-none px-0 shadow-none md:rounded-md md:shadow">
       {journal.user.id === currentUser?.id && <JournalCardMenu journalId={journal.id} />}
-      <CardHeader className="flex flex-row gap-x-4 px-8 pb-0">
+      <CardHeader className="flex flex-row gap-x-2 px-4 py-5 pb-0 md:gap-x-4 md:px-8 md:py-6">
         <UserAvatar user={journal.user} />
         <div className="flex flex-col gap-y-2">
           <CardTitle>{journal.title}</CardTitle>

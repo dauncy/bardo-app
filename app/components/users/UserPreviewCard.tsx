@@ -2,7 +2,7 @@ import type { PublicUser } from '@app/types/users'
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '../bardo/Card'
 import { UserAvatar } from './UserAvatar'
 import { TypographyParagraph } from '../bardo/typography/TypographyParagraph'
-import { Link, useOutletContext } from '@remix-run/react'
+import { Link, useLocation, useOutletContext } from '@remix-run/react'
 import { Button } from '../bardo/Button'
 import type { User } from '@prisma/client'
 import type { SerializeFrom } from '@remix-run/node'
@@ -15,6 +15,8 @@ export const UserPreviewCard = ({
   numJournals: number
 }) => {
   const { currentUser } = useOutletContext<{ currentUser: User | null }>()
+  const { pathname } = useLocation()
+
   const displayName = () => {
     if (user.name) {
       return user.name
@@ -30,19 +32,22 @@ export const UserPreviewCard = ({
     return `bardo_user_${user.user_id}`
   }
   return (
-    <Card className="h-max w-full md:w-[302px]">
-      <CardHeader>
+    <Card className="rounded-non h-max w-full shadow-none md:w-[302px] md:rounded-md md:shadow">
+      <CardHeader className="p-4 py-5">
         <div className="flex flex-row gap-x-2">
           <UserAvatar user={user} />
-          <div className="flex flex-col">
+          <div className="mt-1 flex flex-col">
             <CardTitle>{displayName()}</CardTitle>
-            <CardDescription>{`
-                Member since 
-                ${new Date(user.created_at).toLocaleDateString('en', {
+            <CardDescription>
+              <span>Member since </span>
+              <span> </span>
+              <span className="font-medium text-foreground">
+                {`${new Date(user.created_at).toLocaleDateString('en', {
                   month: 'long',
                   year: 'numeric',
-                })}
-              `}</CardDescription>
+                })}`}
+              </span>
+            </CardDescription>
           </div>
         </div>
       </CardHeader>
@@ -56,9 +61,9 @@ export const UserPreviewCard = ({
           </TypographyParagraph>
         </div>
       </CardContent>
-      <CardFooter className="items-center justify-center">
-        {currentUser?.id === user.id && (
-          <Link className="w-max min-w-36 md:w-full" to={'/user-settings'}>
+      <CardFooter className="items-center justify-center py-0">
+        {currentUser?.id === user.id && pathname !== `/users/${currentUser.id}` && (
+          <Link className=" my-6 w-full min-w-36" to={'/user-settings'}>
             <Button variant={'bardo_primary'} className="w-full rounded-full">
               {'Visit Profile'}
             </Button>

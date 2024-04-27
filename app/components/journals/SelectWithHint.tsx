@@ -50,7 +50,7 @@ export const SelectWithHint = (props: SelectWithHintProps) => {
           htmlFor={`data[${props.label}]`}
           className={cn(
             paragraphVariants({ size: 'medium' }),
-            "font-medium capitalize text-foreground after:ml-0.5 after:text-red-500 after:content-['*']",
+            "font-medium capitalize leading-none text-foreground after:ml-0.5 after:text-red-500 after:content-['*']",
           )}
         >
           {props.label}

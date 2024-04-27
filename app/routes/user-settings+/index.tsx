@@ -87,10 +87,10 @@ export default function UserSettingsPage() {
   }
 
   return (
-    <div className="flex h-full min-h-full w-full flex-1 flex-col gap-y-2 p-5">
+    <div className="flex h-max min-h-full w-full flex-1 flex-col gap-y-2 p-0 md:p-5">
       <h1 className="font-foreground font-medium text-2xl">{'Public Profile'}</h1>
       <div className="w-full">
-        <p className="mb-2 border-l border-l-2 border-violet-400 pl-4 text-sm font-normal italic text-foreground/60">
+        <p className="mb-2 border-l border-l-2 border-violet-400 pl-2 text-sm font-normal italic text-foreground/60 md:pl-4">
           {
             'This is public data. This is how other users will see you on your publicly shared experiences. You can always change or update this stuff later.'
           }
@@ -110,7 +110,7 @@ export default function UserSettingsPage() {
           className="peer mt-1 focus-visible:border-violet-400 focus-visible:ring-violet-400 disabled:cursor-not-allowed disabled:bg-violet-100 md:max-w-sm"
           disabled={pending}
         />
-        <div className="mt-8 flex flex-col gap-y-1">
+        <div className="mt-3 flex flex-col gap-y-1 md:mt-8">
           <TypographyParagraph size={'medium'} className="font-medium text-foreground">
             {'Profile Image'}
           </TypographyParagraph>
@@ -119,7 +119,7 @@ export default function UserSettingsPage() {
         <Button
           disabled={pending}
           variant={'bardo_primary'}
-          className="mt-auto flex min-w-40 items-center gap-x-2 peer-invalid:cursor-not-allowed peer-invalid:opacity-40 md:ml-auto md:max-w-sm"
+          className="mt-3 flex min-w-40 items-center gap-x-2 peer-invalid:cursor-not-allowed peer-invalid:opacity-40 md:ml-auto md:mt-auto md:max-w-sm"
           onClick={() => {
             const username = usernameRef.current?.value?.trim()
             if (!username) {

@@ -7,7 +7,7 @@ export const LearnMoreModal = () => {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button variant={'secondary'} className="mt-1 flex items-center gap-x-2 self-start">
+        <Button variant={'secondary'} className="mt-1 flex w-full flex-1 items-center gap-x-2 self-start">
           {'Learn More'}
           <Icons.ArrowUpRight className="size-5" />
         </Button>

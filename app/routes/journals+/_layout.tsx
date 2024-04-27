@@ -25,7 +25,7 @@ export default function FeedLayout() {
   return (
     <div className="relative flex size-full h-max min-h-full flex-col items-center bg-violet-50">
       <MainNav user={currentUser} />
-      <div className="flex h-full min-h-full w-full flex-1 flex-col px-0 py-6 pt-[88px] md:px-6">
+      <div className="flex h-full min-h-full w-full flex-1 flex-col px-0 py-6 pt-[80px] md:px-6">
         <Outlet context={{ currentUser }} />
       </div>
     </div>

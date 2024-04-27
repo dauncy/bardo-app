@@ -74,10 +74,10 @@ export const action = async (ctx: ActionFunctionArgs) => {
 
 export default function DemographicsPage() {
   return (
-    <div className="flex h-full w-full flex-col gap-y-2 p-5">
+    <div className="flex h-full w-full flex-col gap-y-2 p-0 md:p-5">
       <h1 className="font-foreground font-medium text-2xl">{'Private Information'}</h1>
       <div className="w-full">
-        <p className="mb-2 border-l border-l-2 border-violet-400 pl-4 text-sm font-normal italic text-foreground/60">
+        <p className="mb-2 border-l border-l-2 border-violet-400 pl-2 text-sm font-normal italic text-foreground/60 md:pl-4">
           {
             'This is private info inaccessible to other users. We collect this data to conduct research on how to better help pschedelic users integrate their experieces. In our research all this data will be de-identifiable. Feel free to skip this step.'
           }

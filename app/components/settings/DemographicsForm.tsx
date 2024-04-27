@@ -159,13 +159,13 @@ export const DemographicsForm = () => {
     <ClientOnly>
       {() => (
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="flex w-full flex-col gap-y-8">
+          <form onSubmit={form.handleSubmit(onSubmit)} className="flex w-full flex-col gap-y-5 md:gap-y-8">
             <FormField
               control={form.control}
               name={'gender'}
               render={({ field }) => (
-                <FormItem className="flex flex-col gap-y-1">
-                  <TypographyParagraph size={'medium'} className="font-medium text-foreground">
+                <FormItem className="flex flex-col gap-y-1 space-y-0 md:gap-y-2">
+                  <TypographyParagraph size={'medium'} className="font-medium leading-none text-foreground">
                     {'Gender'}
                   </TypographyParagraph>
                   <FormControl>
@@ -190,11 +190,11 @@ export const DemographicsForm = () => {
               control={form.control}
               name={'race'}
               render={({ field }) => (
-                <FormItem className="flex flex-col gap-y-1">
-                  <TypographyParagraph size={'medium'} className="font-medium text-foreground">
+                <FormItem className="flex flex-col gap-y-1 space-y-0 md:gap-y-2">
+                  <TypographyParagraph size={'medium'} className="font-medium leading-none text-foreground">
                     {'Ethnicity'}
                   </TypographyParagraph>
-                  <FormControl>
+                  <FormControl className="p-0">
                     <Select onValueChange={value => field.onChange(value)} value={field.value}>
                       <SelectTrigger className="max-w-[302px]">
                         <SelectValue placeholder={'Select your race'} />
@@ -220,8 +220,8 @@ export const DemographicsForm = () => {
               control={form.control}
               name={'education_level'}
               render={({ field }) => (
-                <FormItem className="flex flex-col gap-y-1">
-                  <TypographyParagraph size={'medium'} className="font-medium text-foreground">
+                <FormItem className="flex flex-col gap-y-1 space-y-0 md:gap-y-2">
+                  <TypographyParagraph size={'medium'} className="font-medium leading-none text-foreground">
                     {'Highest Level of Education'}
                   </TypographyParagraph>
                   <FormControl>
@@ -250,8 +250,8 @@ export const DemographicsForm = () => {
                 </FormItem>
               )}
             />
-            <div className="flex flex-col gap-y-1">
-              <TypographyParagraph size={'medium'} className="font-medium text-foreground">
+            <div className="flex flex-col gap-y-1 md:gap-y-2">
+              <TypographyParagraph size={'medium'} className="font-medium leading-none text-foreground">
                 {'Date of Birth'}
               </TypographyParagraph>
               <div className="flex items-center gap-x-4">

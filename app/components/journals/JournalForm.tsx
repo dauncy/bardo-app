@@ -295,10 +295,10 @@ export const JournalForm = ({
               control={form.control}
               name={'title'}
               render={({ field }) => (
-                <FormItem className="flex flex-col gap-y-1">
+                <FormItem className="flex flex-col gap-y-1 space-y-0 md:gap-y-2">
                   <TypographyParagraph
                     size={'medium'}
-                    className="font-medium text-foreground after:ml-0.5 after:text-red-500 after:content-['*']"
+                    className="font-medium leading-none text-foreground after:ml-0.5 after:text-red-500 after:content-['*']"
                   >
                     {'Title'}
                   </TypographyParagraph>
@@ -317,10 +317,10 @@ export const JournalForm = ({
               )}
             />
 
-            <div className="flex flex-col gap-y-1">
+            <div className="flex flex-col gap-y-1 md:gap-y-2">
               <TypographyParagraph
                 size={'medium'}
-                className="font-medium text-foreground after:ml-0.5 after:text-red-500 after:content-['*']"
+                className="font-medium leading-none text-foreground after:ml-0.5 after:text-red-500 after:content-['*']"
               >
                 {'Date of Experience'}
               </TypographyParagraph>
@@ -451,11 +451,11 @@ export const JournalForm = ({
               control={form.control}
               name={'metadata.modalities'}
               render={({ field }) => (
-                <FormItem className="flex flex-col">
+                <FormItem className="flex flex-col gap-y-1 space-y-0 md:gap-y-2">
                   <div className="flex w-full justify-between">
                     <TypographyParagraph
                       size={'medium'}
-                      className="font-medium text-foreground after:ml-0.5 after:text-red-500 after:content-['*']"
+                      className="font-medium leading-none text-foreground after:ml-0.5 after:text-red-500 after:content-['*']"
                     >
                       {'Modalities'}
                     </TypographyParagraph>
@@ -467,7 +467,7 @@ export const JournalForm = ({
                       form.formState.defaultValues?.metadata?.modalities?.map(m => m?.modality ?? '') ?? undefined
                     }
                     type={'multiple'}
-                    className="w-full"
+                    className="w-full pt-0"
                     onValueChange={e => handleModalities(e as TripModality[])}
                   >
                     {Object.values(TripModality).map(value => (
@@ -497,7 +497,7 @@ export const JournalForm = ({
               control={form.control}
               name={'metadata.intention'}
               render={({ field }) => (
-                <FormItem className="flex flex-col gap-y-1">
+                <FormItem className="flex flex-col gap-y-1 space-y-0 md:gap-y-2">
                   <FormControl>
                     <SelectWithHint
                       defaultValue={form.formState.defaultValues?.metadata?.intention}
@@ -524,7 +524,7 @@ export const JournalForm = ({
               control={form.control}
               name={'metadata.setting'}
               render={({ field }) => (
-                <FormItem className="flex flex-col gap-y-1">
+                <FormItem className="flex flex-col gap-y-1 space-y-0 md:gap-y-2">
                   <FormControl>
                     <SelectWithHint
                       defaultValue={form.formState.defaultValues?.metadata?.setting}
@@ -551,10 +551,10 @@ export const JournalForm = ({
               control={form.control}
               name={'body'}
               render={({ field }) => (
-                <FormItem className="flex flex-col gap-y-1">
+                <FormItem className="flex flex-col gap-y-1 space-y-0 md:gap-y-2">
                   <TypographyParagraph
                     size={'medium'}
-                    className="font-medium text-foreground after:ml-0.5 after:text-red-500 after:content-['*']"
+                    className="font-medium leading-none text-foreground after:ml-0.5 after:text-red-500 after:content-['*']"
                   >
                     {'Brief Description'}
                   </TypographyParagraph>
@@ -576,7 +576,7 @@ export const JournalForm = ({
               control={form.control}
               name={'public'}
               render={({ field }) => (
-                <FormItem className="flex flex-col gap-y-1">
+                <FormItem className="flex flex-col gap-y-1 space-y-0 md:gap-y-2">
                   <TypographyParagraph size={'medium'} className="font-medium text-foreground">
                     {'Keep Public'}
                   </TypographyParagraph>

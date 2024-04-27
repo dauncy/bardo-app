@@ -68,19 +68,21 @@ export default function Index() {
     onRedirect()
   }, [submit])
   return (
-    <div className="reltaive flex h-full min-h-full w-screen bg-violet-200 py-5 md:bg-transparent  md:py-0">
-      <div className="mx-auto flex h-full w-full max-w-screen-2xl flex-col md:flex-row">
-        <div className="flex w-full flex-1 flex-col items-center justify-center gap-y-4 bg-violet-200 md:h-full">
-          <div className="my-0 flex w-full flex-row gap-x-4 px-4 md:mt-auto md:w-max">
+    <div className="reltaive flex h-max min-h-full w-full min-w-full bg-violet-200 md:bg-transparent md:py-0">
+      <div className="flex flex-1 flex-col md:flex-row">
+        <div className="flex w-full flex-col items-center bg-violet-200 pt-5 md:h-full md:flex-1 md:justify-center md:gap-y-4">
+          <div className="my-0 flex w-full flex-row gap-x-2 gap-y-0 px-4 md:mt-auto md:w-max md:gap-x-4">
             <div className="flex size-20 items-center justify-center rounded-full border border-2 border-black bg-yellow-200 shadow-md">
               <img src={'/logo.png'} alt="" className="flex size-14 object-contain object-center" />
             </div>
             <div className="flex flex-col">
               <h1 className="font-bold text-4xl uppercase md:text-5xl">{'Bardo'}</h1>
-              <TypographyParagraph size={'large'} className="ml-1">
-                {'A community Trip Journal'}
+              <TypographyParagraph size={'large'} className="ml-1 leading-none">
+                {'A community trip journal'}
               </TypographyParagraph>
-              <LearnMoreModal />
+              <div className="mt-2 w-full md:w-max">
+                <LearnMoreModal />
+              </div>
             </div>
           </div>
 
@@ -97,7 +99,7 @@ export default function Index() {
             </Link>
           </div>
         </div>
-        <div className="mt-auto flex h-full min-h-[calc(100%-64px)] w-full flex-1 flex-col items-center justify-between px-4 py-0 pt-5 md:bg-transparent md:py-5 md:pb-0 md:pt-0">
+        <div className="flex h-full w-full flex-1 flex-1 flex-col items-center justify-between px-4 py-0 md:mt-auto md:bg-transparent md:py-5 md:pb-0 md:pt-0">
           <div className="flex h-full w-full items-center justify-center md:mb-0">
             <AuthForm />
           </div>
@@ -117,7 +119,7 @@ export default function Index() {
       </div>
 
       {checkingAuth && (
-        <div className="z-2 absolute left-0 top-0 flex h-full w-full items-center justify-center bg-black/60">
+        <div className="z-2 absolute left-0 top-0 flex h-full w-full items-center justify-center bg-[#170830]/80 backdrop-blur-sm">
           <Card className="min-h-[250px flex w-full max-w-md items-center justify-center px-4 py-5 animate-in zoom-in">
             <CardContent className="flex items-center gap-x-4 p-0">
               <Icons.loader className="h-8 w-8 animate-spin text-violet-600" />

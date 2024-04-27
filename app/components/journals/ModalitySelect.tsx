@@ -29,14 +29,11 @@ export const ModalitySelect = ({
   const hasError = currentError !== undefined
   return (
     <AccordionItem value={modality} className="group w-full border-0 py-0">
-      <AccordionTrigger
-        chevron={false}
-        className="flex w-min flex-row items-center justify-start gap-x-2 border-0 py-1"
-      >
+      <AccordionTrigger chevron={false} className="flex w-min flex-row items-start justify-start gap-x-2 border-0 py-1">
         <div className="flex size-4 items-center justify-center rounded border border-foreground group-data-[state=open]:border-violet-400 group-data-[state=open]:bg-violet-400">
           <Icons.Check className="hidden size-3 text-white group-data-[state=open]:flex" strokeWidth={2} />
         </div>
-        <Label>{MODALITIES[modality]}</Label>
+        <Label className="text-left">{MODALITIES[modality]}</Label>
       </AccordionTrigger>
       <AccordionContent className="flex w-max flex-col gap-y-1 py-2 pl-5 pr-4">
         <Select

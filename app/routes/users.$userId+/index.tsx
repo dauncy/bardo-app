@@ -174,19 +174,19 @@ export default function UserJournalsPage() {
   const { journals, user, numJournals } = useLoaderData<typeof loader>()
   const { currentUser } = useOutletContext<{ currentUser: User | null }>()
   return (
-    <div className="mx-auto mt-10 flex h-max min-h-full min-h-full w-full max-w-7xl flex-1 flex-col gap-4 pb-10 md:flex-row">
-      <div className="flex w-full px-6 md:w-[302px] md:px-0">
+    <div className="mx-auto flex h-max min-h-full min-h-full w-full max-w-7xl flex-1 flex-col gap-4 pb-10 md:flex-row">
+      <div className="flex w-full md:w-[302px]">
         <UserPreviewCard numJournals={numJournals} user={user} />
       </div>
       <div className="mt-5 flex h-max min-h-full w-full flex-1 flex-col gap-y-5 md:mt-0 md:max-w-xl">
         {user.id === currentUser?.id && (
-          <div className="flex w-full px-6 md:px-0">
+          <div className="flex w-full px-2 md:px-0">
             <UserJournalTabs />
           </div>
         )}
         <div className="flex h-max min-h-full w-full flex-1 flex-col items-center gap-y-5">
           {journals.length == 0 && (
-            <div className="flex flex h-max min-h-full w-full flex-1 flex-col gap-y-3 rounded-xl border bg-white p-6 shadow">
+            <div className="flex flex h-max min-h-full w-full flex-1 flex-col gap-y-3 border bg-white p-6 shadow md:rounded-xl">
               <TypographyParagraph size={'large'} className="text-foreground">
                 {'No journals found'}
               </TypographyParagraph>

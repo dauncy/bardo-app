@@ -97,28 +97,29 @@ export default function WelcomePage() {
   return (
     <div className="relative flex h-max min-h-full w-full flex-col items-center bg-violet-50">
       <MainNav user={currentUser} />
-      <div className="flex h-max min-h-full w-full max-w-[968px] flex-1 flex-col items-center gap-y-2 p-6 pt-[88px]">
+      <div className="flex h-max min-h-full w-full max-w-[968px] flex-1 flex-col items-center gap-y-2 p-6 pt-[80px]">
         <TypographyParagraph size={'large'} className="font-bold text-xl">
           <span>{`Welcome to Bardo App`}</span>
           <span> </span>
           <span className="text-violet-600 underline">{userName()}</span>
         </TypographyParagraph>
         <TypographyParagraph className="max-w-[600px] whitespace-pre-line text-center">
-          {'What would you like to do today? \nSelect one of the options below to contiune.'}
+          {'Select one of the options below to contiune.'}
         </TypographyParagraph>
 
-        <div className="w-ful mt-8 flex flex-col justify-center gap-6 md:flex-row">
+        <div className="mt-8 grid  w-full grid-cols-1 gap-4 md:grid-cols-2 md:gap-6">
           <div
             className={`
-              ${pending ? 'cursor-not-allowed opacity-40' : 'cursor-pointer transition-all delay-150 duration-150 ease-in hover:shadow-lg'}
-              flex flex h-[350px] w-full flex-col items-center rounded-xl border bg-white p-6 md:max-w-[302px]
+              ${pending ? 'cursor-not-allowed opacity-40' : 'cursor-pointer shadow-lg'}
+              col-span-1
+              flex w-full items-center gap-x-4 rounded-xl border bg-white p-4 md:p-6
             `}
             onClick={() => handleSubmit('/journals')}
           >
-            <div className="flex h-48 w-full flex-col items-center justify-center rounded-md bg-muted">
-              <Icons.LibraryBig className="size-24 text-slate-600/80" strokeWidth={1} />
+            <div className="flex h-16 w-16 flex-col items-center justify-center rounded-md bg-muted">
+              <Icons.LibraryBig className="size-7 text-foreground" strokeWidth={1.75} />
             </div>
-            <div className="mt-5 flex w-full flex-col gap-y-1">
+            <div className="flex w-[calc(100%-80px)] flex-col gap-y-1">
               <TypographyParagraph size={'small'} className="font-semibold text-violet-600">
                 {'View the library'}
               </TypographyParagraph>
@@ -129,24 +130,21 @@ export default function WelcomePage() {
           </div>
           <div
             className={`
-              ${pending ? 'cursor-not-allowed opacity-40' : 'cursor-pointer transition-all delay-150 duration-150 ease-in hover:shadow-lg'}
-              flex flex h-[350px] w-full flex-col items-center rounded-xl border bg-white p-6 md:max-w-[302px]
+              ${pending ? 'cursor-not-allowed opacity-40' : 'cursor-pointer shadow-lg'}
+              col-span-1
+              flex w-full items-center gap-x-4 rounded-xl border bg-white p-4 md:p-6
             `}
-            onClick={() => {
-              handleSubmit('/journals/new')
-            }}
+            onClick={() => handleSubmit('/journals')}
           >
-            <div className="flex h-48 w-full flex-col items-center justify-center rounded-md bg-muted">
-              <Icons.NotebookPen className="size-24 text-slate-600/80" strokeWidth={1} />
+            <div className="flex h-16 w-16 flex-col items-center justify-center rounded-md bg-muted">
+              <Icons.NotebookPen className="size-7 text-foreground" strokeWidth={1.75} />
             </div>
-            <div className="mt-5 flex w-full flex-col gap-y-1">
+            <div className="flex w-[calc(100%-80px)] flex-col gap-y-1">
               <TypographyParagraph size={'small'} className="font-semibold text-violet-600">
                 {'Share an experience'}
               </TypographyParagraph>
               <TypographyParagraph className="text-muted-foreground" size={'extraSmall'}>
-                {
-                  "Journal some thoughts, insights, and feelings you've had during a psychedelic experience. Keep it private or share it with others."
-                }
+                {"Share your thoughts, insights, or feelings you've had during a psychedelic experience."}
               </TypographyParagraph>
             </div>
           </div>
