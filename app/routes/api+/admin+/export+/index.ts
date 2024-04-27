@@ -10,13 +10,16 @@ import os from 'node:os'
 import path from 'path'
 import { promises as fs } from 'fs'
 import type { ExportedJournal } from '@app/types/journals'
+import { UserRole } from '@prisma/client'
 
 const validateRequest = async (ctx: LoaderFunctionArgs) => {
   const { user, authProfile } = await getAccountInfo(ctx.request)
   if (!user || !authProfile) {
     throw redirect('/')
   }
-
+  if (!user.roles.includes(UserRole.admin)) {
+    throw Response.json({ message: 'Unauthorized' }, { status: 403 })
+  }
   return { user }
 }
 

@@ -32,10 +32,12 @@ import {
   Users,
   UserPlus,
   DownloadCloud,
+  Settings,
 } from 'lucide-react'
 
 export const Icons = {
   DownloadCloud,
+  Settings,
   Users,
   HelpCircle,
   CalendarDays,

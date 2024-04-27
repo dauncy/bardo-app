@@ -7,11 +7,7 @@ import { ClientOnly } from '../utility/ClientOnly'
 const DialogChild = DialogPrimitive.Root
 
 const Dialog: React.FC<DialogPrimitive.DialogProps> = props => {
-  return (
-    <ClientOnly>
-      <DialogChild {...props} />
-    </ClientOnly>
-  )
+  return <ClientOnly>{() => <DialogChild {...props} />}</ClientOnly>
 }
 
 const DialogTrigger = DialogPrimitive.Trigger

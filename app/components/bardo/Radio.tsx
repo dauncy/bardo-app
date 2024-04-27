@@ -10,11 +10,7 @@ const RadioGroup = React.forwardRef<
   React.ElementRef<typeof RadioGroupPrimitive.Root>,
   React.ComponentPropsWithoutRef<typeof RadioGroupPrimitive.Root>
 >((props, ref) => {
-  return (
-    <ClientOnly>
-      <RadioGroupChild ref={ref} {...props} />
-    </ClientOnly>
-  )
+  return <ClientOnly>{() => <RadioGroupChild ref={ref} {...props} />}</ClientOnly>
 })
 
 RadioGroup.displayName = 'RadioGroup'

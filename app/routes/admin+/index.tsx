@@ -6,6 +6,7 @@ import { Icons } from '@app/components/bardo/Icons'
 import { MainNav } from '@app/components/nav/MainNav'
 import { prisma } from '@app/db.server'
 import { getAccountInfo } from '@app/utils/server.utils/account.utils'
+import { UserRole } from '@prisma/client'
 import { json, redirect, type LoaderFunctionArgs } from '@remix-run/node'
 import { useLoaderData } from '@remix-run/react'
 
@@ -14,7 +15,9 @@ const validateRequest = async (ctx: LoaderFunctionArgs) => {
   if (!user || !authProfile) {
     throw redirect('/')
   }
-
+  if (!user.roles.includes(UserRole.admin)) {
+    throw redirect('/')
+  }
   return { user }
 }
 

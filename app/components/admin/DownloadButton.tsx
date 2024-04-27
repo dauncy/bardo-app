@@ -37,18 +37,20 @@ export const DownloadButton = ({ type }: { type: 'EXPORT_USERS' | 'EXPORT_JOURNA
   }
   return (
     <ClientOnly>
-      <Button
-        onClick={async () => {
-          await handleDownload()
-        }}
-        disabled={loading}
-        variant={'ghost'}
-        className="disabled:hover-none gap-x-2 text-violet-600 hover:text-violet-800 disabled:cursor-not-allowed"
-      >
-        {loading ? <Icons.loader className="animate-spin" /> : <Icons.DownloadCloud />}
+      {() => (
+        <Button
+          onClick={async () => {
+            await handleDownload()
+          }}
+          disabled={loading}
+          variant={'ghost'}
+          className="disabled:hover-none gap-x-2 text-violet-600 hover:text-violet-800 disabled:cursor-not-allowed"
+        >
+          {loading ? <Icons.loader className="animate-spin" /> : <Icons.DownloadCloud />}
 
-        {loading ? 'Downloading...' : 'Download'}
-      </Button>
+          {loading ? 'Downloading...' : 'Download'}
+        </Button>
+      )}
     </ClientOnly>
   )
 }

@@ -288,374 +288,379 @@ export const JournalForm = ({
 
   return (
     <ClientOnly>
-      <Form {...form}>
-        <div className="flex h-max min-h-full w-full flex-1 flex-col gap-y-8">
-          <FormField
-            control={form.control}
-            name={'title'}
-            render={({ field }) => (
-              <FormItem className="flex flex-col gap-y-1">
-                <TypographyParagraph
-                  size={'medium'}
-                  className="font-medium text-foreground after:ml-0.5 after:text-red-500 after:content-['*']"
-                >
-                  {'Title'}
-                </TypographyParagraph>
-                <FormControl>
-                  <Input
-                    defaultValue={form.formState.defaultValues?.title}
-                    autoComplete={'off'}
-                    className={`${form.formState.errors.title ? 'border-destructive ring-destructive' : ''}`}
-                    placeholder="My first psychedelic trip"
-                    onChange={e => field.onChange(e)}
-                  />
-                </FormControl>
-                <FormDescription>{'A friendly title.'}</FormDescription>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
-          <div className="flex flex-col gap-y-1">
-            <TypographyParagraph
-              size={'medium'}
-              className="font-medium text-foreground after:ml-0.5 after:text-red-500 after:content-['*']"
-            >
-              {'Date of Experience'}
-            </TypographyParagraph>
-            <div className="flex w-full items-center gap-x-4">
-              <FormField
-                control={form.control}
-                name={'date_of_experience.month'}
-                render={({ field }) => (
-                  <FormItem>
-                    <FormControl>
-                      <Select
-                        defaultValue={
-                          form.formState.defaultValues?.date_of_experience?.month
-                            ? `${form.formState.defaultValues?.date_of_experience?.month}`
-                            : undefined
-                        }
-                        onValueChange={value => {
-                          const month = parseInt(value)
-                          field.onChange(month)
-                          getDayOptions()
-                        }}
-                      >
-                        <SelectTrigger
-                          className={`flex-1 ${form.formState.errors.date_of_experience ? 'border-destructive ring-destructive' : ''}`}
-                        >
-                          <SelectValue placeholder={'MM'} />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectGroup>
-                            <SelectLabel>{'Month'}</SelectLabel>
-                            {months.map(month => (
-                              <SelectItem key={`month-${month}`} value={`${month}`}>
-                                {`${month < 10 ? '0' : ''}${month}`}
-                              </SelectItem>
-                            ))}
-                          </SelectGroup>
-                        </SelectContent>
-                      </Select>
-                    </FormControl>
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name={'date_of_experience.day'}
-                render={({ field }) => (
-                  <FormItem>
-                    <FormControl>
-                      <Select
-                        defaultValue={
-                          form.formState.defaultValues?.date_of_experience?.day
-                            ? `${form.formState.defaultValues?.date_of_experience?.day}`
-                            : undefined
-                        }
-                        onValueChange={value => {
-                          const day = parseInt(value)
-                          field.onChange(day)
-                        }}
-                      >
-                        <SelectTrigger
-                          className={`flex-1 ${form.formState.errors.date_of_experience ? 'border-destructive ring-destructive' : ''}`}
-                        >
-                          <SelectValue placeholder={'DD'} />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectGroup>
-                            <SelectLabel>{'Day'}</SelectLabel>
-                            {days.map(day => (
-                              <SelectItem key={`day-${day}`} value={`${day}`}>
-                                {`${day < 10 ? '0' : ''}${day}`}
-                              </SelectItem>
-                            ))}
-                          </SelectGroup>
-                        </SelectContent>
-                      </Select>
-                    </FormControl>
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name={'date_of_experience.year'}
-                render={({ field }) => (
-                  <FormItem>
-                    <FormControl>
-                      <Select
-                        defaultValue={
-                          form.formState.defaultValues?.date_of_experience?.year
-                            ? `${form.formState.defaultValues?.date_of_experience?.year}`
-                            : undefined
-                        }
-                        onValueChange={value => {
-                          const year = parseInt(value)
-                          field.onChange(year)
-                          getDayOptions()
-                        }}
-                      >
-                        <SelectTrigger
-                          className={`flex-1 ${form.formState.errors.date_of_experience ? 'border-destructive ring-destructive' : ''}`}
-                        >
-                          <SelectValue placeholder={'YYYY'} />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectGroup>
-                            <SelectLabel>{'Year'}</SelectLabel>
-                            {yearsArray.map(year => (
-                              <SelectItem key={`year-${year}`} value={`${year}`}>
-                                {year}
-                              </SelectItem>
-                            ))}
-                          </SelectGroup>
-                        </SelectContent>
-                      </Select>
-                    </FormControl>
-                  </FormItem>
-                )}
-              />
-            </div>
-            <FormDescription>{"If you don't remember, give your best guess."}</FormDescription>
-            {form.formState.errors.date_of_experience && (
-              <p className="mt-1 font-medium text-[0.8rem] text-destructive">
-                {form.formState.errors.date_of_experience.message ?? 'Please enter a valid date.'}
-              </p>
-            )}
-          </div>
-
-          <FormField
-            control={form.control}
-            name={'metadata.modalities'}
-            render={({ field }) => (
-              <FormItem className="flex flex-col">
-                <div className="flex w-full justify-between">
+      {() => (
+        <Form {...form}>
+          <div className="flex h-max min-h-full w-full flex-1 flex-col gap-y-8">
+            <FormField
+              control={form.control}
+              name={'title'}
+              render={({ field }) => (
+                <FormItem className="flex flex-col gap-y-1">
                   <TypographyParagraph
                     size={'medium'}
                     className="font-medium text-foreground after:ml-0.5 after:text-red-500 after:content-['*']"
                   >
-                    {'Modalities'}
+                    {'Title'}
                   </TypographyParagraph>
-                  <HintPopover hintText={'What psychedelic(s) did you take?'} />
-                </div>
+                  <FormControl>
+                    <Input
+                      defaultValue={form.formState.defaultValues?.title}
+                      autoComplete={'off'}
+                      className={`${form.formState.errors.title ? 'border-destructive ring-destructive' : ''}`}
+                      placeholder="My first psychedelic trip"
+                      onChange={e => field.onChange(e)}
+                    />
+                  </FormControl>
+                  <FormDescription>{'A friendly title.'}</FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
-                <Accordion
-                  defaultValue={
-                    form.formState.defaultValues?.metadata?.modalities?.map(m => m?.modality ?? '') ?? undefined
-                  }
-                  type={'multiple'}
-                  className="w-full"
-                  onValueChange={e => handleModalities(e as TripModality[])}
-                >
-                  {Object.values(TripModality).map(value => (
-                    <Fragment key={value}>
-                      <ModalitySelect
-                        defaultValue={
-                          form.formState.defaultValues?.metadata?.modalities?.find(m => m?.modality === value)?.dosage
+            <div className="flex flex-col gap-y-1">
+              <TypographyParagraph
+                size={'medium'}
+                className="font-medium text-foreground after:ml-0.5 after:text-red-500 after:content-['*']"
+              >
+                {'Date of Experience'}
+              </TypographyParagraph>
+              <div className="flex w-full items-center gap-x-4">
+                <FormField
+                  control={form.control}
+                  name={'date_of_experience.month'}
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormControl>
+                        <Select
+                          defaultValue={
+                            form.formState.defaultValues?.date_of_experience?.month
+                              ? `${form.formState.defaultValues?.date_of_experience?.month}`
+                              : undefined
+                          }
+                          onValueChange={value => {
+                            const month = parseInt(value)
+                            field.onChange(month)
+                            getDayOptions()
+                          }}
+                        >
+                          <SelectTrigger
+                            className={`flex-1 ${form.formState.errors.date_of_experience ? 'border-destructive ring-destructive' : ''}`}
+                          >
+                            <SelectValue placeholder={'MM'} />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectGroup>
+                              <SelectLabel>{'Month'}</SelectLabel>
+                              {months.map(month => (
+                                <SelectItem key={`month-${month}`} value={`${month}`}>
+                                  {`${month < 10 ? '0' : ''}${month}`}
+                                </SelectItem>
+                              ))}
+                            </SelectGroup>
+                          </SelectContent>
+                        </Select>
+                      </FormControl>
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name={'date_of_experience.day'}
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormControl>
+                        <Select
+                          defaultValue={
+                            form.formState.defaultValues?.date_of_experience?.day
+                              ? `${form.formState.defaultValues?.date_of_experience?.day}`
+                              : undefined
+                          }
+                          onValueChange={value => {
+                            const day = parseInt(value)
+                            field.onChange(day)
+                          }}
+                        >
+                          <SelectTrigger
+                            className={`flex-1 ${form.formState.errors.date_of_experience ? 'border-destructive ring-destructive' : ''}`}
+                          >
+                            <SelectValue placeholder={'DD'} />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectGroup>
+                              <SelectLabel>{'Day'}</SelectLabel>
+                              {days.map(day => (
+                                <SelectItem key={`day-${day}`} value={`${day}`}>
+                                  {`${day < 10 ? '0' : ''}${day}`}
+                                </SelectItem>
+                              ))}
+                            </SelectGroup>
+                          </SelectContent>
+                        </Select>
+                      </FormControl>
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name={'date_of_experience.year'}
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormControl>
+                        <Select
+                          defaultValue={
+                            form.formState.defaultValues?.date_of_experience?.year
+                              ? `${form.formState.defaultValues?.date_of_experience?.year}`
+                              : undefined
+                          }
+                          onValueChange={value => {
+                            const year = parseInt(value)
+                            field.onChange(year)
+                            getDayOptions()
+                          }}
+                        >
+                          <SelectTrigger
+                            className={`flex-1 ${form.formState.errors.date_of_experience ? 'border-destructive ring-destructive' : ''}`}
+                          >
+                            <SelectValue placeholder={'YYYY'} />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectGroup>
+                              <SelectLabel>{'Year'}</SelectLabel>
+                              {yearsArray.map(year => (
+                                <SelectItem key={`year-${year}`} value={`${year}`}>
+                                  {year}
+                                </SelectItem>
+                              ))}
+                            </SelectGroup>
+                          </SelectContent>
+                        </Select>
+                      </FormControl>
+                    </FormItem>
+                  )}
+                />
+              </div>
+              <FormDescription>{"If you don't remember, give your best guess."}</FormDescription>
+              {form.formState.errors.date_of_experience && (
+                <p className="mt-1 font-medium text-[0.8rem] text-destructive">
+                  {form.formState.errors.date_of_experience.message ?? 'Please enter a valid date.'}
+                </p>
+              )}
+            </div>
+
+            <FormField
+              control={form.control}
+              name={'metadata.modalities'}
+              render={({ field }) => (
+                <FormItem className="flex flex-col">
+                  <div className="flex w-full justify-between">
+                    <TypographyParagraph
+                      size={'medium'}
+                      className="font-medium text-foreground after:ml-0.5 after:text-red-500 after:content-['*']"
+                    >
+                      {'Modalities'}
+                    </TypographyParagraph>
+                    <HintPopover hintText={'What psychedelic(s) did you take?'} />
+                  </div>
+
+                  <Accordion
+                    defaultValue={
+                      form.formState.defaultValues?.metadata?.modalities?.map(m => m?.modality ?? '') ?? undefined
+                    }
+                    type={'multiple'}
+                    className="w-full"
+                    onValueChange={e => handleModalities(e as TripModality[])}
+                  >
+                    {Object.values(TripModality).map(value => (
+                      <Fragment key={value}>
+                        <ModalitySelect
+                          defaultValue={
+                            form.formState.defaultValues?.metadata?.modalities?.find(m => m?.modality === value)?.dosage
+                          }
+                          handleDosage={handleDosage}
+                          modality={value}
+                          modalityErrors={modalityErrors}
+                        />
+                      </Fragment>
+                    ))}
+                  </Accordion>
+                  <FormDescription>{'Select all that apply'}</FormDescription>
+                  {form.formState.errors.metadata?.modalities?.message && (
+                    <p className="mt-1 font-medium text-[0.8rem] text-destructive">
+                      {form.formState.errors.metadata?.modalities.message}
+                    </p>
+                  )}
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name={'metadata.intention'}
+              render={({ field }) => (
+                <FormItem className="flex flex-col gap-y-1">
+                  <FormControl>
+                    <SelectWithHint
+                      defaultValue={form.formState.defaultValues?.metadata?.intention}
+                      onValueChange={value => field.onChange(value)}
+                      className={`${form.formState.errors.metadata?.intention ? 'border-destructive ring-destructive' : ''}`}
+                      label={'Intention'}
+                      hintText="What was the reason for your trip"
+                      placeholder={'Select Intention'}
+                      innerLabel={'Select an Intention'}
+                      options={Object.keys(TripIntention).map(key => {
+                        return {
+                          value: key,
+                          label: INTENTION[key] ?? key,
                         }
-                        handleDosage={handleDosage}
-                        modality={value}
-                        modalityErrors={modalityErrors}
-                      />
-                    </Fragment>
-                  ))}
-                </Accordion>
-                <FormDescription>{'Select all that apply'}</FormDescription>
-                {form.formState.errors.metadata?.modalities?.message && (
-                  <p className="mt-1 font-medium text-[0.8rem] text-destructive">
-                    {form.formState.errors.metadata?.modalities.message}
-                  </p>
-                )}
-              </FormItem>
-            )}
-          />
+                      })}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
-          <FormField
-            control={form.control}
-            name={'metadata.intention'}
-            render={({ field }) => (
-              <FormItem className="flex flex-col gap-y-1">
-                <FormControl>
-                  <SelectWithHint
-                    defaultValue={form.formState.defaultValues?.metadata?.intention}
-                    onValueChange={value => field.onChange(value)}
-                    className={`${form.formState.errors.metadata?.intention ? 'border-destructive ring-destructive' : ''}`}
-                    label={'Intention'}
-                    hintText="What was the reason for your trip"
-                    placeholder={'Select Intention'}
-                    innerLabel={'Select an Intention'}
-                    options={Object.keys(TripIntention).map(key => {
-                      return {
-                        value: key,
-                        label: INTENTION[key] ?? key,
-                      }
-                    })}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+            <FormField
+              control={form.control}
+              name={'metadata.setting'}
+              render={({ field }) => (
+                <FormItem className="flex flex-col gap-y-1">
+                  <FormControl>
+                    <SelectWithHint
+                      defaultValue={form.formState.defaultValues?.metadata?.setting}
+                      onValueChange={value => field.onChange(value)}
+                      className={`${form.formState.errors.metadata?.setting ? 'border-destructive ring-destructive' : ''}`}
+                      label={'Setting'}
+                      hintText="Where did you take the psychedelics"
+                      placeholder={'Select Setting'}
+                      innerLabel={'Select a setting'}
+                      options={Object.keys(TripSetting).map(key => {
+                        return {
+                          value: key,
+                          label: SETTING[key] ?? key,
+                        }
+                      })}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
-          <FormField
-            control={form.control}
-            name={'metadata.setting'}
-            render={({ field }) => (
-              <FormItem className="flex flex-col gap-y-1">
-                <FormControl>
-                  <SelectWithHint
-                    defaultValue={form.formState.defaultValues?.metadata?.setting}
-                    onValueChange={value => field.onChange(value)}
-                    className={`${form.formState.errors.metadata?.setting ? 'border-destructive ring-destructive' : ''}`}
-                    label={'Setting'}
-                    hintText="Where did you take the psychedelics"
-                    placeholder={'Select Setting'}
-                    innerLabel={'Select a setting'}
-                    options={Object.keys(TripSetting).map(key => {
-                      return {
-                        value: key,
-                        label: SETTING[key] ?? key,
-                      }
-                    })}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+            <FormField
+              control={form.control}
+              name={'body'}
+              render={({ field }) => (
+                <FormItem className="flex flex-col gap-y-1">
+                  <TypographyParagraph
+                    size={'medium'}
+                    className="font-medium text-foreground after:ml-0.5 after:text-red-500 after:content-['*']"
+                  >
+                    {'Brief Description'}
+                  </TypographyParagraph>
+                  <FormControl>
+                    <Textarea
+                      defaultValue={form.formState.defaultValues?.body}
+                      onChange={value => field.onChange(value)}
+                      className={`h-48 resize-none ${form.formState.errors.body ? 'border-destructive ring-destructive' : ''}`}
+                      placeholder="Jot down any thoughts, visions, feelings or anything else you experienced during or after your trip"
+                    />
+                  </FormControl>
+                  <FormDescription>{'Share as much as you are comfortable with.'}</FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
-          <FormField
-            control={form.control}
-            name={'body'}
-            render={({ field }) => (
-              <FormItem className="flex flex-col gap-y-1">
-                <TypographyParagraph
-                  size={'medium'}
-                  className="font-medium text-foreground after:ml-0.5 after:text-red-500 after:content-['*']"
+            <FormField
+              control={form.control}
+              name={'public'}
+              render={({ field }) => (
+                <FormItem className="flex flex-col gap-y-1">
+                  <TypographyParagraph size={'medium'} className="font-medium text-foreground">
+                    {'Keep Public'}
+                  </TypographyParagraph>
+                  <div className="flex flex-row items-center gap-x-2">
+                    <TypographyParagraph size={'extraSmall'}>{'Private'}</TypographyParagraph>
+                    <Switch
+                      defaultChecked={form.formState.defaultValues?.public}
+                      onCheckedChange={checked => {
+                        form.setValue('public', checked)
+                      }}
+                    />
+                    <TypographyParagraph size={'extraSmall'}>{'Public'}</TypographyParagraph>
+                  </div>
+                </FormItem>
+              )}
+            />
+            <div className="mt-auto flex w-full items-center gap-x-4">
+              {journal?.status !== 'PUBLISHED' && (
+                <Button
+                  disabled={pending}
+                  type={'button'}
+                  variant={'outline'}
+                  className="flex flex-1 items-center gap-x-2 border-violet-500 text-violet-500 hover:text-violet-800"
+                  onClick={() => {
+                    form.setValue('status', JournalStatus.DRAFT)
+
+                    handleSaveAsDraft()
+                  }}
                 >
-                  {'Brief Description'}
-                </TypographyParagraph>
-                <FormControl>
-                  <Textarea
-                    defaultValue={form.formState.defaultValues?.body}
-                    onChange={value => field.onChange(value)}
-                    className={`h-48 resize-none ${form.formState.errors.body ? 'border-destructive ring-destructive' : ''}`}
-                    placeholder="Jot down any thoughts, visions, feelings or anything else you experienced during or after your trip"
-                  />
-                </FormControl>
-                <FormDescription>{'Share as much as you are comfortable with.'}</FormDescription>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
-          <FormField
-            control={form.control}
-            name={'public'}
-            render={({ field }) => (
-              <FormItem className="flex flex-col gap-y-1">
-                <TypographyParagraph size={'medium'} className="font-medium text-foreground">
-                  {'Keep Public'}
-                </TypographyParagraph>
-                <div className="flex flex-row items-center gap-x-2">
-                  <TypographyParagraph size={'extraSmall'}>{'Private'}</TypographyParagraph>
-                  <Switch
-                    defaultChecked={form.formState.defaultValues?.public}
-                    onCheckedChange={checked => {
-                      form.setValue('public', checked)
-                    }}
-                  />
-                  <TypographyParagraph size={'extraSmall'}>{'Public'}</TypographyParagraph>
-                </div>
-              </FormItem>
-            )}
-          />
-          <div className="mt-auto flex w-full items-center gap-x-4">
-            {journal?.status !== 'PUBLISHED' && (
+                  {pending && form.getValues().status === JournalStatus.DRAFT && (
+                    <Icons.loader className="size 4 animate-spin text-white/90" />
+                  )}
+                  {journal ? 'Save Changes' : 'Save as draft'}
+                </Button>
+              )}
               <Button
                 disabled={pending}
                 type={'button'}
-                variant={'outline'}
-                className="flex flex-1 items-center gap-x-2 border-violet-500 text-violet-500 hover:text-violet-800"
+                variant={'bardo_primary'}
+                className={`
+                  ${journal?.status === 'PUBLISHED' ? 'ml-auto w-48' : 'flex-1'}
+                  flex  items-center gap-x-2
+                `}
                 onClick={() => {
-                  form.setValue('status', JournalStatus.DRAFT)
+                  setModalityErrors([])
+                  form.setValue('status', JournalStatus.PUBLISHED)
 
-                  handleSaveAsDraft()
+                  const modalities = form.getValues().metadata.modalities ?? []
+                  for (const modality of modalities) {
+                    if (!modality.dosage) {
+                      setModalityErrors(prev => [
+                        ...prev,
+                        { modality: modality.modality, error: 'Dosage is required.' },
+                      ])
+                    }
+                  }
+                  form.handleSubmit(onSubmit, error => {
+                    let toasted = false
+                    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+                    for (const _err of Object.values(error)) {
+                      if (toasted) {
+                        continue
+                      }
+
+                      toast({
+                        variant: 'destructive',
+                        title: 'Error publishing journal',
+                        description: `Please confirm you have filled out all the fields in the form.`,
+                      })
+                      toasted = true
+                    }
+                    toasted = false
+                  })()
                 }}
               >
-                {pending && form.getValues().status === JournalStatus.DRAFT && (
+                {pending && form.getValues().status === JournalStatus.PUBLISHED && (
                   <Icons.loader className="size 4 animate-spin text-white/90" />
                 )}
-                {journal ? 'Save Changes' : 'Save as draft'}
+                {journal?.status === 'PUBLISHED' ? 'Save Changes' : 'Publish'}
               </Button>
-            )}
-            <Button
-              disabled={pending}
-              type={'button'}
-              variant={'bardo_primary'}
-              className={`
-                ${journal?.status === 'PUBLISHED' ? 'ml-auto w-48' : 'flex-1'}
-                flex  items-center gap-x-2
-              `}
-              onClick={() => {
-                setModalityErrors([])
-                form.setValue('status', JournalStatus.PUBLISHED)
-
-                const modalities = form.getValues().metadata.modalities ?? []
-                for (const modality of modalities) {
-                  if (!modality.dosage) {
-                    setModalityErrors(prev => [...prev, { modality: modality.modality, error: 'Dosage is required.' }])
-                  }
-                }
-                form.handleSubmit(onSubmit, error => {
-                  let toasted = false
-                  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-                  for (const _err of Object.values(error)) {
-                    if (toasted) {
-                      continue
-                    }
-
-                    toast({
-                      variant: 'destructive',
-                      title: 'Error publishing journal',
-                      description: `Please confirm you have filled out all the fields in the form.`,
-                    })
-                    toasted = true
-                  }
-                  toasted = false
-                })()
-              }}
-            >
-              {pending && form.getValues().status === JournalStatus.PUBLISHED && (
-                <Icons.loader className="size 4 animate-spin text-white/90" />
-              )}
-              {journal?.status === 'PUBLISHED' ? 'Save Changes' : 'Publish'}
-            </Button>
+            </div>
           </div>
-        </div>
-      </Form>
+        </Form>
+      )}
     </ClientOnly>
   )
 }
