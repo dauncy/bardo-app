@@ -2,6 +2,9 @@ import { BardoLogo } from '@app/components/nav/BardoLogo'
 import { ProfileMenu } from '@app/components/nav/ProfileMenu'
 import type { User } from '@prisma/client'
 import type { SerializeFrom } from '@remix-run/node'
+import { buttonVariants } from '../bardo/Button'
+import { cn } from '@app/utils/ui.utils'
+import { Link } from '@remix-run/react'
 
 export const MainNav = ({ user }: { user: SerializeFrom<User> | null }) => {
   return (
@@ -9,6 +12,11 @@ export const MainNav = ({ user }: { user: SerializeFrom<User> | null }) => {
       <div className="flex w-full items-center justify-between">
         <BardoLogo />
         {user && <ProfileMenu user={user} />}
+        {!user && (
+          <Link to={'/'} className={cn(buttonVariants({ variant: 'bardo_primary' }))}>
+            {'Get Access'}
+          </Link>
+        )}
       </div>
     </nav>
   )

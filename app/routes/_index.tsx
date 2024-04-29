@@ -59,6 +59,10 @@ export const meta: MetaFunction = () => {
       name: 'description',
       content: 'A community trip journal',
     },
+    {
+      name: 'og:description',
+      content: 'A community trip journal',
+    },
   ]
 }
 
