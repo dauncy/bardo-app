@@ -116,7 +116,11 @@ export default function ToSPage() {
               </span>
               <span>{'.'}</span>
             </p>
-            <p>{'Thank you for being a part of the Bardo community!'}</p>
+            <p className="text-[16px]/[28px] text-foreground">{`
+              These terms of services may be revised and the latest revision will be reflected by the posted date above. Revisit this page to stay aware of any changes. Your continued use of the Bardo website constitutes your agreement to these terms of services and any future revisions.
+            `}</p>
+
+            <p className="text-[16px]/[28px] text-foreground">{'Thank you for being a part of the Bardo community!'}</p>
           </section>
         </div>
       </div>
