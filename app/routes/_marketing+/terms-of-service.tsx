@@ -22,7 +22,9 @@ export default function ToSPage() {
           <header>
             <h1 className="font-semibold text-3xl text-foreground md:text-left">{'Terms of Service'}</h1>
             <h2 className="mt-1 font-regular tracking-tight text-foreground/[0.8] md:mt-3 md:font-medium md:text-[17px]">
-              {'This is meant to be read in conjuction with our'}
+              {
+                'These Terms of Service ("Terms") govern your access to and use of Bardo\'s website and services ("Services"). Please read these Terms carefully before using our Services. By accessing or using our Services, you agree to be bound by these Terms and our'
+              }
               <span> </span>
               <span className="font-medium text-violet-600 underline">
                 <Link to={'/privacy'}>{'Privacy Policy.'}</Link>
@@ -35,93 +37,86 @@ export default function ToSPage() {
           <section className="space-y-1 py-5">
             <h3 className="font-semibold text-lg md:font-medium md:text-2xl md:leading-none">{'Introduction'}</h3>
             <p className="text-[16px]/[28px] text-foreground">{`
-              This Privacy Policy details important information regarding the collection, use and disclosure of User information collected on Bardo("website"). The aim of this Privacy Policy is to help you understand how your personal information is used and your choices regarding said use. By using the website, you agree that Bardo can collect, use, disclose, and process your information as described in this Privacy Policy. This Privacy Policy only applies to the website, and not to any other websites, products or services you may be able to access or link to via bardo. We encourage you to read the privacy policies of any other websites you visit before providing your information to them.
+              Bardo is a social platform designed for human connection, and sharing psychedelic experiences. Similar to other social apps, Bardo allows users to create profiles, share posts, and engage with others in a virtual community.
+              However, different from other social apps, Bardo encourages anonymity. We strongly suggest users refrain from shairing their real names or any other personal identifiable information.
             `}</p>
           </section>
 
           <section className="space-y-1 py-5">
-            <h3 className="font-semibold text-lg md:font-medium md:text-2xl md:leading-none">
-              {'What we Collect and Why'}
-            </h3>
+            <h3 className="font-semibold text-lg md:font-medium md:text-2xl md:leading-none">{'Eligibility'}</h3>
             <p className="text-[16px]/[28px] text-foreground">{`
-              The personal information collected from you includes:
+              To use Bardo, you must be a human. Bots and automated scraping tools are strictly prohibited from accessing or using our Services. By accessing or using Bardo, you represent and warrant that you are a human and will not use any automated means to access, scrape, or collect information from our platform.
+            `}</p>
+            <p className="text-[16px]/[28px] text-foreground">{`
+              Children under the age of 13 are prohibitted from accessing or using Bardo's Services.
+            `}</p>
+          </section>
+
+          <section className="space-y-1 py-5">
+            <h3 className="font-semibold text-lg md:font-medium md:text-2xl md:leading-none">{'Prohibited Content'}</h3>
+            <p className="text-[16px]/[28px] text-foreground">{`
+              We strive to maintain a positive and respectful community on Bardo. Therefore, the following types of content are strictly prohibited:
             `}</p>
             <ul className="my-3 ml-8 list-disc text-[16px]/[28px] text-foreground">
-              <li>{'Your email'}</li>
               <li>
                 {
-                  'Demographic information such as date of birth, gender, race, education level as provided by you to Bardo via filling out forms or any other means.'
+                  'Derogatory content: Content that is defamatory, demeaning, or offensive towards individuals or groups.'
+                }
+              </li>
+              <li>
+                {
+                  'Hate speech: Content that promotes violence, discrimination, or intolerance based on race, ethnicity, religion, gender, sexual orientation, disability, or other protected characteristics.'
+                }
+              </li>
+              <li>
+                {
+                  'Inappropriate content: Content that is sexually explicit, pornographic, or otherwise inappropriate for our community.'
+                }
+              </li>
+              <li>
+                {
+                  'Illegal activities: This is not a platform for buying or selling illegal substances. Bardo does not encourage nor condone engaging in illegal activities.'
                 }
               </li>
             </ul>
-            <p className="text-[16px]/[28px] text-foreground">{`
-              The website only collects this information via direct interactions with forms or other explicit interactions.
-            `}</p>
-            <p className="text-[16px]/[28px] text-foreground">{`
-              Bardo uses demographic information shared by you to conduct research to improve the practices of post-psychedelic integration. All analysis or other research with demographic data will be de-indetified.
-            `}</p>
-            <p className="text-[16px]/[28px] text-foreground">{`
-              The website encourages you not to share any personaly identifiable data such as your name, location or place of work.
-            `}</p>
           </section>
 
           <section className="space-y-1 py-5">
             <h3 className="font-semibold text-lg md:font-medium md:text-2xl md:leading-none">
-              {'Information Not Collected'}
+              {'Reporting Violations'}
             </h3>
-            <p className="text-[16px]/[28px] text-foreground">{`
-              Any other personally-identifiable information about you shall not be collected, unless you give it to Bardo. : by filling out a form, giving written feedback, communicating via third party social media sites, or otherwise communicating via the website.
-            `}</p>
-          </section>
-
-          <section className="space-y-1 py-5">
-            <h3 className="font-semibold text-lg md:font-medium md:text-2xl md:leading-none">{'Cookies'}</h3>
-            <p className="text-[16px]/[28px] text-foreground">{`
-              The website uses cookies.
-            `}</p>
-          </section>
-
-          <section className="space-y-1 py-5">
-            <h3 className="font-semibold text-lg md:font-medium md:text-2xl md:leading-none">{'Firebase'}</h3>
             <p className="text-[16px]/[28px] text-foreground">
-              {`
-              The website uses Firebase as our authentication provider. 
-            `}
-              <span>{"Read about Firebase's privacy measures"}</span>
+              <span>
+                {
+                  'If you encounter any content on Bardo that violates these Terms or our Community Guidelines, please report it immediately to our team at'
+                }
+              </span>
               <span> </span>
-              <span className="font-medium text-violet-600 underline">
-                <a href={'https://firebase.google.com/support/privacy'} target={'_blank'} rel="noreferrer">
-                  {'here.'}
+              <span>
+                <a href={'mailto:contact@bardo.app'} className="font-medium text-violet-600 underline">
+                  {'contact@bardo.app'}
                 </a>
               </span>
+              <span>{'. '}</span>
+              <span>{'We take all reports seriously and will take appropriate action to address violations.'}</span>
             </p>
           </section>
 
           <section className="space-y-1 py-5">
-            <h3 className="font-semibold text-lg md:font-medium md:text-2xl md:leading-none">{'Security'}</h3>
-            <p className="text-[16px]/[28px] text-foreground">{`
-              No organization, Bardo included, can guarantee the security of information processed online. However, Bardo has appropriate security measures in place to protect your personal information. Personal information you provide is stored on servers with limited accesss, encryption, or both.
-            `}</p>
-          </section>
-
-          <section className="space-y-1 py-5">
-            <h3 className="font-semibold text-lg md:font-medium md:text-2xl md:leading-none">
-              {'Changes and Updates'}
-            </h3>
-            <p className="text-[16px]/[28px] text-foreground">{`
-              Your personal information will be processed in accordance with this Privacy Policy, and as part of that you will have limited or no opportunity to otherwise modify how your information is used.
-            `}</p>
-            <p className="text-[16px]/[28px] text-foreground">{`
-              This Privacy Policy may be revised and the latest revision will be reflected by the posted date above. Revisit this page to stay aware of any changes. Your continued use of the Bardo website constitutes your agreement to this Privacy Policy and any future revisions.
-            `}</p>
-
-            <p className="text-[16px]/[28px] text-foreground">{'Contatc Information:'}</p>
-            <a
-              className="ml-5 font-medium text-[16px]/[28px] text-violet-600 underline"
-              href={`mailto:privacy@bardo.app`}
-            >
-              {'privacy@bardo.app'}
-            </a>
+            <h3 className="font-semibold text-lg md:font-medium md:text-2xl md:leading-none">{'Conclusion'}</h3>
+            <p className="text-[16px]/[28px] text-foreground">
+              {
+                'By using Bardo, you agree to abide by these Terms and our Community Guidelines. We reserve the right to suspend or terminate your access to our Services if you violate these Terms or engage in prohibited conduct. If you have any questions or concerns about these Terms, please contact us at'
+              }
+              <span> </span>
+              <span>
+                <a className="font-medium text-violet-600 underline" href={'mailto:contact@bardo.app'}>
+                  {'contact@bardo.app'}
+                </a>
+              </span>
+              <span>{'.'}</span>
+            </p>
+            <p>{'Thank you for being a part of the Bardo community!'}</p>
           </section>
         </div>
       </div>
