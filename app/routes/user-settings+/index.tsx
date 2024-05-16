@@ -19,6 +19,9 @@ import { stringify } from 'qs'
 import { ZodError } from 'zod'
 import { Separator } from '@app/components/bardo/Separator'
 import { TypographyParagraph } from '@app/components/bardo/typography/TypographyParagraph'
+import { ClientOnly } from '@app/components/utility/ClientOnly'
+import { Skeleton } from '@app/components/bardo/Skeleton'
+import { Label } from '@app/components/bardo/Label'
 
 const validateRequest = async (ctx: ActionFunctionArgs) => {
   const { authProfile, user } = await getAccountInfo(ctx.request)
@@ -42,6 +45,9 @@ const checkRedirect = (currentStep: UserOnboardingStep) => {
 }
 export const action = async (ctx: ActionFunctionArgs) => {
   const { user } = await validateRequest(ctx)
+  const onboarding_step = user.onboarding_step
+  const updatedOboardingStep =
+    onboarding_step === UserOnboardingStep.PROFILE ? UserOnboardingStep.DEMOGRAPHICS : onboarding_step
   const body = await getFormData(ctx, userCrudSchema)
   await sleep(350)
   switch (body._action) {
@@ -52,7 +58,8 @@ export const action = async (ctx: ActionFunctionArgs) => {
           id: user.id,
         },
         data: {
-          name: body.data.name,
+          onboarding_step: updatedOboardingStep,
+          name: body?.data?.name,
         },
       })
       if (shouldRedirect) {
@@ -73,7 +80,10 @@ export default function UserSettingsPage() {
     if (currentUser.name) {
       return currentUser.name
     }
+    return undefined
+  }
 
+  const userNamePlaceholder = () => {
     const id = currentUser.user_id
     if (id < 10) {
       return `bardo_user_00${id}`
@@ -85,7 +95,6 @@ export default function UserSettingsPage() {
 
     return `bardo_user_$${id}`
   }
-
   return (
     <div className="flex h-max min-h-full w-full flex-1 flex-col gap-y-2 p-0 md:p-5">
       <h1 className="font-foreground font-medium text-2xl">{'Public Profile'}</h1>
@@ -105,7 +114,7 @@ export default function UserSettingsPage() {
         <Input
           min={1}
           ref={usernameRef}
-          required
+          placeholder={userNamePlaceholder()}
           defaultValue={userName()}
           className="peer mt-1 focus-visible:border-violet-400 focus-visible:ring-violet-400 disabled:cursor-not-allowed disabled:bg-violet-100 md:max-w-sm"
           disabled={pending}
@@ -114,18 +123,26 @@ export default function UserSettingsPage() {
           <TypographyParagraph size={'medium'} className="font-medium text-foreground">
             {'Profile Image'}
           </TypographyParagraph>
-          <UpdateUserProfileImage user={currentUser} />
+          <ClientOnly
+            fallback={
+              <div className="flex cursor-not-allowed items-center gap-x-2">
+                <Skeleton className="size-12 rounded-md" />
+                <Label className="text-sm text-muted">{'Update Image'}</Label>
+              </div>
+            }
+          >
+            {() => {
+              return <UpdateUserProfileImage user={currentUser} />
+            }}
+          </ClientOnly>
         </div>
         <Button
           disabled={pending}
           variant={'bardo_primary'}
           className="mt-3 flex min-w-40 items-center gap-x-2 peer-invalid:cursor-not-allowed peer-invalid:opacity-40 md:ml-auto md:mt-auto md:max-w-sm"
           onClick={() => {
-            const username = usernameRef.current?.value?.trim()
-            if (!username) {
-              return
-            }
-
+            const value = usernameRef.current?.value.trim() ?? ''
+            const username = value.length > 0 ? value : null
             const payload: UserCrudPayload = {
               _action: 'UPDATE_USER',
               data: {
@@ -135,7 +152,7 @@ export default function UserSettingsPage() {
 
             try {
               const verified = userCrudSchema.parse(payload)
-              fetcher.submit(stringify(verified), { method: 'POST' })
+              fetcher.submit(stringify(verified, { skipNulls: true }), { method: 'POST' })
             } catch (e) {
               if (e instanceof ZodError) {
                 const msg = e.errors.map(e => e.message).join(', ')

@@ -15,12 +15,8 @@ export class UsersService {
       create: {
         id: data.fbUid,
         email: data.email,
-        name: data.name,
-        picture: data.picture,
       },
-      update: {
-        email: data.email,
-      },
+      update: {},
     })
   }
 }

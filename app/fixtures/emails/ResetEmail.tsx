@@ -37,12 +37,12 @@ export const ResetEmailTemplate = ({
   email: string
   passwordResetLink: string
 }) => {
-  const previewText = 'Follow the instructions to reset your Bardo app password.'
+  const previewText = 'Follow the instructions to reset your Bardo password.'
 
   return (
     <Html>
       <Head>
-        <title>{'Reset your Bardo App password'}</title>
+        <title>{'Reset your Bardo password'}</title>
         <Font
           fontFamily="normal"
           fallbackFontFamily="Verdana"
@@ -128,7 +128,7 @@ export const ResetEmailTemplate = ({
             <Section className="px-6">
               <Text className="text-base font-normal">{'Thanks,'}</Text>
               <Text className="-mt-4 text-base font-normal">
-                <strong className="text-violet-500">{'Bardo App Team'}</strong>
+                <strong className="text-violet-500">{'Bardo Team'}</strong>
               </Text>
             </Section>
           </Container>

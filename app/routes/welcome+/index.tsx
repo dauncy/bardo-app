@@ -69,19 +69,15 @@ export default function WelcomePage() {
       return currentUser.name
     }
 
-    let defaultName = `bardo_user`
     if (currentUser.user_id < 10) {
-      defaultName += `_00${currentUser.user_id}`
+      return `bardo_user_00${currentUser.user_id}`
     }
 
     if (currentUser.user_id < 100) {
-      defaultName += `_0${currentUser.user_id}`
+      return `bardo_user_0${currentUser.user_id}`
     }
 
-    if (currentUser.user_id >= 100) {
-      defaultName += `_${currentUser.user_id}`
-    }
-    return defaultName
+    return `bardo_user_${currentUser.user_id}`
   }
 
   const handleSubmit = (redirect_to: '/journals' | '/journals/new') => {
@@ -99,7 +95,7 @@ export default function WelcomePage() {
       <MainNav user={currentUser} />
       <div className="flex h-max min-h-full w-full max-w-[968px] flex-1 flex-col items-center gap-y-2 p-6 pt-[80px]">
         <TypographyParagraph size={'large'} className="font-bold text-xl">
-          <span>{`Welcome to Bardo App`}</span>
+          <span>{`Welcome to Bardo`}</span>
           <span> </span>
           <span className="text-violet-600 underline">{userName()}</span>
         </TypographyParagraph>
@@ -134,7 +130,7 @@ export default function WelcomePage() {
               col-span-1
               flex w-full items-center gap-x-4 rounded-xl border bg-white p-4 md:p-6
             `}
-            onClick={() => handleSubmit('/journals')}
+            onClick={() => handleSubmit('/journals/new')}
           >
             <div className="flex h-16 w-16 flex-col items-center justify-center rounded-md bg-muted">
               <Icons.NotebookPen className="size-7 text-foreground" strokeWidth={1.75} />

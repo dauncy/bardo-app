@@ -26,7 +26,7 @@ export const action = async (ctx: ActionFunctionArgs) => {
     await emailCLient.sendEmail({
       From: 'noreply@bardo.app',
       To: email,
-      Subject: 'Bardo App - password reset request',
+      Subject: 'Bardo - password reset request',
       HtmlBody: html,
     })
     return json({ success: true, error: null })

@@ -21,16 +21,12 @@ interface FirebaseSession {
 export interface DecodedClaims {
   sessionToken: string
   email: string
-  name: string
-  picture: string
   expiresAt: number
   fbUid: string
 }
 
 export interface AuthProfile {
   email: string
-  picture: string
-  name: string
   fbUid: string
 }
 
@@ -90,8 +86,6 @@ export class AdminAuthService {
         expiresAt: decoded.exp * 1000,
         email: decoded.email,
         fbUid: decoded.uid,
-        name: decoded.name ?? '',
-        picture: decoded.picture ?? '',
       }
     } catch (e) {
       throw redirect(Routes.logout)
@@ -112,8 +106,6 @@ export class AdminAuthService {
         sessionToken,
         email: decoded.email,
         fbUid: decoded.uid,
-        picture: decoded?.picture ?? '',
-        name: decoded?.name ?? '',
         expiresAt: decoded.exp * 1000,
       }
     } catch (e) {
@@ -163,11 +155,11 @@ export class AdminAuthService {
     const body = parse(params.toString())
     const { idToken } = authenticateSchema.parse(body)
     const session = await this.sessionStorage.getSession(req)
-    const { sessionToken, email, picture, name, fbUid } = await this.createSession(idToken)
+    const { sessionToken, email, fbUid } = await this.createSession(idToken)
     const firebaseSession: FirebaseSession = {
       firebase_session_token: sessionToken,
     }
-    const user = await this.usersService.upsertUser({ email, picture, name, fbUid })
+    const user = await this.usersService.upsertUser({ email, fbUid })
     session.set(sessionKey, firebaseSession)
     let redirect_url = `/journals`
     if (user.onboarding_step === UserOnboardingStep.PROFILE) {
@@ -196,8 +188,6 @@ export class AdminAuthService {
     }
     return {
       email: data.email,
-      picture: data.picture,
-      name: data.name,
       fbUid: data.fbUid,
     }
   }

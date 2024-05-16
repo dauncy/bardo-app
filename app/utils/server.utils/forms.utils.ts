@@ -7,6 +7,7 @@ export const getFormData = async <T extends ZodDiscriminatedUnionOption<string>[
   zodSchema: ZodDiscriminatedUnion<string, T>,
 ): Promise<z.infer<typeof zodSchema>> => {
   const body = await ctx.request.text()
+
   const json = parse(body)
   const parsed = zodSchema.parse(json)
   return parsed
