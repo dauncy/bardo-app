@@ -4,43 +4,52 @@ import { z } from 'zod'
 export interface UserDTO {
   fbUid: string
   email: string
-  picture: string
-  name: string
 }
 
 export enum EducationLevel {
-  NO_HIGH_SCHOOL = 'no_high_scool',
-  SOME_HIGH_SCOOL = 'some_high_school',
-  HIGH_SCOOL = 'high_scool',
-  SOME_COLLEGE = 'some_college',
-  COLLEGE = 'college',
-  MASTERS = 'masters',
-  PHD = 'PhD',
+  NO_HIGH_SCHOOL = 'NO_HIGH_SCHOOL',
+  SOME_HIGH_SCOOL = 'SOME_HIGH_SCHOOL',
+  HIGH_SCOOL = 'HIGH_SCHOOL',
+  SOME_COLLEGE = 'SOME_COLLEGE',
+  COLLEGE = 'COLLEGE',
+  MASTERS = 'MASTERS',
+  PHD = 'PHD',
 }
 
 export enum Ethnicity {
-  WHITE = 'white',
-  BLACK = 'black',
-  ASIAN = 'asian',
-  HISPANIC = 'hispanic',
-  PACIFIC_ISLANDER = 'pacific_islander',
+  WHITE = 'WHITE',
+  BLACK = 'BLACK',
+  ASIAN = 'ASIAN',
+  HISPANIC = 'HISPANIC',
+  PACIFIC_ISLANDER = 'PACIFIC_ISLANDER',
 }
 
 export enum Gender {
-  MALE = 'male',
-  FEMALE = 'female',
-  OTHER = 'other',
+  MALE = 'MALE',
+  FEMALE = 'FEMALE',
+  OTHER = 'OTHER',
 }
 
 export const userCrudSchema = z.discriminatedUnion('_action', [
   z.object({
     _action: z.literal('UPDATE_USER'),
-    data: z.object({
-      name: z
-        .string()
-        .min(3, 'Username must be at least 3 characters')
-        .max(24, 'Username cannot be longer than 24 characters'),
-    }),
+    data: z
+      .object({
+        name: z
+          .string()
+          .min(3, 'Username must be at least 3 characters')
+          .max(24, 'Username cannot be longer than 24 characters')
+          .optional()
+          .nullable()
+          .transform(val => {
+            if (val === 'null' || val === 'undefined') {
+              return null
+            }
+
+            return val
+          }),
+      })
+      .optional(),
   }),
   z.object({
     _action: z.literal('UPDATE_DEMOGRAPHICS'),

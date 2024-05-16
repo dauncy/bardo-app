@@ -23,7 +23,7 @@ export const UserAvatar = ({ user, link = true }: { user: PublicUser | Serialize
   }
 
   const avatarFallback = () => {
-    return userName().charAt(0)
+    return userName().charAt(0).toUpperCase()
   }
 
   if (!link) {

@@ -35,7 +35,7 @@ export default function ResetPassword() {
         <div className="flex flex-col">
           <h1 className="font-bold text-4xl uppercase md:text-5xl">{'Bardo'}</h1>
           <TypographyParagraph size={'large'} className="ml-1">
-            {'A community Trip Journal'}
+            {'A community trip journal'}
           </TypographyParagraph>
         </div>
       </div>

@@ -15,6 +15,7 @@ import {
 } from '@app/components/bardo/Select'
 import { TypographyParagraph } from '@app/components/bardo/typography/TypographyParagraph'
 import { ClientOnly } from '@app/components/utility/ClientOnly'
+import { EDUCATION_LEVEL, ETHNICITY, GENDER } from '@app/constants/user.constants'
 import type { UserCrudPayload } from '@app/types/users'
 import { EducationLevel, Ethnicity, Gender } from '@app/types/users'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -173,10 +174,10 @@ export const DemographicsForm = () => {
                       onValueChange={value => field.onChange(value)}
                       defaultValue={form.formState.defaultValues?.gender}
                     >
-                      {Object.values(Gender).map(value => (
+                      {Object.values(Gender).map((value: Gender) => (
                         <div className="flex items-center space-x-2" key={value}>
                           <RadioGroupItem value={value} id={value} />
-                          <Label htmlFor={value}>{value.split('_').join(' ')}</Label>
+                          <Label htmlFor={value}>{GENDER[value]}</Label>
                         </div>
                       ))}
                     </RadioGroup>
@@ -202,9 +203,9 @@ export const DemographicsForm = () => {
                       <SelectContent>
                         <SelectGroup>
                           <SelectLabel>{'Select your race'}</SelectLabel>
-                          {Object.values(Ethnicity).map(option => (
+                          {Object.values(Ethnicity).map((option: Ethnicity) => (
                             <SelectItem key={option} value={option}>
-                              {option.split('_').join(' ')}
+                              {ETHNICITY[option]}
                             </SelectItem>
                           ))}
                         </SelectGroup>
@@ -237,9 +238,9 @@ export const DemographicsForm = () => {
                       <SelectContent>
                         <SelectGroup>
                           <SelectLabel>{'Select the highest level of education that applies'}</SelectLabel>
-                          {Object.values(EducationLevel).map(option => (
+                          {Object.values(EducationLevel).map((option: EducationLevel) => (
                             <SelectItem key={option} value={option}>
-                              {option.split('_').join(' ')}
+                              {EDUCATION_LEVEL[option]}
                             </SelectItem>
                           ))}
                         </SelectGroup>
