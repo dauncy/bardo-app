@@ -1,9 +1,7 @@
 /* eslint-disable react/jsx-pascal-case */
-import { Button } from '@app/components/bardo/Button'
-import { Icons } from '@app/components/bardo/Icons'
-import { TypographyParagraph } from '@app/components/bardo/typography/TypographyParagraph'
 import { JournalCard } from '@app/components/journals/JournalCard'
 import { JournalSkeleton } from '@app/components/journals/JournalsSkeleton'
+import { NoJournals } from '@app/components/journals/NoJournals'
 import { UserPreviewCard } from '@app/components/users/UserPreviewCard'
 import { prisma } from '@app/db.server'
 import { Routes } from '@app/services/routes.service'
@@ -12,7 +10,7 @@ import { getAccountInfo } from '@app/utils/server.utils/account.utils'
 import type { User } from '@prisma/client'
 import { defer, redirect } from '@remix-run/node'
 import type { LoaderFunctionArgs } from '@remix-run/node'
-import { Await, Link, useLoaderData, useOutletContext } from '@remix-run/react'
+import { Await, useLoaderData, useOutletContext } from '@remix-run/react'
 import { Fragment, Suspense } from 'react'
 
 const getAllJournals = async (): Promise<JournalWithUser[]> => {
@@ -28,6 +26,8 @@ const getAllJournals = async (): Promise<JournalWithUser[]> => {
       body: true,
       updated_at: true,
       created_at: true,
+      public: true,
+      status: true,
       user: {
         select: {
           id: true,
@@ -86,25 +86,7 @@ export default function JournalsFeedPage() {
           <Await resolve={feed}>
             {feed => {
               if (feed.length === 0) {
-                return (
-                  <div className="flex min-h-full w-full flex-col items-center justify-center rounded-md border border-violet-400/60 bg-muted px-4 py-5 shadow">
-                    <TypographyParagraph className="text-center font-light text-muted-foreground" size={'large'}>
-                      {'There are no experiences shared'}
-                    </TypographyParagraph>
-                    <TypographyParagraph className="text-center" size={'small'}>
-                      {'Be the first to share your experience with others.'}
-                    </TypographyParagraph>
-                    <Link to={`/journals/new`}>
-                      <Button
-                        className="mt-5 mt-8 items-center gap-x-2 self-center border border-violet-600 text-violet-600"
-                        variant={'secondary'}
-                      >
-                        {'Share your expereince'}
-                        <Icons.arrowForward className="size-5" strokeWidth={1.5} />
-                      </Button>
-                    </Link>
-                  </div>
-                )
+                return <NoJournals />
               }
               return (
                 <>

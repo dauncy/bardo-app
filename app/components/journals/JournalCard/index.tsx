@@ -20,6 +20,18 @@ import { useState } from 'react'
 export const JournalCardMenu = ({ journal }: { journal: SerializeFrom<JournalWithUser> }) => {
   const [open, setOpen] = useState(false)
   const { currentUser } = useOutletContext<{ currentUser: User | null }>()
+
+  const showMenu = () => {
+    if (journal.public && journal.status === 'PUBLISHED') {
+      return true
+    }
+
+    if (journal.user.id === currentUser?.id) {
+      return true
+    }
+
+    return false
+  }
   const { toast } = useToast()
   const handleShare = async () => {
     const name = () => {
@@ -61,6 +73,11 @@ export const JournalCardMenu = ({ journal }: { journal: SerializeFrom<JournalWit
       })
     }
   }
+
+  if (!showMenu()) {
+    return null
+  }
+
   return (
     <Popover open={open} onOpenChange={e => setOpen(e)}>
       <PopoverTrigger asChild>
@@ -69,22 +86,24 @@ export const JournalCardMenu = ({ journal }: { journal: SerializeFrom<JournalWit
         </div>
       </PopoverTrigger>
       <PopoverContent className="flex max-w-[224px] flex-col gap-y-2 rounded-xl px-4 py-3 shadow-lg" side={'left'}>
-        <Button
-          onClick={async () => await handleShare()}
-          tabIndex={-1}
-          variant={'ghost'}
-          className={`
-              group flex w-full 
-              cursor-pointer 
-              items-center justify-start gap-x-4 rounded-md px-4 
-              py-1.5 hover:bg-violet-200
-            `}
-        >
-          <Icons.Share className="size-4 text-muted-foreground group-hover:text-foreground" />
-          <TypographyParagraph size={'small'} className="text-muted-foreground group-hover:text-foreground">
-            {'Share Journal'}
-          </TypographyParagraph>
-        </Button>
+        {journal.public && journal.status === 'PUBLISHED' && (
+          <Button
+            onClick={async () => await handleShare()}
+            tabIndex={-1}
+            variant={'ghost'}
+            className={`
+                group flex w-full 
+                cursor-pointer 
+                items-center justify-start gap-x-4 rounded-md px-4 
+                py-1.5 hover:bg-violet-200
+              `}
+          >
+            <Icons.Share className="size-4 text-muted-foreground group-hover:text-foreground" />
+            <TypographyParagraph size={'small'} className="text-muted-foreground group-hover:text-foreground">
+              {'Share Journal'}
+            </TypographyParagraph>
+          </Button>
+        )}
         {currentUser?.id === journal?.user?.id && (
           <Link
             to={`/journals/${journal.id}?edit=true`}

@@ -53,7 +53,9 @@ export const journalCrudSchema = z.discriminatedUnion('_action', [
       date_of_experience: z.coerce.date(),
       intention: z.string(),
       setting: z.string(),
-      public: z.coerce.boolean(),
+      public: z
+        .union([z.boolean(), z.literal('true'), z.literal('false')])
+        .transform(value => value === true || value === 'true'),
     }),
   }),
   z.object({
@@ -78,7 +80,9 @@ export const journalCrudSchema = z.discriminatedUnion('_action', [
       date_of_experience: z.coerce.date().optional(),
       intention: z.string().optional(),
       setting: z.string().optional(),
-      public: z.coerce.boolean(),
+      public: z
+        .union([z.boolean(), z.literal('true'), z.literal('false')])
+        .transform(value => value === true || value === 'true'),
     }),
   }),
   z.object({
@@ -105,7 +109,9 @@ export const journalCrudSchema = z.discriminatedUnion('_action', [
         z.string(),
       ]),
       setting: z.string(),
-      public: z.coerce.boolean(),
+      public: z
+        .union([z.boolean(), z.literal('true'), z.literal('false')])
+        .transform(value => value === true || value === 'true'),
     }),
   }),
   z.object({
@@ -118,6 +124,8 @@ export const journalCrudSchema = z.discriminatedUnion('_action', [
 
 export type JournalWithUser = Prisma.JournalGetPayload<{
   select: {
+    status: true
+    public: true
     id: true
     metadata: true
     title: true
