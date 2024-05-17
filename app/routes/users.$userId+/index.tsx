@@ -1,5 +1,5 @@
-import { TypographyParagraph } from '@app/components/bardo/typography/TypographyParagraph'
 import { JournalCard } from '@app/components/journals/JournalCard'
+import { NoJournals } from '@app/components/journals/NoJournals'
 import { UserJournalTabs } from '@app/components/users/UserJournalTabs'
 import { UserPreviewCard } from '@app/components/users/UserPreviewCard'
 import { prisma } from '@app/db.server'
@@ -52,12 +52,17 @@ export const loader = async (ctx: LoaderFunctionArgs) => {
             public: true,
           },
           select: {
+            public: true,
+            status: true,
             id: true,
             title: true,
             metadata: true,
             updated_at: true,
             body: true,
             created_at: true,
+          },
+          orderBy: {
+            updated_at: 'desc',
           },
         },
       },
@@ -92,12 +97,17 @@ export const loader = async (ctx: LoaderFunctionArgs) => {
           status: 'DRAFT',
         },
         select: {
+          status: true,
+          public: true,
           id: true,
           title: true,
           metadata: true,
           updated_at: true,
           body: true,
           created_at: true,
+        },
+        orderBy: {
+          updated_at: 'desc',
         },
       })
 
@@ -122,12 +132,17 @@ export const loader = async (ctx: LoaderFunctionArgs) => {
           public: false,
         },
         select: {
+          status: true,
+          public: true,
           id: true,
           title: true,
           metadata: true,
           updated_at: true,
           body: true,
           created_at: true,
+        },
+        orderBy: {
+          updated_at: 'desc',
         },
       })
 
@@ -154,12 +169,17 @@ export const loader = async (ctx: LoaderFunctionArgs) => {
       public: true,
     },
     select: {
+      public: true,
+      status: true,
       id: true,
       title: true,
       metadata: true,
       updated_at: true,
       body: true,
       created_at: true,
+    },
+    orderBy: {
+      updated_at: 'desc',
     },
   })
 
@@ -245,16 +265,7 @@ export default function UserJournalsPage() {
           </div>
         )}
         <div className="flex h-max min-h-full w-full flex-1 flex-col items-center gap-y-5">
-          {journals.length == 0 && (
-            <div className="flex flex h-max min-h-full w-full flex-1 flex-col gap-y-3 border bg-white p-6 shadow md:rounded-xl">
-              <TypographyParagraph size={'large'} className="text-foreground">
-                {'No journals found'}
-              </TypographyParagraph>
-              <TypographyParagraph size={'small'} className="text-muted-foreground">
-                {"We couldn't find any jounals that match your query."}
-              </TypographyParagraph>
-            </div>
-          )}
+          {journals.length == 0 && <NoJournals />}
           {journals.length > 0 &&
             journals.map(journal => (
               <Fragment key={journal.id}>

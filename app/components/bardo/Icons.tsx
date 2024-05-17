@@ -34,10 +34,14 @@ import {
   DownloadCloud,
   Settings,
   Share,
+  CircleSlash2,
+  Bird,
 } from 'lucide-react'
 
 export const Icons = {
+  Bird,
   Share,
+  CircleSlash2,
   DownloadCloud,
   Settings,
   Users,

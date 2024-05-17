@@ -47,6 +47,8 @@ const getJournal = async (ctx: LoaderFunctionArgs) => {
         status: 'PUBLISHED',
       },
       select: {
+        status: true,
+        public: true,
         id: true,
         title: true,
         body: true,
@@ -196,8 +198,15 @@ export const action = async (ctx: ActionFunctionArgs) => {
             date_of_experience: data.date_of_experience,
           },
         },
+        select: {
+          user_id: true,
+          public: true,
+        },
       })
-      return redirect(`/journals/${updated.id}`)
+      if (updated.public) {
+        return redirect(`/users/${updated.user_id}`)
+      }
+      return redirect(`/users/${updated.user_id}?type=private`)
     }
     case 'SAVE_DRAFT': {
       const data = body.data
@@ -218,9 +227,13 @@ export const action = async (ctx: ActionFunctionArgs) => {
             setting: data.setting,
           },
         },
+        select: {
+          id: true,
+          user_id: true,
+        },
       })
 
-      return redirect(`/journals/${updated.id}`)
+      return redirect(`/users/${updated.user_id}?type=draft`)
     }
     default:
       return null
@@ -264,7 +277,7 @@ export default function JournalViewPage() {
 
       {journal && !editable && (
         <div className="relative mx-auto flex h-max min-h-full w-full max-w-7xl flex-1 flex-col border bg-white p-6 shadow md:rounded-xl md:p-14">
-          {currentUser?.id === journal.user.id && <JournalCardMenu journal={journal} />}
+          <JournalCardMenu journal={journal} />
           <div className="flex gap-x-2">
             <UserAvatar user={journal.user} />
             <div className="flex flex-col gap-y-1">

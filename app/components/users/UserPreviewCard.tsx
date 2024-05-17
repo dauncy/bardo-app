@@ -6,6 +6,7 @@ import { Link, useLocation, useOutletContext } from '@remix-run/react'
 import { Button } from '../bardo/Button'
 import type { User } from '@prisma/client'
 import type { SerializeFrom } from '@remix-run/node'
+import { Icons } from '../bardo/Icons'
 
 export const UserPreviewCard = ({
   user,
@@ -63,9 +64,18 @@ export const UserPreviewCard = ({
       </CardContent>
       <CardFooter className="items-center justify-center py-0">
         {currentUser?.id === user.id && pathname !== `/users/${currentUser.id}` && (
-          <Link className=" my-6 w-full min-w-36" to={'/user-settings'}>
+          <Link className=" my-6 w-full min-w-36" to={`/users/${currentUser.id}`}>
             <Button variant={'bardo_primary'} className="w-full rounded-full">
               {'Visit Profile'}
+            </Button>
+          </Link>
+        )}
+        {currentUser?.id === user.id && pathname === `/users/${currentUser.id}` && (
+          <Link className=" my-6 w-full min-w-36" to={`/journals/new`}>
+            <Button variant={'bardo_primary'} className="w-full items-center gap-x-2 rounded-full">
+              {/* eslint-disable-next-line react/jsx-pascal-case */}
+              <Icons.plus />
+              {'New Journal'}
             </Button>
           </Link>
         )}

@@ -35,20 +35,22 @@ export const UserAvatar = ({ user, link = true }: { user: PublicUser | Serialize
     )
   }
   return (
-    <TooltipProvider>
-      <Tooltip delayDuration={50}>
-        <TooltipTrigger asChild>
-          <Link to={`/users/${user.id}`}>
-            <Avatar className="flex size-12 cursor-pointer rounded-full border border-slate-200">
-              <AvatarImage src={user.picture ?? ''} alt={''} />
-              <AvatarFallback className="size-12 border border-slate-200 bg-violet-400">
-                {avatarFallback()}
-              </AvatarFallback>
-            </Avatar>
-          </Link>
-        </TooltipTrigger>
-        <TooltipContent side="left">{userName()}</TooltipContent>
-      </Tooltip>
-    </TooltipProvider>
+    <div>
+      <TooltipProvider>
+        <Tooltip delayDuration={50}>
+          <TooltipTrigger asChild>
+            <Link to={`/users/${user.id}`}>
+              <Avatar className="flex size-12 cursor-pointer rounded-full border border-slate-200">
+                <AvatarImage src={user.picture ?? ''} alt={''} />
+                <AvatarFallback className="size-12 border border-slate-200 bg-violet-400">
+                  {avatarFallback()}
+                </AvatarFallback>
+              </Avatar>
+            </Link>
+          </TooltipTrigger>
+          <TooltipContent side="left">{userName()}</TooltipContent>
+        </Tooltip>
+      </TooltipProvider>
+    </div>
   )
 }

@@ -607,7 +607,7 @@ export const JournalForm = ({
                   }}
                 >
                   {pending && form.getValues().status === JournalStatus.DRAFT && (
-                    <Icons.loader className="size 4 animate-spin text-white/90" />
+                    <Icons.loader className="size 4 animate-spin text-violet-500" />
                   )}
                   {journal ? 'Save Changes' : 'Save as draft'}
                 </Button>
