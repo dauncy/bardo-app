@@ -56,6 +56,7 @@ export class AdminAuthService {
 
   private getRefreshToken = async (fbUid: string): Promise<string> => {
     const customToken = await this.adminAuth.createCustomToken(fbUid)
+    this.logger.info('getRefreshToken: ', { customToken })
     const url = `${this.googleAuthUrl}/accounts:signInWithCustomToken?key=${this.config.firebase.api_key}`
     const res = await fetch(url, {
       method: 'POST',
@@ -68,6 +69,7 @@ export class AdminAuthService {
     })
 
     const data = await res.json()
+    this.logger.info('getRefreshToken: ', { data })
     return data.idToken
   }
 
@@ -88,6 +90,7 @@ export class AdminAuthService {
         fbUid: decoded.uid,
       }
     } catch (e) {
+      this.logger.error('Error verifying session: ', e)
       throw redirect(Routes.logout)
     }
   }
@@ -125,15 +128,16 @@ export class AdminAuthService {
     this.logger.debug('getSession: ', {
       currentDate: new Date(currentDate).toLocaleDateString('en', { hour: '2-digit', minute: '2-digit' }),
       expiresAt: new Date(sessionData.expiresAt).toLocaleDateString('en', { hour: '2-digit', minute: '2-digit' }),
-      tieLeft: `${Math.floor((sessionData.expiresAt - currentDate) / 1000)} seconds`,
+      timeLeft: `${Math.floor((sessionData.expiresAt - currentDate) / 1000)} seconds`,
     })
-    if (currentDate < sessionData.expiresAt - 5000) {
+    if (currentDate < sessionData.expiresAt - 1000 * 60) {
       return sessionData
     }
 
     try {
       const refreshToken = await this.getRefreshToken(sessionData.fbUid)
       const { sessionToken } = await this.createSession(refreshToken)
+      this.logger.info('getSession: ', { refreshToken, sessionToken })
       const newSession: FirebaseSession = {
         firebase_session_token: sessionToken,
       }
@@ -144,7 +148,7 @@ export class AdminAuthService {
         },
       })
     } catch (e) {
-      this.logger.debug('error refreshing session: ', { e })
+      this.logger.error('error refreshing session: ', { e })
       throw redirect(Routes.logout)
     }
   }
