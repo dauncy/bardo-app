@@ -66,6 +66,7 @@ export const loader = async (ctx: LoaderFunctionArgs) => {
 export default function JournalsFeedPage() {
   const { currentUser } = useOutletContext<{ currentUser: User }>()
   const { feed, userStats } = useLoaderData<typeof loader>()
+
   return (
     <div className="mx-auto flex w-full max-w-7xl flex-col gap-4 pb-10 md:flex-row">
       <div className="flex w-full md:w-[302px] md:px-0 md:px-6">
