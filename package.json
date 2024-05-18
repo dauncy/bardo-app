@@ -14,7 +14,8 @@
     "start": "cross-env NODE_ENV=production node ./server.js",
     "typecheck": "tsc --skipLibCheck --noEmit",
     "prisma:generate": "npx prisma generate",
-    "prisma:migrate:dev": "npx prisma migrate dev"
+    "prisma:migrate:dev": "npx prisma migrate dev",
+    "prisma:seed": "npx prisma db seed"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.3.4",
@@ -71,6 +72,7 @@
     "zod": "^3.22.4"
   },
   "devDependencies": {
+    "@faker-js/faker": "^8.4.1",
     "@remix-run/dev": "^2.4.1",
     "@remix-run/eslint-config": "^2.5.0",
     "@types/compression": "^1.7.2",
