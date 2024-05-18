@@ -1,6 +1,6 @@
 export const firebaseConfig = {
   apiKey: 'AIzaSyDOJnSfdocNj6u4bQP3cjj7xggBGqvIQgE',
-  authDomain: 'bardo-app-e340e.firebaseapp.com',
+  authDomain: 'auth.bardo.app',
   projectId: 'bardo-app-e340e',
   storageBucket: 'bardo-app-e340e.appspot.com',
   messagingSenderId: '534308746465',

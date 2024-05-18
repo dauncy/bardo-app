@@ -5,7 +5,6 @@ import type { Auth, User } from 'firebase/auth'
 import {
   getAuth,
   inMemoryPersistence,
-  signInWithRedirect,
   GoogleAuthProvider,
   fetchSignInMethodsForEmail,
   signInWithEmailAndPassword,
@@ -17,7 +16,6 @@ import {
   confirmPasswordReset,
 } from 'firebase/auth'
 import { LoggerStore } from '@app/services/logger.service'
-import { isIOS } from '@app/utils/ui.utils'
 
 @singleton()
 export class AuthClient {
@@ -37,10 +35,7 @@ export class AuthClient {
   }
 
   public signInWithGoogle = async () => {
-    if (isIOS()) {
-      return await signInWithPopup(this.auth, this.googleAuthProvider)
-    }
-    return await signInWithRedirect(this.auth, this.googleAuthProvider)
+    return await signInWithPopup(this.auth, this.googleAuthProvider)
   }
 
   public getRedirectRes = async (callback?: (user: null | User) => void) => {
