@@ -13,6 +13,7 @@ import type { Dispatch, SetStateAction } from 'react'
 import { useState } from 'react'
 import { Icons } from '@app/components/bardo/Icons'
 import { AuthStep } from '@app/types/auth'
+import { FirebaseError } from 'firebase/app'
 
 const authSvc = container.resolve(AuthClient)
 
@@ -46,7 +47,7 @@ export const SignUpForm = ({
           {'Enter a password and click Continue to create your account.'}
         </TypographyParagraph>
       </CardHeader>
-      <CardContent className="flex flex-col gap-y-2">
+      <CardContent className="relative flex flex-col gap-y-2">
         <Form
           onSubmit={async e => {
             e.preventDefault()
@@ -58,15 +59,24 @@ export const SignUpForm = ({
               const data = signUpSchema.parse(values)
               setLoading(true)
               const userCred = await authSvc.signUpWithEmailAndPassword({ email: data.email, password: data.password })
+              console.log({ userCred })
               const idToken = await userCred.user.getIdToken()
               if (!idToken) {
                 throw new Error('no idToken')
               }
               submit({ idToken }, { action: Routes.login })
             } catch (e) {
+              console.log(e)
               if (e instanceof ZodError) {
                 setError('Enter a valid password')
               } else {
+                if (e instanceof FirebaseError) {
+                  if (e.code === 'auth/email-already-in-use') {
+                    setError('This email was connected with Google. Please continue with Google.')
+                    setLoading(false)
+                    return
+                  }
+                }
                 setError('Something went wrong')
               }
             }
@@ -83,7 +93,14 @@ export const SignUpForm = ({
             {'Password'}
           </Label>
           <Input type={'password'} name={'password'} required={true} placeholder="enter password" />
-
+          {error && (
+            <div className="flex items-start gap-x-2">
+              <Icons.alertCircle className="h-4 w-4 text-red-500" />
+              <TypographyParagraph size={'small'} className="max-w-[90%] text-red-500">
+                {error}
+              </TypographyParagraph>
+            </div>
+          )}
           <Button
             disabled={loading}
             variant={'bardo_primary'}
@@ -93,14 +110,6 @@ export const SignUpForm = ({
             {loading && <Icons.loader className="h-5 w-5 animate-spin text-white/90" />}
             {'Continue'}
           </Button>
-          {error && (
-            <div className="absolute -bottom-6 inline-flex items-center gap-x-2">
-              <Icons.alertCircle className="h-4 w-4 text-red-500" />
-              <TypographyParagraph size={'small'} className="text-red-500">
-                {error}
-              </TypographyParagraph>
-            </div>
-          )}
         </Form>
       </CardContent>
       <CardFooter className="px-10">

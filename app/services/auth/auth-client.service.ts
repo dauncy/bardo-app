@@ -49,7 +49,6 @@ export class AuthClient {
 
   public checkEmailExists = async ({ email }: { email: string }) => {
     const methods = await fetchSignInMethodsForEmail(this.auth, email)
-    this.logger.debug('checking email: ', methods)
     return methods.includes('password')
   }
 
